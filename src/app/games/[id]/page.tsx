@@ -182,6 +182,7 @@ export default function GameDetailPage() {
   }
 
   const toggleMark = (num: number) => {
+    if (!drawnNumbers.includes(num)) return
     setMarkedNumbers((prev) =>
       prev.includes(num) ? prev.filter((n) => n !== num) : [...prev, num]
     )
@@ -262,9 +263,9 @@ export default function GameDetailPage() {
               ))}
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               {/* Left: All 75 numbers */}
-              <div className="w-1/2">
+              <div className="w-3/5">
                 <div className="grid grid-cols-5 gap-px">
                   {ALL_NUMBERS.map((n) => {
                     const isDrawn = drawnNumbers.includes(n)
@@ -302,12 +303,23 @@ export default function GameDetailPage() {
               </div>
 
               {/* Right: Player card */}
-              <div className="w-1/2">
+              <div className="w-2/5">
+                {lastNumber !== null && (
+                  <div className="text-center mb-1">
+                    <div className="text-[10px]" style={{ color: 'var(--tg-theme-hint-color)' }}>Called</div>
+                    <div
+                      className="text-2xl font-bold leading-tight"
+                      style={{ color: 'var(--tg-theme-button-color)' }}
+                    >
+                      {lastNumber}
+                    </div>
+                  </div>
+                )}
                 {myCards.length > 0 ? (
                   myCards.map((card) => (
                     <div key={card._id}>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-bold">Card #{card.cardNumber}</span>
+                        <span className="text-[10px] font-bold">#{card.cardNumber}</span>
                         <button
                           onClick={handleBingo}
                           className="text-[10px] px-2 py-1 rounded font-bold text-white"
@@ -321,14 +333,16 @@ export default function GameDetailPage() {
                         {COLUMNS.map((col) =>
                           (card.card ? card.card[col] : [0, 0, 0, 0, 0]).map((num: number, idx: number) => {
                             const isFree = num === 0
+                            const isDrawn = drawnNumbers.includes(num)
                             const isMarked = markedNumbers.includes(num) || isFree
+                            const canTap = isDrawn && !isFree
                             return (
                               <button
                                 key={`${col}-${idx}`}
-                                onClick={() => !isFree && toggleMark(num)}
+                                onClick={() => canTap && toggleMark(num)}
                                 className={`text-center text-[9px] leading-none py-1 rounded-sm ${
                                   isMarked ? 'font-bold text-white' : ''
-                                }`}
+                                } ${!isDrawn && !isFree ? 'opacity-30' : ''}`}
                                 style={{
                                   backgroundColor: isMarked
                                     ? 'var(--tg-theme-button-color)'
@@ -336,7 +350,6 @@ export default function GameDetailPage() {
                                   color: isMarked
                                     ? 'var(--tg-theme-button-text-color)'
                                     : 'var(--tg-theme-text-color)',
-                                  opacity: isFree ? 0.5 : 1,
                                 }}
                               >
                                 {isFree ? '★' : num}
