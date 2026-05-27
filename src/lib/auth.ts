@@ -32,6 +32,22 @@ export function clearAuth(): void {
   localStorage.removeItem(INIT_DATA_KEY)
 }
 
+/**
+ * Check if the cached user matches the current Telegram WebApp user.
+ * If not, clear the stale session so a fresh auth is forced.
+ * Returns true if the session is still valid.
+ */
+export function validateTelegramSession(): boolean {
+  if (typeof window === 'undefined') return false
+  const storedUser = getStoredUser()
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user
+  if (storedUser && tgUser && String(storedUser.telegramId) !== String(tgUser.id)) {
+    clearAuth()
+    return false
+  }
+  return !!getStoredToken()
+}
+
 export function isAuthenticated(): boolean {
   return !!getStoredToken() || !!getStoredInitData()
 }

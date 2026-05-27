@@ -10,7 +10,12 @@ export function getSocket(): Socket {
 }
 
 export function connectSocket(token?: string, initData?: string): Socket {
-  if (socket?.connected) return socket
+  // If already connected but with potentially different creds, disconnect first
+  if (socket?.connected) {
+    socket.removeAllListeners()
+    socket.disconnect()
+    socket = null
+  }
 
   const auth: Record<string, string> = {}
   if (token) auth.token = token

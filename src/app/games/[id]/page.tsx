@@ -10,7 +10,7 @@ import {
   purchaseCardApi,
   claimBingoApi,
 } from '@/lib/api'
-import { getStoredUser } from '@/lib/auth'
+import { getStoredUser, validateTelegramSession } from '@/lib/auth'
 import { useSocket } from '@/hooks/useSocket'
 import { joinGameRoom, leaveGameRoom } from '@/lib/socket'
 import NavBar from '@/components/NavBar'
@@ -32,6 +32,7 @@ export default function GameDetailPage() {
   const { on } = useSocket()
 
   useEffect(() => {
+    validateTelegramSession()
     const stored = getStoredUser()
     if (stored) setUser(stored)
   }, [])

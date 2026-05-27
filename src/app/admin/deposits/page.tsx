@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { adminGetDepositRequests, adminMatchSmsDeposit, adminConfirmDeposit } from '@/lib/api'
-import { getStoredUser } from '@/lib/auth'
+import { getStoredUser, validateTelegramSession } from '@/lib/auth'
 import NavBar from '@/components/NavBar'
 import type { User, DepositRequest } from '@/types'
 
@@ -15,6 +15,7 @@ export default function AdminDepositsPage() {
   const [matchText, setMatchText] = useState<Record<string, string>>({})
 
   useEffect(() => {
+    validateTelegramSession()
     const stored = getStoredUser()
     if (stored) setUser(stored)
   }, [])

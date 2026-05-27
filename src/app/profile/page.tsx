@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { getProfile } from '@/lib/api'
-import { getStoredUser, clearAuth } from '@/lib/auth'
+import { getStoredUser, clearAuth, validateTelegramSession } from '@/lib/auth'
 import { disconnectSocket } from '@/lib/socket'
 import NavBar from '@/components/NavBar'
 import { useRouter } from 'next/navigation'
@@ -15,6 +15,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    validateTelegramSession()
     const stored = getStoredUser()
     if (stored) setUser(stored)
   }, [])

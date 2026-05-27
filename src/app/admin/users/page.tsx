@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { adminGetUsers, adminBanUser, adminCreditUser } from '@/lib/api'
-import { getStoredUser } from '@/lib/auth'
+import { getStoredUser, validateTelegramSession } from '@/lib/auth'
 import NavBar from '@/components/NavBar'
 import type { User } from '@/types'
 
@@ -17,6 +17,7 @@ export default function AdminUsersPage() {
   const [creditAmount, setCreditAmount] = useState('')
 
   useEffect(() => {
+    validateTelegramSession()
     const stored = getStoredUser()
     if (stored) setUser(stored)
   }, [])

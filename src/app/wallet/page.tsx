@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { getBalance, getDepositAccounts, requestSmsDeposit, getTransactions } from '@/lib/api'
-import { getStoredUser } from '@/lib/auth'
+import { getStoredUser, validateTelegramSession } from '@/lib/auth'
 import NavBar from '@/components/NavBar'
 import TransactionList from '@/components/TransactionList'
 import type { User, Transaction, DepositAccounts } from '@/types'
@@ -28,6 +28,7 @@ export default function WalletPage() {
   const [success, setSuccess] = useState('')
 
   useEffect(() => {
+    validateTelegramSession()
     const stored = getStoredUser()
     if (stored) setUser(stored)
   }, [])

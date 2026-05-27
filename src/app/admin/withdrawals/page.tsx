@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { adminGetWithdrawals, adminApproveWithdrawal, adminRejectWithdrawal } from '@/lib/api'
-import { getStoredUser } from '@/lib/auth'
+import { getStoredUser, validateTelegramSession } from '@/lib/auth'
 import NavBar from '@/components/NavBar'
 import type { User, Withdrawal } from '@/types'
 
@@ -22,6 +22,7 @@ export default function AdminWithdrawalsPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
+    validateTelegramSession()
     const stored = getStoredUser()
     if (stored) setUser(stored)
   }, [])
