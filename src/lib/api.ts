@@ -88,10 +88,10 @@ export async function getGameCards(gameId: string): Promise<BingoCard[]> {
   return (data.cards || []) as BingoCard[]
 }
 
-export async function selectCard(gameId: string, cardId: string): Promise<{ card: BingoCard }> {
+export async function selectCard(gameId: string, cardId: string): Promise<{ card: BingoCard; prizePool?: number }> {
   const { data } = await api.post(`/api/games/${gameId}/cards/${cardId}/select`)
   if (!data.success) throw new Error(data.message || 'Failed to select card')
-  return { card: data.card as BingoCard }
+  return { card: data.card as BingoCard, prizePool: data.prizePool as number | undefined }
 }
 
 export async function releaseCardApi(gameId: string, cardId: string): Promise<void> {

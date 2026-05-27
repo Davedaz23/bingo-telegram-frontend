@@ -7,7 +7,6 @@ import {
   getGameCards,
   selectCard,
   releaseCardApi,
-  purchaseCardApi,
   claimBingoApi,
 } from '@/lib/api'
 import { getStoredUser, validateTelegramSession } from '@/lib/auth'
@@ -24,7 +23,6 @@ export default function GameDetailPage() {
   const [game, setGame] = useState<Game | null>(null)
   const [cards, setCards] = useState<BingoCard[]>([])
   const [myCards, setMyCards] = useState<BingoCard[]>([])
-  const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [countdown, setCountdown] = useState<number | null>(null)
@@ -102,10 +100,6 @@ export default function GameDetailPage() {
       fetchCards()
     }))
 
-    unsubs.push(on('card:locked', () => {
-      fetchCards()
-    }))
-
     unsubs.push(on('card:released', () => {
       fetchCards()
     }))
@@ -115,9 +109,7 @@ export default function GameDetailPage() {
 
   useEffect(() => {
     if (!game || !user) return
-    const purchased = cards.filter(
-      (c) => c.status === 'purchased' && (c.ownerId === user._id || c.isLockedByMe)
-    )
+    const purchased = cards.filter((c) => c.isOwnedByMe)
     setMyCards(purchased)
   }, [cards, game, user])
 
@@ -133,29 +125,8 @@ export default function GameDetailPage() {
     setLoading(true)
     setError('')
     try {
-      const result = await selectCard(id, card._id)
-      setSelectedCardId(card._id)
-      if (result.card) {
-        setCards((prev) => prev.map((c) =>
-          c._id === card._id ? { ...c, ...result.card, status: 'selected' } : c
-        ))
-      }
-      await fetchCards()
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to select card')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handlePurchase = async (card: BingoCard) => {
-    setLoading(true)
-    setError('')
-    try {
-      await purchaseCardApi(id, card._id)
-      setSelectedCardId(null)
-      await fetchCards()
-      await fetchGame()
+      await selectCard(id, card._id)
+      await Promise.all([fetchCards(), fetchGame()])
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to purchase card')
     } finally {
@@ -168,8 +139,7 @@ export default function GameDetailPage() {
     setError('')
     try {
       await releaseCardApi(id, card._id)
-      setSelectedCardId(null)
-      await fetchCards()
+      await Promise.all([fetchCards(), fetchGame()])
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to release card')
     } finally {
@@ -235,7 +205,7 @@ export default function GameDetailPage() {
 
         <div className="card mb-4 text-sm">
           <div className="flex justify-between mb-2">
-            <span>🎴 {game.purchasedCards ?? cards.filter(c => c.status === 'purchased').length ?? 0} cards sold</span>
+            <span>🎴 {cards.filter(c => c.status === 'purchased').length} cards sold</span>
             <span>🔢 Drawn: {game.drawnNumbers.length}/75</span>
           </div>
           <div className="flex justify-between pt-2 border-t" style={{ borderColor: 'var(--tg-theme-hint-color)', opacity: 0.3 }}>
@@ -317,10 +287,8 @@ export default function GameDetailPage() {
         {game.status === 'selection' && (
           <CardSelector
             cards={cards}
-            selectedCardId={selectedCardId}
             cardPrice={game.cardPrice}
             onSelect={handleSelect}
-            onPurchase={handlePurchase}
             onRelease={handleRelease}
             loading={loading}
           />

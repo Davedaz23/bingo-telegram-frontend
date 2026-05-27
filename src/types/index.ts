@@ -64,6 +64,7 @@ export interface BingoCard {
   status: 'available' | 'selected' | 'purchased' | 'released'
   price?: number
   isLockedByMe?: boolean
+  isOwnedByMe?: boolean
   card?: CardData
   grid?: CardCell[][]
   lockExpiresAt?: string

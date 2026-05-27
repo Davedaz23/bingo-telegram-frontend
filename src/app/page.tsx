@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { getGames, getGameCards, selectCard, releaseCardApi, purchaseCardApi, authTelegram, getProfile } from '@/lib/api'
+import { getGames, getGameCards, selectCard, releaseCardApi, authTelegram, getProfile } from '@/lib/api'
 import { getStoredToken, getStoredUser, storeAuth, clearAuth } from '@/lib/auth'
 import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket'
 import NavBar from '@/components/NavBar'
@@ -35,7 +35,6 @@ export default function HomePage() {
   const [user, setUser] = useState<User | null>(null)
   const [game, setGame] = useState<Game | null>(null)
   const [cards, setCards] = useState<BingoCard[]>([])
-  const [selectedCardId, setSelectedCardId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState(false)
   const [error, setError] = useState('')
@@ -159,8 +158,7 @@ export default function HomePage() {
     sock.on('game:winner', refresh)
     sock.on('game:cancelled', refresh)
     sock.on('card:purchased', refreshWithUser)
-    sock.on('card:locked', refresh)
-    sock.on('card:released', refresh)
+    sock.on('card:released', refreshWithUser)
 
     return () => {
       sock.off('game:countdown', refresh)
@@ -168,8 +166,7 @@ export default function HomePage() {
       sock.off('game:winner', refresh)
       sock.off('game:cancelled', refresh)
       sock.off('card:purchased', refreshWithUser)
-      sock.off('card:locked', refresh)
-      sock.off('card:released', refresh)
+      sock.off('card:released', refreshWithUser)
     }
   }, [fetchGame, refreshUser])
 
@@ -179,28 +176,11 @@ export default function HomePage() {
     setError('')
     try {
       const result = await selectCard(game._id, card._id)
-      setSelectedCardId(card._id)
       if (result.card) {
         setCards((prev) => prev.map((c) =>
-          c._id === card._id ? { ...c, ...result.card, status: 'selected' } : c
+          c._id === card._id ? { ...c, ...result.card, status: 'purchased' } : c
         ))
       }
-      const allCards = await getGameCards(game._id)
-      setCards(allCards)
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to select card')
-    } finally {
-      setActionLoading(false)
-    }
-  }
-
-  const handlePurchase = async (card: BingoCard) => {
-    if (!game) return
-    setActionLoading(true)
-    setError('')
-    try {
-      await purchaseCardApi(game._id, card._id)
-      setSelectedCardId(null)
       const [allCards, fresh] = await Promise.all([getGameCards(game._id), getProfile()])
       setCards(allCards)
       setUser(fresh)
@@ -219,9 +199,11 @@ export default function HomePage() {
     setError('')
     try {
       await releaseCardApi(game._id, card._id)
-      setSelectedCardId(null)
-      const allCards = await getGameCards(game._id)
+      const [allCards, fresh] = await Promise.all([getGameCards(game._id), getProfile()])
       setCards(allCards)
+      setUser(fresh)
+      const token = getStoredToken()
+      if (token) storeAuth(token, fresh)
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to release card')
     } finally {
@@ -253,11 +235,12 @@ export default function HomePage() {
   const cardPrice = game?.cardPrice ?? 10
   const canAfford = user.balance >= cardPrice
   const isSelection = game?.status === 'selection'
+  const myCards = cards.filter(c => c.isOwnedByMe)
 
   return (
     <div className="pb-16">
       <div className="p-4 max-w-lg mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-xl font-bold">Bingo</h1>
             <p className="text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>
@@ -289,17 +272,15 @@ export default function HomePage() {
         ) : isSelection ? (
           canAfford ? (
             <div>
-              <div className="card mb-4 text-sm flex justify-between">
+              <div className="card mb-3 text-xs flex justify-between items-center py-2 px-3">
                 <span>Game #{game.gameCode}</span>
-                <span>🎯 Winner gets {Math.floor(game.prizePool * 0.8)} Birr</span>
-                <span>🎴 {cards.filter(c => c.status === 'purchased').length} sold</span>
+                <span>Prize {Math.floor(game.prizePool * 0.8)} Birr</span>
+                <span>{myCards.length} mine</span>
               </div>
               <CardSelector
                 cards={cards}
-                selectedCardId={selectedCardId}
                 cardPrice={cardPrice}
                 onSelect={handleSelect}
-                onPurchase={handlePurchase}
                 onRelease={handleRelease}
                 loading={actionLoading}
               />
