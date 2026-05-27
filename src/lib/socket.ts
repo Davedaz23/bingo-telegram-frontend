@@ -23,7 +23,7 @@ export function connectSocket(token?: string, initData?: string): Socket {
 
   socket = io(process.env.NEXT_PUBLIC_SOCKET_URL, {
     auth,
-    transports: ['websocket', 'polling'],
+    transports: ['polling', 'websocket'],
     reconnection: true,
     reconnectionAttempts: 10,
     reconnectionDelay: 1000,

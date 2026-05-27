@@ -297,6 +297,7 @@ export default function HomePage() {
               <CardSelector
                 cards={cards}
                 selectedCardId={selectedCardId}
+                cardPrice={cardPrice}
                 onSelect={handleSelect}
                 onPurchase={handlePurchase}
                 onRelease={handleRelease}

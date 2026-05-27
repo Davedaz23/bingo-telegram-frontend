@@ -318,6 +318,7 @@ export default function GameDetailPage() {
           <CardSelector
             cards={cards}
             selectedCardId={selectedCardId}
+            cardPrice={game.cardPrice}
             onSelect={handleSelect}
             onPurchase={handlePurchase}
             onRelease={handleRelease}
