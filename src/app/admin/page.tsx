@@ -90,6 +90,12 @@ export default function AdminDashboardPage() {
                 <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Pending Withdrawals</div>
               </div>
               <div className="card text-center">
+                <div className="text-2xl font-bold text-purple-500">
+                  {dashboard.stats.pendingDeposits ?? 0}
+                </div>
+                <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Pending Deposits</div>
+              </div>
+              <div className="card text-center">
                 <div className="text-2xl font-bold text-green-500">
                   ${dashboard.stats.platformRevenue.toFixed(2)}
                 </div>
@@ -105,6 +111,10 @@ export default function AdminDashboardPage() {
               <Link href="/admin/users" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium">👥 Users</span>
                 <span style={{ color: 'var(--tg-theme-hint-color)' }}>Manage users →</span>
+              </Link>
+              <Link href="/admin/deposits" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
+                <span className="font-medium">💰 Deposits</span>
+                <span style={{ color: 'var(--tg-theme-hint-color)' }}>Match & confirm →</span>
               </Link>
               <Link href="/admin/withdrawals" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium">💳 Withdrawals</span>

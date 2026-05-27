@@ -6,6 +6,8 @@ import type {
   Transaction,
   Withdrawal,
   AdminDashboard,
+  DepositRequest,
+  DepositAccounts,
 } from '@/types'
 
 const api: AxiosInstance = axios.create({
@@ -112,7 +114,7 @@ export async function getGameHistory(): Promise<Game[]> {
   return (data.games || []) as Game[]
 }
 
-// ─── Payments ─────────────────────────────────────────────────────
+// ─── Payments / Deposits ──────────────────────────────────────────
 
 export async function getBalance(): Promise<number> {
   const { data } = await api.get('/api/payments/balance')
@@ -120,15 +122,15 @@ export async function getBalance(): Promise<number> {
   return (data.balance as number) || 0
 }
 
-export async function deposit(amount: number): Promise<string> {
-  const { data } = await api.post('/api/payments/deposit', { amount })
-  if (!data.success) throw new Error(data.message || 'Deposit failed')
-  return (data.checkoutUrl as string) || ''
+export async function getDepositAccounts(): Promise<DepositAccounts> {
+  const { data } = await api.get('/api/payments/deposit/accounts')
+  if (!data.success) throw new Error('Failed to get deposit accounts')
+  return data.accounts as DepositAccounts
 }
 
-export async function verifyDeposit(txRef: string): Promise<void> {
-  const { data } = await api.get(`/api/payments/deposit/verify/${txRef}`)
-  if (!data.success) throw new Error(data.message || 'Verification failed')
+export async function requestSmsDeposit(amount: number, channel: string, smsText: string): Promise<void> {
+  const { data } = await api.post('/api/payments/deposit', { amount, channel, smsText })
+  if (!data.success) throw new Error(data.message || 'Deposit request failed')
 }
 
 export async function getTransactions(): Promise<Transaction[]> {
@@ -200,6 +202,23 @@ export async function adminCreditUser(id: string, amount: number): Promise<void>
   if (!data.success) throw new Error(data.message || 'Failed to credit user')
 }
 
+// Admin: SMS Deposits
+export async function adminGetDepositRequests(): Promise<DepositRequest[]> {
+  const { data } = await api.get('/api/admin/deposits')
+  return (data.deposits || []) as DepositRequest[]
+}
+
+export async function adminMatchSmsDeposit(id: string, adminSmsText: string): Promise<void> {
+  const { data } = await api.post(`/api/admin/deposits/${id}/match`, { adminSmsText })
+  if (!data.success) throw new Error(data.message || 'Failed to match SMS')
+}
+
+export async function adminConfirmDeposit(id: string): Promise<void> {
+  const { data } = await api.post(`/api/admin/deposits/${id}/confirm`)
+  if (!data.success) throw new Error(data.message || 'Failed to confirm deposit')
+}
+
+// Admin: Withdrawals
 export async function adminGetWithdrawals(): Promise<Withdrawal[]> {
   const { data } = await api.get('/api/admin/withdrawals')
   return (data.withdrawals || []) as Withdrawal[]
@@ -213,9 +232,4 @@ export async function adminApproveWithdrawal(id: string): Promise<void> {
 export async function adminRejectWithdrawal(id: string): Promise<void> {
   const { data } = await api.post(`/api/admin/withdrawals/${id}/reject`, { reason: 'Rejected by admin' })
   if (!data.success) throw new Error(data.message || 'Failed to reject withdrawal')
-}
-
-export async function adminListAllGames(): Promise<Game[]> {
-  const { data } = await api.get('/api/admin/games')
-  return (data.games || []) as Game[]
 }

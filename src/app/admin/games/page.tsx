@@ -125,12 +125,18 @@ export default function AdminGamesPage() {
                 <div className="flex items-center justify-between mb-2">
                   <div>
                     <span className="font-bold">#{game.gameCode}</span>
-                    <span className={`ml-2 ${game.status === 'waiting' ? 'badge-blue' : game.status === 'starting' ? 'badge-yellow' : game.status === 'active' ? 'badge-green' : 'badge-gray'}`}>
+                    <span className={`ml-2 ${
+                      game.status === 'selection' ? 'badge-blue' :
+                      game.status === 'starting' ? 'badge-yellow' :
+                      game.status === 'active' ? 'badge-green' :
+                      game.status === 'finished' ? 'badge-gray' :
+                      'badge-red'
+                    }`}>
                       {game.status}
                     </span>
                   </div>
                   <div className="flex gap-2">
-                    {game.status === 'waiting' && (
+                    {game.status === 'selection' && (
                       <button
                         onClick={() => handleStart(game._id)}
                         className="btn-success text-xs px-2 py-1"
@@ -139,7 +145,7 @@ export default function AdminGamesPage() {
                         Start
                       </button>
                     )}
-                    {(game.status === 'waiting' || game.status === 'starting') && (
+                    {(game.status === 'selection' || game.status === 'starting') && (
                       <button
                         onClick={() => handleCancel(game._id)}
                         className="btn-danger text-xs px-2 py-1"
@@ -150,10 +156,10 @@ export default function AdminGamesPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex justify-between text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
                   <span>🎯 ${game.prizePool.toFixed(2)}</span>
-                  <span>👥 {game.players?.length ?? 0}</span>
-                  <span>🎴 {game.purchasedCards ?? '?'}/{game.totalCards ?? '?'}</span>
+                  <span>🎴 {game.purchasedCards ?? '?'} sold</span>
+                  <span>🔢 {game.drawnNumbers?.length ?? 0} drawn</span>
                   <Link href={`/games/${game._id}`} className="underline">View →</Link>
                 </div>
               </div>

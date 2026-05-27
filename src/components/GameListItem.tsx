@@ -8,7 +8,7 @@ interface GameListItemProps {
 }
 
 const statusBadge: Record<string, string> = {
-  waiting: 'badge-blue',
+  selection: 'badge-blue',
   starting: 'badge-yellow',
   active: 'badge-green',
   finished: 'badge-gray',
@@ -27,8 +27,8 @@ export default function GameListItem({ game }: GameListItemProps) {
       </div>
       <div className="flex items-center justify-between text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>
         <span>🎯 Prize: <strong className="text-base" style={{ color: 'var(--tg-theme-text-color)' }}>${game.prizePool}</strong></span>
-        <span>👥 {game.players?.length ?? 0} / {game.maxPlayers}</span>
-        <span>🎴 {game.purchasedCards ?? '?'} / {game.totalCards ?? '?'}</span>
+        <span>🎴 {game.purchasedCards ?? '?'} cards</span>
+        <span>🔢 {game.drawnNumbers?.length ?? 0} drawn</span>
       </div>
     </Link>
   )

@@ -33,7 +33,7 @@ export interface GameWinner {
 export interface Game {
   _id: string
   gameCode: string
-  status: 'waiting' | 'starting' | 'active' | 'finished' | 'cancelled' | 'refunding'
+  status: 'selection' | 'starting' | 'active' | 'finished' | 'cancelled' | 'refunding'
   prizePool: number
   cardPrice: number
   platformFeePercent: number
@@ -101,14 +101,35 @@ export interface Withdrawal {
   processedAt?: string
 }
 
+export interface DepositRequest {
+  _id: string
+  userId: { _id: string; firstName: string; username?: string; telegramId: string }
+  amount: number
+  channel: string
+  userSmsText: string
+  adminSmsText?: string
+  status: 'pending' | 'sms_matched' | 'completed' | 'rejected'
+  matchedRef?: string
+  createdAt: string
+}
+
 export interface AdminStats {
   users: { total: number; active: number }
   games: { total: number; active: number; completed: number }
   pendingWithdrawals: number
+  pendingDeposits: number
   platformRevenue: number
 }
 
 export interface AdminDashboard {
   stats: AdminStats
   recentTransactions: Transaction[]
+}
+
+export interface DepositAccounts {
+  cbe: string
+  cbebirr: string
+  abyssinia: string
+  telebirr: string
+  accountName: string
 }

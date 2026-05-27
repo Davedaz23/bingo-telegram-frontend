@@ -1,20 +1,31 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { getBalance, deposit, getTransactions } from '@/lib/api'
+import { getBalance, getDepositAccounts, requestSmsDeposit, getTransactions } from '@/lib/api'
 import { getStoredUser } from '@/lib/auth'
 import NavBar from '@/components/NavBar'
 import TransactionList from '@/components/TransactionList'
-import type { User, Transaction } from '@/types'
+import type { User, Transaction, DepositAccounts } from '@/types'
+
+const CHANNELS = ['cbe', 'cbebirr', 'abyssinia', 'telebirr'] as const
+const CHANNEL_LABELS: Record<string, string> = {
+  cbe: 'CBE',
+  cbebirr: 'CBE Birr',
+  abyssinia: 'Abyssinia',
+  telebirr: 'Telebirr',
+}
 
 export default function WalletPage() {
   const [user, setUser] = useState<User | null>(null)
   const [balance, setBalance] = useState(0)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
-  const [depositAmount, setDepositAmount] = useState('')
+  const [accounts, setAccounts] = useState<DepositAccounts | null>(null)
+  const [channel, setChannel] = useState<string>('')
+  const [smsText, setSmsText] = useState('')
   const [depositing, setDepositing] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
   useEffect(() => {
     const stored = getStoredUser()
@@ -25,9 +36,14 @@ export default function WalletPage() {
     if (!user) return
     const fetchData = async () => {
       try {
-        const [bal, txs] = await Promise.all([getBalance(), getTransactions()])
+        const [bal, txs, accs] = await Promise.all([
+          getBalance(),
+          getTransactions(),
+          getDepositAccounts(),
+        ])
         setBalance(bal)
         setTransactions(txs)
+        setAccounts(accs)
       } catch {
         setError('Failed to load wallet data')
       } finally {
@@ -38,17 +54,24 @@ export default function WalletPage() {
   }, [user])
 
   const handleDeposit = async () => {
-    const amount = parseFloat(depositAmount)
-    if (isNaN(amount) || amount <= 0) {
-      setError('Enter a valid amount')
+    if (!channel) {
+      setError('Select a deposit channel')
+      return
+    }
+    if (!smsText.trim()) {
+      setError('Paste the SMS confirmation you received')
       return
     }
     setDepositing(true)
     setError('')
+    setSuccess('')
     try {
-      const url = await deposit(amount)
-      if (url) window.open(url, '_blank')
-      setDepositAmount('')
+      await requestSmsDeposit(0, channel, smsText.trim())
+      setSuccess('Deposit request submitted. Wait for admin confirmation.')
+      setSmsText('')
+      setChannel('')
+      const bal = await getBalance()
+      setBalance(bal)
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Deposit failed')
     } finally {
@@ -73,28 +96,62 @@ export default function WalletPage() {
         </div>
 
         <div className="card mb-6">
-          <h3 className="font-bold mb-3">Deposit</h3>
+          <h3 className="font-bold mb-3">Deposit via SMS</h3>
+
           {error && (
             <div className="bg-red-100 text-red-700 text-sm p-2 rounded-lg mb-3">{error}</div>
           )}
-          <div className="flex gap-2">
-            <input
-              type="number"
-              placeholder="Amount"
-              value={depositAmount}
-              onChange={(e) => setDepositAmount(e.target.value)}
-              className="input flex-1"
-              min="1"
-              step="1"
-            />
-            <button
-              onClick={handleDeposit}
-              className="btn-primary"
-              disabled={depositing || !depositAmount}
-            >
-              {depositing ? '...' : 'Deposit'}
-            </button>
+          {success && (
+            <div className="bg-green-100 text-green-700 text-sm p-2 rounded-lg mb-3">{success}</div>
+          )}
+
+          <div className="mb-3">
+            <label className="text-xs font-medium block mb-1">Transfer to</label>
+            {CHANNELS.map((ch) => (
+              <button
+                key={ch}
+                onClick={() => setChannel(ch)}
+                className={`block w-full text-left p-2 rounded-lg mb-1 text-sm border transition-colors ${
+                  channel === ch
+                    ? 'border-blue-500 bg-blue-50 font-medium'
+                    : 'border-transparent bg-gray-50'
+                }`}
+              >
+                <span className="font-medium">{CHANNEL_LABELS[ch]}</span>
+                {accounts && (
+                  <span className="ml-2" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                    {accounts[ch as keyof DepositAccounts]}
+                  </span>
+                )}
+              </button>
+            ))}
+            {accounts && (
+              <p className="text-xs mt-1" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                Account Name: {accounts.accountName}
+              </p>
+            )}
           </div>
+
+          <div className="mb-3">
+            <label className="text-xs font-medium block mb-1">
+              Paste SMS Confirmation
+            </label>
+            <textarea
+              placeholder="Paste the SMS you received after transfer..."
+              value={smsText}
+              onChange={(e) => setSmsText(e.target.value)}
+              className="input w-full resize-none"
+              rows={3}
+            />
+          </div>
+
+          <button
+            onClick={handleDeposit}
+            className="btn-primary w-full"
+            disabled={depositing || !channel || !smsText.trim()}
+          >
+            {depositing ? 'Submitting...' : 'Submit Deposit Request'}
+          </button>
         </div>
 
         <div>

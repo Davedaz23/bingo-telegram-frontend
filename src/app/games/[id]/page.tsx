@@ -233,9 +233,9 @@ export default function GameDetailPage() {
         </div>
 
         <div className="card mb-4 flex justify-between text-sm">
-          <span>👥 Players: {game.players?.length ?? 0}</span>
-          <span>🎴 Cards sold: {game.purchasedCards ?? '?'}/{game.totalCards ?? '?'}</span>
+          <span>🎴 {game.purchasedCards ?? cards.filter(c => c.status === 'purchased').length ?? 0} cards sold</span>
           <span>🔢 Drawn: {game.drawnNumbers.length}/75</span>
+          <span>💰 ${game.prizePool.toFixed(2)}</span>
         </div>
 
         {error && (
@@ -307,7 +307,7 @@ export default function GameDetailPage() {
           </div>
         )}
 
-        {game.status === 'waiting' && (
+        {game.status === 'selection' && (
           <CardSelector
             cards={cards}
             selectedCardId={selectedCardId}
