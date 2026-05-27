@@ -115,6 +115,10 @@ export default function HomePage() {
         return
       }
       setGame(g)
+      if (g.status === 'starting' || g.status === 'active') {
+        router.push(`/games/${g._id}`)
+        return
+      }
       if (g.status === 'selection') {
         const allCards = await getGameCards(g._id)
         setCards(allCards)
@@ -124,7 +128,7 @@ export default function HomePage() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [router])
 
   const refreshUser = useCallback(async () => {
     try {
@@ -152,23 +156,27 @@ export default function HomePage() {
 
     const refresh = () => { fetchGame() }
     const refreshWithUser = () => { fetchGame(); refreshUser() }
+    const goToGame = (data: unknown) => {
+      const d = data as { gameId: string }
+      router.push(`/games/${d.gameId}`)
+    }
 
-    sock.on('game:countdown', refresh)
-    sock.on('game:started', refresh)
+    sock.on('game:countdown', goToGame)
+    sock.on('game:started', goToGame)
     sock.on('game:winner', refresh)
     sock.on('game:cancelled', refresh)
     sock.on('card:purchased', refreshWithUser)
     sock.on('card:released', refreshWithUser)
 
     return () => {
-      sock.off('game:countdown', refresh)
-      sock.off('game:started', refresh)
+      sock.off('game:countdown', goToGame)
+      sock.off('game:started', goToGame)
       sock.off('game:winner', refresh)
       sock.off('game:cancelled', refresh)
       sock.off('card:purchased', refreshWithUser)
       sock.off('card:released', refreshWithUser)
     }
-  }, [fetchGame, refreshUser])
+  }, [fetchGame, refreshUser, router])
 
   const handleSelect = async (card: BingoCard) => {
     if (!game) return
