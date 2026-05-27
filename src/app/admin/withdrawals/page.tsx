@@ -107,7 +107,7 @@ export default function AdminWithdrawalsPage() {
             {withdrawals.map((w) => (
               <div key={w._id} className="card">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="font-bold">${w.amount.toFixed(2)}</div>
+                  <div className="font-bold">{w.amount.toFixed(2)} Birr</div>
                   <span className={statusBadge[w.status] || 'badge-gray'}>{w.status}</span>
                 </div>
                 <div className="text-xs space-y-0.5" style={{ color: 'var(--tg-theme-hint-color)' }}>

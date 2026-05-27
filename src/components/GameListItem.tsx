@@ -26,9 +26,9 @@ export default function GameListItem({ game }: GameListItemProps) {
         </span>
       </div>
       <div className="flex items-center justify-between text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>
-        <span>🎯 Prize: <strong className="text-base" style={{ color: 'var(--tg-theme-text-color)' }}>${game.prizePool}</strong></span>
+        <span>🎯 <strong className="text-base" style={{ color: 'var(--tg-theme-text-color)' }}>{game.prizePool} Birr</strong></span>
         <span>🎴 {game.purchasedCards ?? '?'} cards</span>
-        <span>🔢 {game.drawnNumbers?.length ?? 0} drawn</span>
+        <span>🏆 Win {Math.floor(Number(game.prizePool) * 0.8)} Birr</span>
       </div>
     </Link>
   )

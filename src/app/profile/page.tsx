@@ -78,7 +78,7 @@ export default function ProfilePage() {
             <div className="flex justify-between">
               <span style={{ color: 'var(--tg-theme-hint-color)' }}>Balance</span>
               <span className="font-bold" style={{ color: 'var(--tg-theme-button-color)' }}>
-                ${p.balance.toFixed(2)}
+                {p.balance.toFixed(2)} Birr
               </span>
             </div>
             <div className="flex justify-between">

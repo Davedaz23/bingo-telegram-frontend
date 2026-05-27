@@ -146,7 +146,7 @@ export default function WithdrawalsPage() {
               {withdrawals.map((w) => (
                 <div key={w._id} className="card flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-sm">${w.amount.toFixed(2)}</div>
+                    <div className="font-medium text-sm">{w.amount.toFixed(2)} Birr</div>
                     <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
                       {w.accountNumber}
                     </div>

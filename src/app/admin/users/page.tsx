@@ -121,7 +121,7 @@ export default function AdminUsersPage() {
                       </span>
                       <span className="badge-blue text-xs">{u.role}</span>
                       <span className="text-xs font-bold" style={{ color: 'var(--tg-theme-button-color)' }}>
-                        ${u.balance.toFixed(2)}
+                        {u.balance.toFixed(2)} Birr
                       </span>
                     </div>
                   </div>

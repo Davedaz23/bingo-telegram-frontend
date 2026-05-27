@@ -45,7 +45,7 @@ export default function TransactionList({ transactions }: TransactionListProps) 
           </div>
           <div className="text-right">
             <div className={`font-bold text-sm ${tx.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>
-              {tx.amount > 0 ? '+' : ''}${tx.amount.toFixed(2)}
+              {tx.amount > 0 ? '+' : ''}{tx.amount.toFixed(2)} Birr
             </div>
             <span className={statusBadge[tx.status] || 'badge-gray'}>{tx.status}</span>
           </div>

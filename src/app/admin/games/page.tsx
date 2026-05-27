@@ -157,7 +157,7 @@ export default function AdminGamesPage() {
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
-                  <span>🎯 ${game.prizePool.toFixed(2)}</span>
+                  <span>🎯 {game.prizePool.toFixed(2)} Birr</span>
                   <span>🎴 {game.purchasedCards ?? '?'} sold</span>
                   <span>🔢 {game.drawnNumbers?.length ?? 0} drawn</span>
                   <Link href={`/games/${game._id}`} className="underline">View →</Link>

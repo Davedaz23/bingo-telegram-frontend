@@ -91,7 +91,7 @@ export default function WalletPage() {
             Available Balance
           </div>
           <div className="text-3xl font-bold mt-1" style={{ color: 'var(--tg-theme-button-color)' }}>
-            ${balance.toFixed(2)}
+            {balance.toFixed(2)} Birr
           </div>
         </div>
 

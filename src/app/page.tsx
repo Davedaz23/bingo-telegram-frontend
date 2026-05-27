@@ -149,7 +149,7 @@ export default function HomePage() {
           <div className="text-right">
             <div className="text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>Balance</div>
             <div className="text-lg font-bold" style={{ color: 'var(--tg-theme-button-color)' }}>
-              ${user.balance.toFixed(2)}
+              {user.balance.toFixed(2)} Birr
             </div>
           </div>
         </div>

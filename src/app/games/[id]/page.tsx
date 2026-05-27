@@ -227,15 +227,21 @@ export default function GameDetailPage() {
           <div className="text-right">
             <div className="text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>Prize Pool</div>
             <div className="text-lg font-bold" style={{ color: 'var(--tg-theme-button-color)' }}>
-              ${game.prizePool.toFixed(2)}
+              {game.prizePool.toFixed(2)} Birr
             </div>
           </div>
         </div>
 
-        <div className="card mb-4 flex justify-between text-sm">
-          <span>🎴 {game.purchasedCards ?? cards.filter(c => c.status === 'purchased').length ?? 0} cards sold</span>
-          <span>🔢 Drawn: {game.drawnNumbers.length}/75</span>
-          <span>💰 ${game.prizePool.toFixed(2)}</span>
+        <div className="card mb-4 text-sm">
+          <div className="flex justify-between mb-2">
+            <span>🎴 {game.purchasedCards ?? cards.filter(c => c.status === 'purchased').length ?? 0} cards sold</span>
+            <span>🔢 Drawn: {game.drawnNumbers.length}/75</span>
+          </div>
+          <div className="flex justify-between pt-2 border-t" style={{ borderColor: 'var(--tg-theme-hint-color)', opacity: 0.3 }}>
+            <span>🎯 Card: {game.cardPrice} Birr</span>
+            <span>🏆 Winner gets <strong>{Math.floor(game.prizePool * 0.8)} Birr</strong></span>
+            <span style={{ color: 'var(--tg-theme-hint-color)' }}>20% platform fee</span>
+          </div>
         </div>
 
         {error && (
@@ -325,7 +331,7 @@ export default function GameDetailPage() {
                 <div className="text-3xl mb-2">🎉</div>
                 <div className="font-bold text-lg text-green-500">You Won!</div>
                 <div className="text-sm mt-1" style={{ color: 'var(--tg-theme-hint-color)' }}>
-                  Prize: ${game.winner.prizeAmount?.toFixed(2)}
+                  Prize: {game.winner.prizeAmount?.toFixed(2)} Birr
                 </div>
               </div>
             ) : game.winner ? (

@@ -29,7 +29,7 @@ export default function CardSelector({
         <div className="flex items-center justify-between">
           <h3 className="font-bold">Card #{selected.cardNumber}</h3>
           <span className="text-sm font-semibold" style={{ color: 'var(--tg-theme-button-color)' }}>
-            ${selected.price || 0}
+            {selected.price || 0} Birr
           </span>
         </div>
         <div className="flex justify-center">
@@ -40,7 +40,7 @@ export default function CardSelector({
             Release
           </button>
           <button onClick={() => onPurchase(selected)} className="btn-primary flex-1" disabled={loading}>
-            {loading ? 'Processing...' : `Buy $${selected.price || 0}`}
+            {loading ? 'Processing...' : `Buy ${selected.price || 0} Birr`}
           </button>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function CardSelector({
           >
             <div className="text-lg font-bold">#{card.cardNumber}</div>
             <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
-              ${card.price || 0}
+              {card.price || 0} Birr
             </div>
           </button>
         ))}

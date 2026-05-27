@@ -131,7 +131,7 @@ export default function AdminDepositsPage() {
 
                   <div className="grid grid-cols-2 gap-2 mb-2 text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
                     <div>Channel: <span className="font-medium text-gray-800">{dep.channel}</span></div>
-                    <div>Amount: <span className="font-medium text-gray-800">${dep.amount.toFixed(2)}</span></div>
+                    <div>Amount: <span className="font-medium text-gray-800">{dep.amount.toFixed(2)} Birr</span></div>
                     <div className="col-span-2">Date: {new Date(dep.createdAt).toLocaleString()}</div>
                   </div>
 

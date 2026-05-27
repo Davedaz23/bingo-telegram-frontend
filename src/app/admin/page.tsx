@@ -97,7 +97,7 @@ export default function AdminDashboardPage() {
               </div>
               <div className="card text-center">
                 <div className="text-2xl font-bold text-green-500">
-                  ${dashboard.stats.platformRevenue.toFixed(2)}
+                  {dashboard.stats.platformRevenue.toFixed(2)} Birr
                 </div>
                 <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Revenue</div>
               </div>
@@ -135,7 +135,7 @@ export default function AdminDashboardPage() {
                         </div>
                       </div>
                       <div className={`font-bold ${tx.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        ${tx.amount.toFixed(2)}
+                        {tx.amount.toFixed(2)} Birr
                       </div>
                     </div>
                   ))}
