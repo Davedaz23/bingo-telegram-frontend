@@ -173,18 +173,36 @@ export default function HomePage() {
     sock.on('game:started', goToGame)
     sock.on('game:winner', refresh)
     sock.on('game:cancelled', refresh)
-    sock.on('card:purchased', refreshWithUser)
-    sock.on('card:released', refreshWithUser)
+
+    sock.on('card:purchased', (data: unknown) => {
+      const d = data as { cardId: string; userId: string }
+      setCards((prev) => prev.map((c) =>
+        c._id === d.cardId
+          ? { ...c, status: 'purchased', isOwnedByMe: d.userId === user?._id }
+          : c
+      ))
+      refreshWithUser()
+    })
+
+    sock.on('card:released', (data: unknown) => {
+      const d = data as { cardId: string }
+      setCards((prev) => prev.map((c) =>
+        c._id === d.cardId
+          ? { ...c, status: 'available', isOwnedByMe: false }
+          : c
+      ))
+      refreshWithUser()
+    })
 
     return () => {
       sock.off('game:countdown', goToGame)
       sock.off('game:started', goToGame)
       sock.off('game:winner', refresh)
       sock.off('game:cancelled', refresh)
-      sock.off('card:purchased', refreshWithUser)
-      sock.off('card:released', refreshWithUser)
+      sock.off('card:purchased')
+      sock.off('card:released')
     }
-  }, [fetchGame, refreshUser, router])
+  }, [fetchGame, refreshUser, router, user])
 
   const handleSelect = async (card: BingoCard) => {
     if (!game) return
@@ -289,7 +307,10 @@ export default function HomePage() {
           canAfford ? (
             <div>
               <div className="card mb-3 flex justify-between items-center py-2 px-3">
-                <span className="font-semibold">Game #{game.gameCode}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold">Game #{game.gameCode}</span>
+                  <span className="badge-blue text-xs">{game.status}</span>
+                </div>
                 <span style={{ color: '#0ca3db' }} className="font-bold">Prize {Math.floor(game.prizePool * 0.8)} Birr</span>
                 <span>{myCards.length} mine</span>
               </div>
