@@ -11,7 +11,7 @@ import {
 } from '@/lib/api'
 import { getStoredUser, validateTelegramSession } from '@/lib/auth'
 import { useSocket } from '@/hooks/useSocket'
-import { joinGameRoom, leaveGameRoom } from '@/lib/socket'
+import { getSocket, joinGameRoom, leaveGameRoom } from '@/lib/socket'
 import NavBar from '@/components/NavBar'
 import CardSelector from '@/components/CardSelector'
 import type { User, Game, BingoCard } from '@/types'
@@ -32,12 +32,30 @@ export default function GameDetailPage() {
   const [placedBingo, setPlacedBingo] = useState(false)
   const [markedNumbers, setMarkedNumbers] = useState<number[]>([])
   const [winnerCountdown, setWinnerCountdown] = useState<number | null>(null)
+  const [connected, setConnected] = useState(false)
   const { on } = useSocket()
 
   useEffect(() => {
     validateTelegramSession()
     const stored = getStoredUser()
     if (stored) setUser(stored)
+  }, [])
+
+  useEffect(() => {
+    try {
+      const sock = getSocket()
+      setConnected(sock.connected)
+      const onConnect = () => setConnected(true)
+      const onDisconnect = () => setConnected(false)
+      sock.on('connect', onConnect)
+      sock.on('disconnect', onDisconnect)
+      return () => {
+        sock.off('connect', onConnect)
+        sock.off('disconnect', onDisconnect)
+      }
+    } catch {
+      return
+    }
   }, [])
 
   const fetchGame = useCallback(async () => {
@@ -219,6 +237,18 @@ export default function GameDetailPage() {
   return (
     <div className="pb-20">
       <div className="p-3 max-w-lg mx-auto">
+        {/* Connection status */}
+        <div className="flex items-center justify-end mb-1 gap-2">
+          <div className="flex items-center gap-1">
+            <div
+              className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-green-500' : 'bg-red-400'}`}
+            />
+            <span className="text-[9px]" style={{ color: 'var(--tg-theme-hint-color)' }}>
+              {connected ? 'Live' : 'Offline'}
+            </span>
+          </div>
+        </div>
+
         <div className="flex items-center justify-between mb-2">
           <div>
             <h1 className="text-lg font-bold">Game #{game.gameCode}</h1>
@@ -249,24 +279,26 @@ export default function GameDetailPage() {
 
         {game.status === 'active' && (
           <div>
-            {/* Current + last 3 numbers */}
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Last:</div>
-              {lastThree.map((n, i) => (
-                <span
-                  key={i}
-                  className={`text-xs font-bold ${n === lastNumber ? 'text-lg' : 'opacity-60'}`}
-                  style={{ color: n === lastNumber ? 'var(--tg-theme-button-color)' : 'var(--tg-theme-hint-color)' }}
-                >
-                  {n}
-                </span>
-              ))}
-            </div>
+            {/* Last 3 called numbers */}
+            {lastThree.length > 0 && (
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-[10px]" style={{ color: 'var(--tg-theme-hint-color)' }}>Last:</span>
+                {lastThree.map((n, i) => (
+                  <span
+                    key={i}
+                    className={`font-bold ${n === lastNumber ? 'text-base' : 'text-xs opacity-60'}`}
+                    style={{ color: n === lastNumber ? 'var(--tg-theme-button-color)' : 'var(--tg-theme-hint-color)' }}
+                  >
+                    {n}
+                  </span>
+                ))}
+              </div>
+            )}
 
             <div className="flex gap-1">
               {/* Left: All 75 numbers */}
-              <div className="w-3/5">
-                <div className="grid grid-cols-5 gap-px">
+              <div className="flex-1 min-w-0">
+                <div className="grid grid-cols-5 gap-[1.5px]">
                   {ALL_NUMBERS.map((n) => {
                     const isDrawn = drawnNumbers.includes(n)
                     const isCurrent = n === lastNumber
@@ -274,11 +306,11 @@ export default function GameDetailPage() {
                     return (
                       <div
                         key={n}
-                        className={`text-center text-[9px] leading-none py-1 rounded-sm ${
+                        className={`text-center text-[10px] leading-none py-[3px] rounded-sm ${
                           isCurrent
                             ? 'font-bold text-white'
                             : isDrawn
-                            ? 'font-medium'
+                            ? 'font-semibold'
                             : ''
                         }`}
                         style={{
@@ -292,7 +324,7 @@ export default function GameDetailPage() {
                             : isDrawn
                             ? 'var(--tg-theme-button-color)'
                             : 'var(--tg-theme-hint-color)',
-                          border: isRecent && !isCurrent ? '1px solid var(--tg-theme-button-color)' : '1px solid transparent',
+                          border: isRecent && !isCurrent ? '1.5px solid var(--tg-theme-button-color)' : '1px solid transparent',
                         }}
                       >
                         {n}
@@ -303,46 +335,36 @@ export default function GameDetailPage() {
               </div>
 
               {/* Right: Player card */}
-              <div className="w-2/5">
-                {lastNumber !== null && (
-                  <div className="text-center mb-1">
-                    <div className="text-[10px]" style={{ color: 'var(--tg-theme-hint-color)' }}>Called</div>
-                    <div
-                      className="text-2xl font-bold leading-tight"
-                      style={{ color: 'var(--tg-theme-button-color)' }}
-                    >
-                      {lastNumber}
-                    </div>
-                  </div>
-                )}
+              <div className="w-[120px] flex-shrink-0">
                 {myCards.length > 0 ? (
                   myCards.map((card) => (
                     <div key={card._id}>
-                      <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center justify-between mb-[2px]">
                         <span className="text-[10px] font-bold">#{card.cardNumber}</span>
                         <button
                           onClick={handleBingo}
-                          className="text-[10px] px-2 py-1 rounded font-bold text-white"
-                          style={{ backgroundColor: 'var(--tg-theme-button-color)' }}
+                          className="text-[10px] px-2 py-[2px] rounded font-bold"
+                          style={{
+                            backgroundColor: 'var(--tg-theme-button-color)',
+                            color: 'var(--tg-theme-button-text-color)',
+                            border: 'none',
+                          }}
                           disabled={loading || placedBingo}
                         >
                           {placedBingo ? '✓' : loading ? '...' : 'BINGO'}
                         </button>
                       </div>
-                      <div className="grid grid-cols-5 gap-px">
+                      <div className="grid grid-cols-5 gap-[1px]">
                         {COLUMNS.map((col) =>
                           (card.card ? card.card[col] : [0, 0, 0, 0, 0]).map((num: number, idx: number) => {
                             const isFree = num === 0
-                            const isDrawn = drawnNumbers.includes(num)
                             const isMarked = markedNumbers.includes(num) || isFree
-                            const canTap = isDrawn && !isFree
+                            const canTap = drawnNumbers.includes(num) && !isFree
                             return (
                               <button
                                 key={`${col}-${idx}`}
                                 onClick={() => canTap && toggleMark(num)}
-                                className={`text-center text-[9px] leading-none py-1 rounded-sm ${
-                                  isMarked ? 'font-bold text-white' : ''
-                                } ${!isDrawn && !isFree ? 'opacity-30' : ''}`}
+                                className="text-center text-[9px] leading-none py-[2px] rounded-sm"
                                 style={{
                                   backgroundColor: isMarked
                                     ? 'var(--tg-theme-button-color)'
@@ -350,6 +372,8 @@ export default function GameDetailPage() {
                                   color: isMarked
                                     ? 'var(--tg-theme-button-text-color)'
                                     : 'var(--tg-theme-text-color)',
+                                  border: 'none',
+                                  opacity: canTap ? 1 : 0.4,
                                 }}
                               >
                                 {isFree ? '★' : num}
