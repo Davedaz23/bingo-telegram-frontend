@@ -19,7 +19,7 @@ export default function CardSelector({
 }: CardSelectorProps) {
   const myCards = cards.filter((c) => c.isOwnedByMe && c.card)
   const taken = cards.filter((c) => !c.isOwnedByMe && (c.status === 'selected' || c.status === 'purchased'))
-  const available = cards.filter((c) => c.status === 'available')
+  const available = cards;
   const showCards = [...available, ...myCards]
 
   return (
