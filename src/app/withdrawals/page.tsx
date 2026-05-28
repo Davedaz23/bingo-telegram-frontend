@@ -139,7 +139,7 @@ export default function WithdrawalsPage() {
               ))}
             </div>
           ) : withdrawals.length === 0 ? (
-            <div className="text-center py-8" style={{ color: 'var(--tg-theme-hint-color)' }}>
+            <div className="text-center py-8" style={{ color: '#c39977' }}>
               No withdrawals yet
             </div>
           ) : (
@@ -148,10 +148,10 @@ export default function WithdrawalsPage() {
                 <div key={w._id} className="card flex items-center justify-between">
                   <div>
                     <div className="font-medium text-sm">{w.amount.toFixed(2)} Birr</div>
-                    <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                    <div className="text-xs" style={{ color: '#c39977' }}>
                       {w.accountNumber}
                     </div>
-                    <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                    <div className="text-xs" style={{ color: '#c39977' }}>
                       {new Date(w.createdAt).toLocaleDateString()}
                     </div>
                   </div>

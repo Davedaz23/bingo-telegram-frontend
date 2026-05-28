@@ -224,7 +224,7 @@ export default function HomePage() {
       <div className="flex items-center justify-center min-h-screen p-4">
         <div className="text-center">
           <h1 className="text-xl font-bold mb-2">Bingo</h1>
-          <p className="text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>
+          <p className="text-sm" style={{ color: '#c39977' }}>
             {error || 'Initializing...'}
           </p>
           {error && (
@@ -251,13 +251,13 @@ export default function HomePage() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-xl font-bold">Bingo</h1>
-            <p className="text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>
+            <p className="text-sm" style={{ color: '#c39977' }}>
               Welcome, {user.firstName}
             </p>
           </div>
           <div className="text-right">
-            <div className="text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>Balance</div>
-            <div className="text-lg font-bold" style={{ color: 'var(--tg-theme-button-color)' }}>
+            <div className="text-sm" style={{ color: '#c39977' }}>Balance</div>
+            <div className="text-lg font-bold" style={{ color: '#0ca3db' }}>
               {user.balance.toFixed(2)} Birr
             </div>
           </div>
@@ -273,7 +273,7 @@ export default function HomePage() {
             <div className="card animate-pulse h-64" />
           </div>
         ) : !game ? (
-          <div className="text-center py-12" style={{ color: 'var(--tg-theme-hint-color)' }}>
+          <div className="text-center py-12" style={{ color: '#c39977' }}>
             <p>No game available right now</p>
             <p className="text-xs mt-1">Check back soon</p>
           </div>
@@ -297,7 +297,7 @@ export default function HomePage() {
             <div className="card text-center py-8">
               <div className="text-3xl mb-3">💰</div>
               <h3 className="font-bold mb-1">Insufficient Balance</h3>
-              <p className="text-sm mb-4" style={{ color: 'var(--tg-theme-hint-color)' }}>
+              <p className="text-sm mb-4" style={{ color: '#c39977' }}>
                 You need at least {cardPrice} Birr to buy a card
               </p>
               <button
@@ -310,7 +310,7 @@ export default function HomePage() {
           )
         ) : (
           <div className="card text-center py-8">
-            <div className="text-sm mb-2" style={{ color: 'var(--tg-theme-hint-color)' }}>
+            <div className="text-sm mb-2" style={{ color: '#c39977' }}>
               Game #{game.gameCode} is <strong>{game.status}</strong>
             </div>
             <button

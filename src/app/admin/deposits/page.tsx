@@ -95,7 +95,7 @@ export default function AdminDepositsPage() {
         )}
 
         {deposits.length === 0 && !loading ? (
-          <div className="text-center py-8" style={{ color: 'var(--tg-theme-hint-color)' }}>
+          <div className="text-center py-8" style={{ color: '#c39977' }}>
             No deposit requests found
           </div>
         ) : loading ? (
@@ -115,7 +115,7 @@ export default function AdminDepositsPage() {
                     <div>
                       <span className="font-medium">{dep.userId?.firstName || 'Unknown'}</span>
                       {dep.userId?.username && (
-                        <span className="ml-1" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                        <span className="ml-1" style={{ color: '#c39977' }}>
                           @{dep.userId.username}
                         </span>
                       )}
@@ -130,7 +130,7 @@ export default function AdminDepositsPage() {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 mb-2 text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                  <div className="grid grid-cols-2 gap-2 mb-2 text-xs" style={{ color: '#c39977' }}>
                     <div>Channel: <span className="font-medium text-gray-800">{dep.channel}</span></div>
                     <div>Amount: <span className="font-medium text-gray-800">{dep.amount.toFixed(2)} Birr</span></div>
                     <div className="col-span-2">Date: {new Date(dep.createdAt).toLocaleString()}</div>

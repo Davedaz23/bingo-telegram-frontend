@@ -21,7 +21,7 @@ export default function BingoBoard({ card, drawnNumbers }: BingoBoardProps) {
           <div
             key={col}
             className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-t text-xs sm:text-sm font-bold text-white"
-            style={{ backgroundColor: 'var(--tg-theme-button-color)' }}
+            style={{ backgroundColor: '#0ca3db' }}
           >
             {col}
           </div>
@@ -39,9 +39,9 @@ export default function BingoBoard({ card, drawnNumbers }: BingoBoardProps) {
                 style={
                   drawn || isFree
                     ? {
-                        backgroundColor: 'var(--tg-theme-button-color)',
-                        color: 'var(--tg-theme-button-text-color)',
-                        borderColor: 'var(--tg-theme-button-color)',
+                        backgroundColor: '#0ca3db',
+                        color: '#ffffff',
+                        borderColor: '#0ca3db',
                         opacity: isFree ? 0.5 : 1,
                       }
                     : undefined

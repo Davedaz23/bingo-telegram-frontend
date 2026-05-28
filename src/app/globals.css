@@ -3,18 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --tg-theme-bg-color: #ede7e0;
-  --tg-theme-text-color: #1a1a2e;
-  --tg-theme-hint-color: #c39977;
-  --tg-theme-link-color: #0ca3db;
-  --tg-theme-button-color: #0ca3db;
-  --tg-theme-button-text-color: #ffffff;
-  --tg-theme-secondary-bg-color: #ffffff;
+  --brand-primary: #0ca3db;
+  --brand-secondary: #528b98;
+  --brand-bg: #ede7e0;
+  --brand-bg-dark: #e0d8cf;
+  --brand-hint: #c39977;
+  --brand-gold: #ddc477;
+  --brand-text: #1a1a2e;
+  --brand-white: #ffffff;
+
+  /* Override Telegram theme variables with brand colors */
+  --tg-theme-bg-color: #ede7e0 !important;
+  --tg-theme-text-color: #1a1a2e !important;
+  --tg-theme-hint-color: #c39977 !important;
+  --tg-theme-link-color: #0ca3db !important;
+  --tg-theme-button-color: #0ca3db !important;
+  --tg-theme-button-text-color: #ffffff !important;
+  --tg-theme-secondary-bg-color: #ffffff !important;
 }
 
 body {
-  background: linear-gradient(135deg, #ede7e0 0%, #e0d8cf 100%);
-  color: var(--tg-theme-text-color);
+  background: linear-gradient(135deg, var(--brand-bg) 0%, var(--brand-bg-dark) 100%);
+  color: var(--brand-text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   min-height: 100vh;
 }
@@ -24,9 +34,9 @@ body {
     @apply px-5 py-2.5 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide;
   }
   .btn-primary {
-    @apply btn text-white shadow-md;
-    background: linear-gradient(135deg, #0ca3db, #528b98);
-    color: var(--tg-theme-button-text-color);
+    @apply btn text-white;
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    color: var(--brand-white);
     box-shadow: 0 4px 12px rgba(12, 163, 219, 0.3);
   }
   .btn-primary:hover:not(:disabled) {
@@ -34,18 +44,15 @@ body {
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(12, 163, 219, 0.35);
   }
-  .btn-primary:active:not(:disabled) {
-    transform: translateY(0);
-  }
   .btn-secondary {
     @apply btn;
-    background-color: var(--tg-theme-secondary-bg-color);
-    border: 1.5px solid #e5e7eb;
-    color: var(--tg-theme-hint-color);
+    background-color: var(--brand-bg);
+    border: 1.5px solid #d4c9be;
+    color: var(--brand-hint);
   }
   .btn-secondary:hover:not(:disabled) {
-    border-color: var(--tg-theme-button-color);
-    color: var(--tg-theme-button-color);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
   }
   .btn-danger {
     @apply btn bg-red-500 text-white hover:bg-red-600 shadow-md shadow-red-200;
@@ -55,7 +62,7 @@ body {
   }
   .card {
     @apply rounded-2xl p-4;
-    background-color: var(--tg-theme-secondary-bg-color);
+    background-color: var(--brand-white);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
     border: 1px solid rgba(0, 0, 0, 0.04);
   }
@@ -65,14 +72,14 @@ body {
   }
   .input {
     @apply w-full px-4 py-2.5 rounded-xl border text-sm outline-none transition-all;
-    border-color: #e5e7eb;
-    background-color: var(--tg-theme-bg-color);
-    color: var(--tg-theme-text-color);
+    border-color: #d4c9be;
+    background-color: var(--brand-bg);
+    color: var(--brand-text);
   }
   .input:focus {
     @apply ring-2;
-    border-color: var(--tg-theme-button-color);
-    --tw-ring-color: var(--tg-theme-button-color);
+    border-color: var(--brand-primary);
+    --tw-ring-color: var(--brand-primary);
   }
   .badge {
     @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold;
@@ -87,27 +94,29 @@ body {
     @apply badge bg-red-50 text-red-700;
   }
   .badge-blue {
-    @apply badge bg-indigo-50 text-indigo-700;
+    @apply badge;
+    background-color: rgba(12, 163, 219, 0.1);
+    color: var(--brand-primary);
   }
   .badge-gray {
     @apply badge bg-gray-100 text-gray-600;
   }
   .bingo-cell {
     @apply w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-xs sm:text-sm font-bold cursor-pointer transition-all duration-150;
-    background-color: var(--tg-theme-bg-color);
+    background-color: var(--brand-bg);
   }
   .bingo-cell-default {
     @apply border;
-    border-color: #e5e7eb;
-    color: var(--tg-theme-text-color);
+    border-color: #d4c9be;
+    color: var(--brand-text);
   }
   .bingo-cell-default:hover {
-    border-color: var(--tg-theme-button-color);
+    border-color: var(--brand-primary);
     @apply shadow-sm;
   }
   .bingo-cell-marked {
-    background: linear-gradient(135deg, #0ca3db, #528b98);
-    color: white;
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    color: var(--brand-white);
     border-color: transparent;
     box-shadow: 0 2px 6px rgba(12, 163, 219, 0.25);
   }

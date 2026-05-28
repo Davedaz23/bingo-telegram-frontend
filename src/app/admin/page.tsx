@@ -43,7 +43,7 @@ export default function AdminDashboardPage() {
         <div className="text-center">
           <div className="text-4xl mb-4">🚫</div>
           <h1 className="text-xl font-bold">Access Denied</h1>
-          <p className="text-sm mt-2" style={{ color: 'var(--tg-theme-hint-color)' }}>
+          <p className="text-sm mt-2" style={{ color: '#c39977' }}>
             Admin access required
           </p>
           <Link href="/" className="btn-primary mt-4 inline-block">Go Home</Link>
@@ -73,53 +73,53 @@ export default function AdminDashboardPage() {
           <>
             <div className="grid grid-cols-2 gap-3 mb-6">
               <div className="card text-center">
-                <div className="text-2xl font-bold" style={{ color: 'var(--tg-theme-button-color)' }}>
+                <div className="text-2xl font-bold" style={{ color: '#0ca3db' }}>
                   {dashboard.stats.users.total}
                 </div>
-                <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Users</div>
+                <div className="text-xs" style={{ color: '#c39977' }}>Users</div>
               </div>
               <div className="card text-center">
-                <div className="text-2xl font-bold" style={{ color: 'var(--tg-theme-button-color)' }}>
+                <div className="text-2xl font-bold" style={{ color: '#0ca3db' }}>
                   {dashboard.stats.games.active}
                 </div>
-                <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Active Games</div>
+                <div className="text-xs" style={{ color: '#c39977' }}>Active Games</div>
               </div>
               <div className="card text-center">
                 <div className="text-2xl font-bold text-yellow-500">
                   {dashboard.stats.pendingWithdrawals}
                 </div>
-                <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Pending Withdrawals</div>
+                <div className="text-xs" style={{ color: '#c39977' }}>Pending Withdrawals</div>
               </div>
               <div className="card text-center">
                 <div className="text-2xl font-bold text-purple-500">
                   {dashboard.stats.pendingDeposits ?? 0}
                 </div>
-                <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Pending Deposits</div>
+                <div className="text-xs" style={{ color: '#c39977' }}>Pending Deposits</div>
               </div>
               <div className="card text-center">
                 <div className="text-2xl font-bold text-green-500">
                   {dashboard.stats.platformRevenue.toFixed(2)} Birr
                 </div>
-                <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Revenue</div>
+                <div className="text-xs" style={{ color: '#c39977' }}>Revenue</div>
               </div>
             </div>
 
             <div className="space-y-2 mb-6">
               <Link href="/admin/games" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium">🎮 Games</span>
-                <span style={{ color: 'var(--tg-theme-hint-color)' }}>Create & manage →</span>
+                <span style={{ color: '#c39977' }}>Create & manage →</span>
               </Link>
               <Link href="/admin/users" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium">👥 Users</span>
-                <span style={{ color: 'var(--tg-theme-hint-color)' }}>Manage users →</span>
+                <span style={{ color: '#c39977' }}>Manage users →</span>
               </Link>
               <Link href="/admin/deposits" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium">💰 Deposits</span>
-                <span style={{ color: 'var(--tg-theme-hint-color)' }}>Match & confirm →</span>
+                <span style={{ color: '#c39977' }}>Match & confirm →</span>
               </Link>
               <Link href="/admin/withdrawals" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium">💳 Withdrawals</span>
-                <span style={{ color: 'var(--tg-theme-hint-color)' }}>Approve/reject →</span>
+                <span style={{ color: '#c39977' }}>Approve/reject →</span>
               </Link>
             </div>
 
@@ -131,7 +131,7 @@ export default function AdminDashboardPage() {
                     <div key={tx._id} className="card flex items-center justify-between text-sm">
                       <div>
                         <div className="font-medium">{tx.type}</div>
-                        <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                        <div className="text-xs" style={{ color: '#c39977' }}>
                           {new Date(tx.createdAt).toLocaleString()}
                         </div>
                       </div>

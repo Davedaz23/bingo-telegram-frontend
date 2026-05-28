@@ -25,7 +25,7 @@ const statusBadge: Record<string, string> = {
 
 export default function TransactionList({ transactions }: TransactionListProps) {
   if (!transactions.length) {
-    return <div className="text-center py-8" style={{ color: 'var(--tg-theme-hint-color)' }}>No transactions yet</div>
+    return <div className="text-center py-8" style={{ color: '#c39977' }}>No transactions yet</div>
   }
 
   return (
@@ -34,11 +34,11 @@ export default function TransactionList({ transactions }: TransactionListProps) 
         <div key={tx._id} className="card flex items-center justify-between">
           <div>
             <div className="font-medium text-sm">{typeLabels[tx.type] || tx.type}</div>
-            <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
+            <div className="text-xs" style={{ color: '#c39977' }}>
               {new Date(tx.createdAt).toLocaleDateString()}
             </div>
             {tx.description && (
-              <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
+              <div className="text-xs" style={{ color: '#c39977' }}>
                 {tx.description}
               </div>
             )}

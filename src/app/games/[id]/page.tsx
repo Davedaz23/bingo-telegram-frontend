@@ -222,7 +222,7 @@ export default function GameDetailPage() {
   if (!game) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-pulse text-center" style={{ color: 'var(--tg-theme-hint-color)' }}>
+        <div className="animate-pulse text-center" style={{ color: '#c39977' }}>
           Loading game...
         </div>
       </div>
@@ -243,7 +243,7 @@ export default function GameDetailPage() {
             <div
               className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-green-500' : 'bg-red-400'}`}
             />
-            <span className="text-[9px]" style={{ color: 'var(--tg-theme-hint-color)' }}>
+            <span className="text-[9px]" style={{ color: '#c39977' }}>
               {connected ? 'Live' : 'Offline'}
             </span>
           </div>
@@ -252,13 +252,13 @@ export default function GameDetailPage() {
         <div className="flex items-center justify-between mb-2">
           <div>
             <h1 className="text-lg font-bold">Game #{game.gameCode}</h1>
-            <p className="text-xs capitalize" style={{ color: 'var(--tg-theme-hint-color)' }}>
+            <p className="text-xs capitalize" style={{ color: '#c39977' }}>
               {game.status === 'starting' ? 'Starting...' : game.status === 'active' ? 'In Progress' : game.status}
             </p>
           </div>
           <div className="text-right">
-            <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Prize</div>
-            <div className="text-base font-bold" style={{ color: 'var(--tg-theme-button-color)' }}>
+            <div className="text-xs" style={{ color: '#c39977' }}>Prize</div>
+            <div className="text-base font-bold" style={{ color: '#0ca3db' }}>
               {game.prizePool.toFixed(2)} Birr
             </div>
           </div>
@@ -270,8 +270,8 @@ export default function GameDetailPage() {
 
         {countdown !== null && countdown > 0 && game.status === 'starting' && (
           <div className="card mb-3 text-center py-4">
-            <div className="text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>Game starting in</div>
-            <div className="text-2xl font-bold mt-1" style={{ color: 'var(--tg-theme-button-color)' }}>
+            <div className="text-xs" style={{ color: '#c39977' }}>Game starting in</div>
+            <div className="text-2xl font-bold mt-1" style={{ color: '#0ca3db' }}>
               {Math.ceil(countdown)}s
             </div>
           </div>
@@ -282,12 +282,12 @@ export default function GameDetailPage() {
             {/* Last 3 called numbers */}
             {lastThree.length > 0 && (
               <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-[10px]" style={{ color: 'var(--tg-theme-hint-color)' }}>Last:</span>
+                <span className="text-[10px]" style={{ color: '#c39977' }}>Last:</span>
                 {lastThree.map((n, i) => (
                   <span
                     key={i}
                     className={`font-bold ${n === lastNumber ? 'text-base' : 'text-xs opacity-60'}`}
-                    style={{ color: n === lastNumber ? 'var(--tg-theme-button-color)' : 'var(--tg-theme-hint-color)' }}
+                    style={{ color: n === lastNumber ? '#0ca3db' : '#c39977' }}
                   >
                     {n}
                   </span>
@@ -315,16 +315,16 @@ export default function GameDetailPage() {
                         }`}
                         style={{
                           backgroundColor: isCurrent
-                            ? 'var(--tg-theme-button-color)'
+                            ? '#0ca3db'
                             : isDrawn
-                            ? 'var(--tg-theme-secondary-bg-color)'
+                            ? '#ffffff'
                             : 'transparent',
                           color: isCurrent
-                            ? 'var(--tg-theme-button-text-color)'
+                            ? '#ffffff'
                             : isDrawn
-                            ? 'var(--tg-theme-button-color)'
-                            : 'var(--tg-theme-hint-color)',
-                          border: isRecent && !isCurrent ? '1.5px solid var(--tg-theme-button-color)' : '1px solid transparent',
+                            ? '#0ca3db'
+                            : '#c39977',
+                          border: isRecent && !isCurrent ? '1.5px solid #0ca3db' : '1px solid transparent',
                         }}
                       >
                         {n}
@@ -345,8 +345,8 @@ export default function GameDetailPage() {
                           onClick={handleBingo}
                           className="text-[10px] px-2 py-[2px] rounded font-bold"
                           style={{
-                            backgroundColor: 'var(--tg-theme-button-color)',
-                            color: 'var(--tg-theme-button-text-color)',
+                            backgroundColor: '#0ca3db',
+                            color: '#ffffff',
                             border: 'none',
                           }}
                           disabled={loading || placedBingo}
@@ -367,11 +367,11 @@ export default function GameDetailPage() {
                                 className="text-center text-[9px] leading-none py-[2px] rounded-sm"
                                 style={{
                                   backgroundColor: isMarked
-                                    ? 'var(--tg-theme-button-color)'
-                                    : 'var(--tg-theme-secondary-bg-color)',
+                                    ? '#0ca3db'
+                                    : '#ffffff',
                                   color: isMarked
-                                    ? 'var(--tg-theme-button-text-color)'
-                                    : 'var(--tg-theme-text-color)',
+                                    ? '#ffffff'
+                                    : '#1a1a2e',
                                   border: 'none',
                                   opacity: canTap ? 1 : 0.4,
                                 }}
@@ -385,7 +385,7 @@ export default function GameDetailPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-6 text-xs" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                  <div className="text-center py-6 text-xs" style={{ color: '#c39977' }}>
                     No cards
                   </div>
                 )}
@@ -407,7 +407,7 @@ export default function GameDetailPage() {
         {isFinished && (
           <div className="card text-center mb-4 py-4">
             {winnerCountdown !== null && (
-              <div className="text-2xl font-bold mb-2" style={{ color: 'var(--tg-theme-button-color)' }}>
+              <div className="text-2xl font-bold mb-2" style={{ color: '#0ca3db' }}>
                 {winnerCountdown}s
               </div>
             )}
@@ -415,21 +415,21 @@ export default function GameDetailPage() {
               <div>
                 <div className="text-2xl mb-1">🎉</div>
                 <div className="font-bold text-green-500">You Won!</div>
-                <div className="text-xs mt-1" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                <div className="text-xs mt-1" style={{ color: '#c39977' }}>
                   Prize: {game.winner.prizeAmount?.toFixed(2)} Birr
                 </div>
               </div>
             ) : game.winner ? (
               <div>
                 <div className="text-sm font-medium">Game Won</div>
-                <div className="text-xs mt-1" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                <div className="text-xs mt-1" style={{ color: '#c39977' }}>
                   Another player won this game
                 </div>
               </div>
             ) : (
               <div>
                 <div className="text-sm font-medium">Game {game.status === 'cancelled' ? 'Cancelled' : 'Finished'}</div>
-                <div className="text-xs mt-1" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                <div className="text-xs mt-1" style={{ color: '#c39977' }}>
                   {game.status === 'cancelled' ? 'Refunds processed' : 'No winner'}
                 </div>
               </div>

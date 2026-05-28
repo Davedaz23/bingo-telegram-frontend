@@ -45,7 +45,7 @@ export default function CardSelector({
 
       {myCards.length > 0 && (
         <div className="mb-3">
-          <h3 className="font-bold mb-2 text-sm" style={{ color: 'var(--tg-theme-button-color)' }}>
+          <h3 className="font-bold mb-2 text-sm" style={{ color: '#0ca3db' }}>
             My Cards ({myCards.length})
           </h3>
           <div className="max-h-60 overflow-y-auto space-y-2">
@@ -79,9 +79,9 @@ export default function CardSelector({
               <div
                 key={card._id}
                 className="card text-center py-2 px-1 opacity-50"
-                style={{ backgroundColor: 'var(--tg-theme-secondary-bg-color)' }}
+                style={{ backgroundColor: '#ffffff' }}
               >
-                <div className="text-xs font-bold" style={{ color: 'var(--tg-theme-hint-color)' }}>
+                <div className="text-xs font-bold" style={{ color: '#c39977' }}>
                   #{card.cardNumber}
                 </div>
                 <div className="text-[10px] text-red-400">Taken</div>
@@ -92,7 +92,7 @@ export default function CardSelector({
       )}
 
       {available.length === 0 && myCards.length === 0 && taken.length === 0 && (
-        <div className="text-center py-8 text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>
+        <div className="text-center py-8 text-sm" style={{ color: '#c39977' }}>
           No cards available for this game
         </div>
       )}

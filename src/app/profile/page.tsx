@@ -52,7 +52,7 @@ export default function ProfilePage() {
 
         <div className="card text-center mb-6">
           <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-3 text-white"
-            style={{ backgroundColor: 'var(--tg-theme-button-color)' }}
+            style={{ backgroundColor: '#0ca3db' }}
           >
             {p.firstName.charAt(0).toUpperCase()}
           </div>
@@ -60,7 +60,7 @@ export default function ProfilePage() {
             {p.firstName} {p.lastName || ''}
           </div>
           {p.username && (
-            <div className="text-sm" style={{ color: 'var(--tg-theme-hint-color)' }}>
+            <div className="text-sm" style={{ color: '#c39977' }}>
               @{p.username}
             </div>
           )}
@@ -73,21 +73,21 @@ export default function ProfilePage() {
           <h3 className="font-bold mb-3">Account Info</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span style={{ color: 'var(--tg-theme-hint-color)' }}>Telegram ID</span>
+              <span style={{ color: '#c39977' }}>Telegram ID</span>
               <span>{p.telegramId}</span>
             </div>
             <div className="flex justify-between">
-              <span style={{ color: 'var(--tg-theme-hint-color)' }}>Balance</span>
-              <span className="font-bold" style={{ color: 'var(--tg-theme-button-color)' }}>
+              <span style={{ color: '#c39977' }}>Balance</span>
+              <span className="font-bold" style={{ color: '#0ca3db' }}>
                 {p.balance.toFixed(2)} Birr
               </span>
             </div>
             <div className="flex justify-between">
-              <span style={{ color: 'var(--tg-theme-hint-color)' }}>Language</span>
+              <span style={{ color: '#c39977' }}>Language</span>
               <span>{p.languageCode}</span>
             </div>
             <div className="flex justify-between">
-              <span style={{ color: 'var(--tg-theme-hint-color)' }}>Joined</span>
+              <span style={{ color: '#c39977' }}>Joined</span>
               <span>{new Date(p.createdAt).toLocaleDateString()}</span>
             </div>
           </div>
