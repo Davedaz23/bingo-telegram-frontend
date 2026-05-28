@@ -10,7 +10,7 @@ const config: Config = {
         brand: {
           primary: '#0ca3db',
           secondary: '#528b98',
-          bg: '#ede7e0',
+          bg: '#7ab5ec',
           'bg-dark': '#e0d8cf',
           hint: '#c39977',
           gold: '#ddc477',

@@ -5,15 +5,15 @@
 :root {
   --brand-primary: #0ca3db;
   --brand-secondary: #528b98;
-  --brand-bg: #ede7e0;
-  --brand-bg-dark: #e0d8cf;
+  --brand-bg: #7ab5ec;
+  --brand-bg-dark: #1b2f42;
   --brand-hint: #c39977;
   --brand-gold: #ddc477;
   --brand-text: #1a1a2e;
   --brand-white: #ffffff;
 
   /* Override Telegram theme variables with brand colors */
-  --tg-theme-bg-color: #ede7e0 !important;
+  --tg-theme-bg-color: #7ab5ec !important;
   --tg-theme-text-color: #1a1a2e !important;
   --tg-theme-hint-color: #c39977 !important;
   --tg-theme-link-color: #0ca3db !important;
@@ -102,7 +102,7 @@ body {
     @apply badge bg-gray-100 text-gray-600;
   }
   .bingo-cell {
-    @apply w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg font-bold cursor-pointer transition-all duration-150;
+    @apply w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-xs sm:text-sm font-bold cursor-pointer transition-all duration-150;
     background-color: var(--brand-bg);
   }
   .bingo-cell-default {
