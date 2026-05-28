@@ -18,49 +18,46 @@ export default function CardSelector({
   loading,
 }: CardSelectorProps) {
   const myCards = cards.filter((c) => c.isOwnedByMe && c.card)
-  const taken = cards.filter((c) => !c.isOwnedByMe && (c.status === 'selected' || c.status === 'purchased'))
-  const available = cards;
-  const showCards = [...available, ...myCards]
+  const takenCount = cards.filter((c) => !c.isOwnedByMe && (c.status === 'selected' || c.status === 'purchased')).length
+  const availableCount = cards.filter((c) => c.status === 'available').length
 
   return (
     <div>
-      {showCards.length > 0 && (
+      {cards.length > 0 && (
         <div className="mb-3">
-          <h3 className="font-bold mb-2">
-            Available Cards ({available.length})
-          </h3>
+          <h3 className="font-bold mb-2">Cards ({cards.length})</h3>
           <div className="max-h-48 overflow-y-auto">
             <div className="grid grid-cols-5 gap-1.5">
-              {showCards.map((card) => {
-                const owned = card.isOwnedByMe
+              {cards.map((card) => {
+                const taken = card.status === 'selected' || card.status === 'purchased'
                 return (
                   <button
                     key={card._id}
-                    onClick={() => !owned && onSelect(card)}
+                    onClick={() => !taken && onSelect(card)}
                     className="card text-center py-2 px-1 transition-opacity"
                     style={{
-                      borderColor: owned ? '#dc2626' : '#0ca3db',
+                      borderColor: taken ? '#dc2626' : '#0ca3db',
                       borderWidth: '2px',
-                      opacity: owned ? 0.9 : 1,
+                      backgroundColor: taken ? '#fef2f2' : '#ffffff',
                     }}
-                    disabled={loading || owned}
+                    disabled={loading || taken}
                   >
-                    <div className="font-bold" style={{ color: owned ? '#dc2626' : '#0ca3db' }}>
+                    <div className="font-bold" style={{ color: taken ? '#dc2626' : '#0ca3db' }}>
                       #{card.cardNumber}
                     </div>
-                    {owned && (
-                      <div className="text-xs font-medium" style={{ color: '#dc2626' }}>Yours</div>
+                    {taken && (
+                      <div className="text-xs font-medium" style={{ color: '#dc2626' }}>
+                        {card.isOwnedByMe ? 'Yours' : 'Taken'}
+                      </div>
                     )}
                   </button>
                 )
               })}
             </div>
           </div>
-          {taken.length > 0 && (
-            <div className="text-xs mt-1" style={{ color: '#c39977' }}>
-              Taken: {taken.length} other{taken.length > 1 ? 's' : ''} &middot; {available.length} left
-            </div>
-          )}
+          <div className="text-xs mt-1" style={{ color: '#c39977' }}>
+            {availableCount} available &middot; {takenCount + myCards.length} taken
+          </div>
         </div>
       )}
 
@@ -71,7 +68,7 @@ export default function CardSelector({
           </h3>
           <div className="space-y-2">
             {myCards.map((card) => (
-              <div key={card._id} className="card p-3" style={{ borderColor: '#dc2626', borderWidth: '2px' }}>
+              <div key={card._id} className="card p-3" style={{ borderColor: '#dc2626', borderWidth: '2px', backgroundColor: '#fef2f2' }}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-bold">Card #{card.cardNumber}</span>
                   <button
@@ -92,7 +89,7 @@ export default function CardSelector({
         </div>
       )}
 
-      {showCards.length === 0 && (
+      {cards.length === 0 && (
         <div className="text-center py-8" style={{ color: '#c39977' }}>
           No cards available for this game
         </div>
