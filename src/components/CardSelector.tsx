@@ -18,33 +18,50 @@ export default function CardSelector({
   loading,
 }: CardSelectorProps) {
   const myCards = cards.filter((c) => c.isOwnedByMe && c.card)
+  const taken = cards.filter((c) => !c.isOwnedByMe && (c.status === 'selected' || c.status === 'purchased'))
   const available = cards.filter((c) => c.status === 'available')
 
   return (
     <div>
-      {available.length > 0 && (
+      {cards.length > 0 && (
         <div className="mb-3">
-          <h3 className="font-bold mb-2">Available Cards ({available.length})</h3>
+          <h3 className="font-bold mb-2">Cards ({cards.length})</h3>
           <div className="max-h-48 overflow-y-auto">
             <div className="grid grid-cols-5 gap-1.5">
-              {available.map((card) => (
-                <button
-                  key={card._id}
-                  onClick={() => onSelect(card)}
-                  className="card text-center py-2 px-1 hover:opacity-80 transition-opacity"
-                  disabled={loading}
-                >
-                  <div className="font-bold">#{card.cardNumber}</div>
-                </button>
-              ))}
+              {cards.map((card) => {
+                const owned = card.isOwnedByMe
+                return (
+                  <button
+                    key={card._id}
+                    onClick={() => !owned && onSelect(card)}
+                    className="card text-center py-2 px-1 transition-opacity"
+                    style={{
+                      borderColor: owned ? '#dc2626' : '#0ca3db',
+                      borderWidth: '2px',
+                      opacity: owned ? 0.9 : 1,
+                    }}
+                    disabled={loading || owned}
+                  >
+                    <div className="font-bold" style={{ color: owned ? '#dc2626' : '#0ca3db' }}>
+                      #{card.cardNumber}
+                    </div>
+                    {owned && (
+                      <div className="text-xs font-medium" style={{ color: '#dc2626' }}>Yours</div>
+                    )}
+                  </button>
+                )
+              })}
             </div>
+          </div>
+          <div className="text-xs mt-1" style={{ color: '#c39977' }}>
+            Taken: {taken.length + myCards.length} / {cards.length}
           </div>
         </div>
       )}
 
       {myCards.length > 0 && (
         <div className="mb-3">
-          <h3 className="font-bold mb-2" style={{ color: '#0ca3db' }}>
+          <h3 className="font-bold mb-2" style={{ color: '#dc2626' }}>
             My Cards ({myCards.length})
           </h3>
           <div className="space-y-2">
@@ -70,7 +87,7 @@ export default function CardSelector({
         </div>
       )}
 
-      {available.length === 0 && myCards.length === 0 && (
+      {cards.length === 0 && (
         <div className="text-center py-8" style={{ color: '#c39977' }}>
           No cards available for this game
         </div>
