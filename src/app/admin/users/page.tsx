@@ -113,7 +113,7 @@ export default function AdminUsersPage() {
                     <div className="font-medium truncate">
                       {u.firstName} {u.lastName || ''}
                     </div>
-                    <div style={{ color: '#c39977' }}>
+                    <div style={{ color: '#ffffff' }}>
                       @{u.username || 'no username'} · ID: {u.telegramId}
                     </div>
                     <div className="flex items-center gap-2 mt-1">
@@ -155,7 +155,7 @@ export default function AdminUsersPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="rounded-xl p-6 w-full max-w-sm" style={{ backgroundColor: '#ede7e0' }}>
             <h3 className="font-bold mb-1">Credit {creditModal.name}</h3>
-            <p className="text-sm mb-4" style={{ color: '#c39977' }}>
+            <p className="text-sm mb-4" style={{ color: '#ffffff' }}>
               Enter amount to add to wallet
             </p>
             <input

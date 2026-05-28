@@ -31,7 +31,7 @@ export default function NavBar({ user }: NavBarProps) {
               className={`flex flex-col items-center justify-center px-3 py-1 transition-colors ${
                 isActive ? 'opacity-100' : 'opacity-50'
               }`}
-              style={{ color: isActive ? '#0ca3db' : '#c39977' }}
+              style={{ color: isActive ? '#0ca3db' : '#ffffff' }}
             >
               <span className="text-xl">{item.icon}</span>
               <span className="mt-0.5 text-xs">{item.label}</span>
@@ -44,7 +44,7 @@ export default function NavBar({ user }: NavBarProps) {
             className={`flex flex-col items-center justify-center px-3 py-1 transition-colors ${
               pathname.startsWith('/admin') ? 'opacity-100' : 'opacity-50'
             }`}
-            style={{ color: pathname.startsWith('/admin') ? '#0ca3db' : '#c39977' }}
+            style={{ color: pathname.startsWith('/admin') ? '#0ca3db' : '#ffffff' }}
           >
             <span className="text-xl">⚙️</span>
             <span className="mt-0.5 text-xs">Admin</span>

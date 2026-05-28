@@ -60,7 +60,7 @@ export default function ProfilePage() {
             {p.firstName} {p.lastName || ''}
           </div>
           {p.username && (
-            <div style={{ color: '#c39977' }}>
+            <div style={{ color: '#ffffff' }}>
               @{p.username}
             </div>
           )}
@@ -73,21 +73,21 @@ export default function ProfilePage() {
           <h3 className="font-bold mb-3 text-lg">Account Info</h3>
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span style={{ color: '#c39977' }}>Telegram ID</span>
+              <span style={{ color: '#ffffff' }}>Telegram ID</span>
               <span>{p.telegramId}</span>
             </div>
             <div className="flex justify-between">
-              <span style={{ color: '#c39977' }}>Balance</span>
+              <span style={{ color: '#ffffff' }}>Balance</span>
               <span className="font-bold" style={{ color: '#0ca3db' }}>
                 {p.balance.toFixed(2)} Birr
               </span>
             </div>
             <div className="flex justify-between">
-              <span style={{ color: '#c39977' }}>Language</span>
+              <span style={{ color: '#ffffff' }}>Language</span>
               <span>{p.languageCode}</span>
             </div>
             <div className="flex justify-between">
-              <span style={{ color: '#c39977' }}>Joined</span>
+              <span style={{ color: '#ffffff' }}>Joined</span>
               <span>{new Date(p.createdAt).toLocaleDateString()}</span>
             </div>
           </div>

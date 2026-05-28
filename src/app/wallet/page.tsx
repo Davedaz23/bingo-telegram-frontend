@@ -88,7 +88,7 @@ export default function WalletPage() {
         <h1 className="text-2xl font-bold mb-6">Wallet</h1>
 
         <div className="card text-center mb-6">
-          <div style={{ color: '#c39977' }}>
+          <div style={{ color: '#ffffff' }}>
             Available Balance
           </div>
           <div className="text-4xl font-bold mt-1" style={{ color: '#0ca3db' }}>
@@ -120,14 +120,14 @@ export default function WalletPage() {
               >
                 <span className="font-medium">{CHANNEL_LABELS[ch]}</span>
                 {accounts && (
-                  <span className="ml-2" style={{ color: '#c39977' }}>
+                  <span className="ml-2" style={{ color: '#ffffff' }}>
                     {accounts[ch as keyof DepositAccounts]}
                   </span>
                 )}
               </button>
             ))}
             {accounts && (
-              <p className="text-sm mt-1" style={{ color: '#c39977' }}>
+              <p className="text-sm mt-1" style={{ color: '#ffffff' }}>
                 Account Name: {accounts.accountName}
               </p>
             )}

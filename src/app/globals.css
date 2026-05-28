@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --brand-primary: #0ca3db;
-  --brand-secondary: #528b98;
-  --brand-bg: #7ab5ec;
-  --brand-bg-dark: #1b2f42;
-  --brand-hint: #c39977;
-  --brand-gold: #ddc477;
-  --brand-text: #1a1a2e;
+  --brand-primary: #00beac;
+  --brand-secondary: #ffffff;
+  --brand-bg: #00beac;
+  --brand-bg-dark: #007267;
+  --brand-hint: #ffffff;
+  --brand-gold: #ffffff;
+  --brand-text: #ffffff;
   --brand-white: #ffffff;
 
   /* Override Telegram theme variables with brand colors */
   --tg-theme-bg-color: #7ab5ec !important;
   --tg-theme-text-color: #1a1a2e !important;
-  --tg-theme-hint-color: #c39977 !important;
+  --tg-theme-hint-color: #ffffff !important;
   --tg-theme-link-color: #0ca3db !important;
   --tg-theme-button-color: #0ca3db !important;
   --tg-theme-button-text-color: #ffffff !important;

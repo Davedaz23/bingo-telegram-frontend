@@ -12,7 +12,7 @@ const config: Config = {
           secondary: '#528b98',
           bg: '#7ab5ec',
           'bg-dark': '#e0d8cf',
-          hint: '#c39977',
+          hint: '#ffffff',
           gold: '#ddc477',
           text: '#1a1a2e',
           white: '#ffffff',

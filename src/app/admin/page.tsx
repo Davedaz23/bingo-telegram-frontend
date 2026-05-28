@@ -43,7 +43,7 @@ export default function AdminDashboardPage() {
         <div className="text-center">
           <div className="text-4xl mb-4">🚫</div>
           <h1 className="text-xl font-bold">Access Denied</h1>
-          <p className="text-sm mt-2" style={{ color: '#c39977' }}>
+          <p className="text-sm mt-2" style={{ color: '#ffffff' }}>
             Admin access required
           </p>
           <Link href="/" className="btn-primary mt-4 inline-block">Go Home</Link>
@@ -76,50 +76,50 @@ export default function AdminDashboardPage() {
                 <div className="text-3xl font-bold" style={{ color: '#0ca3db' }}>
                   {dashboard.stats.users.total}
                 </div>
-                <div style={{ color: '#c39977' }}>Users</div>
+                <div style={{ color: '#ffffff' }}>Users</div>
               </div>
               <div className="card text-center">
                 <div className="text-3xl font-bold" style={{ color: '#0ca3db' }}>
                   {dashboard.stats.games.active}
                 </div>
-                <div style={{ color: '#c39977' }}>Active Games</div>
+                <div style={{ color: '#ffffff' }}>Active Games</div>
               </div>
               <div className="card text-center">
                 <div className="text-3xl font-bold text-yellow-500">
                   {dashboard.stats.pendingWithdrawals}
                 </div>
-                <div style={{ color: '#c39977' }}>Pending Withdrawals</div>
+                <div style={{ color: '#ffffff' }}>Pending Withdrawals</div>
               </div>
               <div className="card text-center">
                 <div className="text-3xl font-bold text-purple-500">
                   {dashboard.stats.pendingDeposits ?? 0}
                 </div>
-                <div style={{ color: '#c39977' }}>Pending Deposits</div>
+                <div style={{ color: '#ffffff' }}>Pending Deposits</div>
               </div>
               <div className="card text-center">
                 <div className="text-3xl font-bold text-green-500">
                   {dashboard.stats.platformRevenue.toFixed(2)} Birr
                 </div>
-                <div style={{ color: '#c39977' }}>Revenue</div>
+                <div style={{ color: '#ffffff' }}>Revenue</div>
               </div>
             </div>
 
             <div className="space-y-2 mb-6">
               <Link href="/admin/games" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium text-lg">🎮 Games</span>
-                <span style={{ color: '#c39977' }}>Create & manage →</span>
+                <span style={{ color: '#ffffff' }}>Create & manage →</span>
               </Link>
               <Link href="/admin/users" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium text-lg">👥 Users</span>
-                <span style={{ color: '#c39977' }}>Manage users →</span>
+                <span style={{ color: '#ffffff' }}>Manage users →</span>
               </Link>
               <Link href="/admin/deposits" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium text-lg">💰 Deposits</span>
-                <span style={{ color: '#c39977' }}>Match & confirm →</span>
+                <span style={{ color: '#ffffff' }}>Match & confirm →</span>
               </Link>
               <Link href="/admin/withdrawals" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
                 <span className="font-medium text-lg">💳 Withdrawals</span>
-                <span style={{ color: '#c39977' }}>Approve/reject →</span>
+                <span style={{ color: '#ffffff' }}>Approve/reject →</span>
               </Link>
             </div>
 
@@ -131,7 +131,7 @@ export default function AdminDashboardPage() {
                     <div key={tx._id} className="card flex items-center justify-between">
                       <div>
                         <div className="font-medium">{tx.type}</div>
-                        <div className="text-sm" style={{ color: '#c39977' }}>
+                        <div className="text-sm" style={{ color: '#ffffff' }}>
                           {new Date(tx.createdAt).toLocaleString()}
                         </div>
                       </div>

@@ -25,7 +25,7 @@ export default function GameListItem({ game }: GameListItemProps) {
           {game.status}
         </span>
       </div>
-      <div className="flex items-center justify-between" style={{ color: '#c39977' }}>
+      <div className="flex items-center justify-between" style={{ color: '#ffffff' }}>
         <span>🎯 <strong style={{ color: '#1a1a2e' }}>{game.prizePool} Birr</strong></span>
         <span>🎴 {game.purchasedCards ?? '?'} cards</span>
         <span>🏆 Win {Math.floor(Number(game.prizePool) * 0.8)} Birr</span>

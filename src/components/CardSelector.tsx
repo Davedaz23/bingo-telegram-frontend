@@ -55,7 +55,7 @@ export default function CardSelector({
               })}
             </div>
           </div>
-          <div className="text-xs mt-1" style={{ color: '#c39977' }}>
+          <div className="text-xs mt-1" style={{ color: '#ffffff' }}>
             {availableCount} available &middot; {takenCount + myCards.length} taken
           </div>
         </div>
@@ -90,7 +90,7 @@ export default function CardSelector({
       )}
 
       {cards.length === 0 && (
-        <div className="text-center py-8" style={{ color: '#c39977' }}>
+        <div className="text-center py-8" style={{ color: '#ffffff' }}>
           No cards available for this game
         </div>
       )}
