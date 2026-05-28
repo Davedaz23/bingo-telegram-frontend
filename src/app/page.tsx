@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { getGames, getGameCards, selectCard, releaseCardApi, authTelegram, getProfile } from '@/lib/api'
 import { getStoredToken, getStoredUser, storeAuth, clearAuth } from '@/lib/auth'
-import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket'
+import { connectSocket, disconnectSocket, getSocket, joinGameRoom, leaveGameRoom } from '@/lib/socket'
 import NavBar from '@/components/NavBar'
 import CardSelector from '@/components/CardSelector'
 import type { User, Game, BingoCard } from '@/types'
@@ -145,6 +145,14 @@ export default function HomePage() {
     if (!user) return
     fetchGame()
   }, [user, fetchGame])
+
+  useEffect(() => {
+    if (!game) return
+    try { joinGameRoom(game._id) } catch {}
+    return () => {
+      try { leaveGameRoom(game._id) } catch {}
+    }
+  }, [game])
 
   useEffect(() => {
     let sock: ReturnType<typeof getSocket>
