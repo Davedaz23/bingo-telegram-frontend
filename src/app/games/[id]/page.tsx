@@ -61,6 +61,7 @@ export default function GameDetailPage() {
   const fetchGame = useCallback(async () => {
     try {
       const g = await getGame(id)
+      console.log('Fetched game:', g)
       setGame(g)
       if (g.countdownStartedAt) {
         const elapsed = (Date.now() - new Date(g.countdownStartedAt).getTime()) / 1000
