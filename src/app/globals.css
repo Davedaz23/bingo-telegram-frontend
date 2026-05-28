@@ -31,7 +31,7 @@ body {
 
 @layer components {
   .btn {
-    @apply px-5 py-2.5 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide;
+    @apply px-5 py-3 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed tracking-wide;
   }
   .btn-primary {
     @apply btn text-white;
@@ -102,7 +102,7 @@ body {
     @apply badge bg-gray-100 text-gray-600;
   }
   .bingo-cell {
-    @apply w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-xs sm:text-sm font-bold cursor-pointer transition-all duration-150;
+    @apply w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg font-bold cursor-pointer transition-all duration-150;
     background-color: var(--brand-bg);
   }
   .bingo-cell-default {

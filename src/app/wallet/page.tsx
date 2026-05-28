@@ -85,34 +85,34 @@ export default function WalletPage() {
   return (
     <div className="pb-16">
       <div className="p-4 max-w-lg mx-auto">
-        <h1 className="text-xl font-bold mb-6">Wallet</h1>
+        <h1 className="text-2xl font-bold mb-6">Wallet</h1>
 
         <div className="card text-center mb-6">
-          <div className="text-sm" style={{ color: '#c39977' }}>
+          <div style={{ color: '#c39977' }}>
             Available Balance
           </div>
-          <div className="text-3xl font-bold mt-1" style={{ color: '#0ca3db' }}>
+          <div className="text-4xl font-bold mt-1" style={{ color: '#0ca3db' }}>
             {balance.toFixed(2)} Birr
           </div>
         </div>
 
         <div className="card mb-6">
-          <h3 className="font-bold mb-3">Deposit via SMS</h3>
+          <h3 className="font-bold mb-3 text-lg">Deposit via SMS</h3>
 
           {error && (
-            <div className="bg-red-100 text-red-700 text-sm p-2 rounded-lg mb-3">{error}</div>
+            <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-3">{error}</div>
           )}
           {success && (
-            <div className="bg-green-100 text-green-700 text-sm p-2 rounded-lg mb-3">{success}</div>
+            <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-3">{success}</div>
           )}
 
           <div className="mb-3">
-            <label className="text-xs font-medium block mb-1">Transfer to</label>
+            <label className="font-medium block mb-1">Transfer to</label>
             {CHANNELS.map((ch) => (
               <button
                 key={ch}
                 onClick={() => setChannel(ch)}
-                className={`block w-full text-left p-2 rounded-lg mb-1 text-sm border transition-colors ${
+                className={`block w-full text-left p-3 rounded-lg mb-1 border transition-colors ${
                   channel === ch
                     ? 'border-blue-500 bg-blue-50 font-medium'
                     : 'border-transparent bg-gray-50'
@@ -127,14 +127,14 @@ export default function WalletPage() {
               </button>
             ))}
             {accounts && (
-              <p className="text-xs mt-1" style={{ color: '#c39977' }}>
+              <p className="text-sm mt-1" style={{ color: '#c39977' }}>
                 Account Name: {accounts.accountName}
               </p>
             )}
           </div>
 
           <div className="mb-3">
-            <label className="text-xs font-medium block mb-1">
+            <label className="font-medium block mb-1">
               Paste SMS Confirmation
             </label>
             <textarea
@@ -156,7 +156,7 @@ export default function WalletPage() {
         </div>
 
         <div>
-          <h3 className="font-bold mb-3">Transaction History</h3>
+          <h3 className="font-bold mb-3 text-lg">Transaction History</h3>
           {loading ? (
             <div className="space-y-2">
               {[1, 2, 3].map((i) => (

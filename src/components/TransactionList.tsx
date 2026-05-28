@@ -33,18 +33,18 @@ export default function TransactionList({ transactions }: TransactionListProps) 
       {transactions.map((tx) => (
         <div key={tx._id} className="card flex items-center justify-between">
           <div>
-            <div className="font-medium text-sm">{typeLabels[tx.type] || tx.type}</div>
-            <div className="text-xs" style={{ color: '#c39977' }}>
+            <div className="font-medium">{typeLabels[tx.type] || tx.type}</div>
+            <div className="text-sm" style={{ color: '#c39977' }}>
               {new Date(tx.createdAt).toLocaleDateString()}
             </div>
             {tx.description && (
-              <div className="text-xs" style={{ color: '#c39977' }}>
+              <div className="text-sm" style={{ color: '#c39977' }}>
                 {tx.description}
               </div>
             )}
           </div>
           <div className="text-right">
-            <div className={`font-bold text-sm ${tx.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>
+            <div className={`font-bold ${tx.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>
               {tx.amount > 0 ? '+' : ''}{tx.amount.toFixed(2)} Birr
             </div>
             <span className={statusBadge[tx.status] || 'badge-gray'}>{tx.status}</span>

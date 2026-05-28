@@ -20,8 +20,8 @@ export default function BingoBoard({ card, drawnNumbers }: BingoBoardProps) {
         {COLUMNS.map((col) => (
           <div
             key={col}
-            className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-t text-xs sm:text-sm font-bold text-white"
-            style={{ backgroundColor: '#0ca3db' }}
+            className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-t font-bold text-white"
+            style={{ backgroundColor: '#0ca3db', fontSize: '14px' }}
           >
             {col}
           </div>

@@ -56,12 +56,12 @@ export default function AdminDashboardPage() {
     <div className="pb-20">
       <div className="p-4 max-w-lg mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold">Admin Panel</h1>
-          <span className="badge-blue">{user.role}</span>
+          <h1 className="text-2xl font-bold">Admin Panel</h1>
+          <span className="badge-blue text-sm">{user.role}</span>
         </div>
 
         {error && (
-          <div className="bg-red-100 text-red-700 text-sm p-3 rounded-lg mb-4">{error}</div>
+          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>
         )}
 
         {loading ? (
@@ -73,69 +73,69 @@ export default function AdminDashboardPage() {
           <>
             <div className="grid grid-cols-2 gap-3 mb-6">
               <div className="card text-center">
-                <div className="text-2xl font-bold" style={{ color: '#0ca3db' }}>
+                <div className="text-3xl font-bold" style={{ color: '#0ca3db' }}>
                   {dashboard.stats.users.total}
                 </div>
-                <div className="text-xs" style={{ color: '#c39977' }}>Users</div>
+                <div style={{ color: '#c39977' }}>Users</div>
               </div>
               <div className="card text-center">
-                <div className="text-2xl font-bold" style={{ color: '#0ca3db' }}>
+                <div className="text-3xl font-bold" style={{ color: '#0ca3db' }}>
                   {dashboard.stats.games.active}
                 </div>
-                <div className="text-xs" style={{ color: '#c39977' }}>Active Games</div>
+                <div style={{ color: '#c39977' }}>Active Games</div>
               </div>
               <div className="card text-center">
-                <div className="text-2xl font-bold text-yellow-500">
+                <div className="text-3xl font-bold text-yellow-500">
                   {dashboard.stats.pendingWithdrawals}
                 </div>
-                <div className="text-xs" style={{ color: '#c39977' }}>Pending Withdrawals</div>
+                <div style={{ color: '#c39977' }}>Pending Withdrawals</div>
               </div>
               <div className="card text-center">
-                <div className="text-2xl font-bold text-purple-500">
+                <div className="text-3xl font-bold text-purple-500">
                   {dashboard.stats.pendingDeposits ?? 0}
                 </div>
-                <div className="text-xs" style={{ color: '#c39977' }}>Pending Deposits</div>
+                <div style={{ color: '#c39977' }}>Pending Deposits</div>
               </div>
               <div className="card text-center">
-                <div className="text-2xl font-bold text-green-500">
+                <div className="text-3xl font-bold text-green-500">
                   {dashboard.stats.platformRevenue.toFixed(2)} Birr
                 </div>
-                <div className="text-xs" style={{ color: '#c39977' }}>Revenue</div>
+                <div style={{ color: '#c39977' }}>Revenue</div>
               </div>
             </div>
 
             <div className="space-y-2 mb-6">
               <Link href="/admin/games" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
-                <span className="font-medium">🎮 Games</span>
+                <span className="font-medium text-lg">🎮 Games</span>
                 <span style={{ color: '#c39977' }}>Create & manage →</span>
               </Link>
               <Link href="/admin/users" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
-                <span className="font-medium">👥 Users</span>
+                <span className="font-medium text-lg">👥 Users</span>
                 <span style={{ color: '#c39977' }}>Manage users →</span>
               </Link>
               <Link href="/admin/deposits" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
-                <span className="font-medium">💰 Deposits</span>
+                <span className="font-medium text-lg">💰 Deposits</span>
                 <span style={{ color: '#c39977' }}>Match & confirm →</span>
               </Link>
               <Link href="/admin/withdrawals" className="card flex items-center justify-between hover:opacity-80 transition-opacity">
-                <span className="font-medium">💳 Withdrawals</span>
+                <span className="font-medium text-lg">💳 Withdrawals</span>
                 <span style={{ color: '#c39977' }}>Approve/reject →</span>
               </Link>
             </div>
 
             {dashboard.recentTransactions.length > 0 && (
               <div>
-                <h3 className="font-bold mb-3">Recent Transactions</h3>
+                <h3 className="font-bold mb-3 text-lg">Recent Transactions</h3>
                 <div className="space-y-2">
                   {dashboard.recentTransactions.slice(0, 5).map((tx) => (
-                    <div key={tx._id} className="card flex items-center justify-between text-sm">
+                    <div key={tx._id} className="card flex items-center justify-between">
                       <div>
                         <div className="font-medium">{tx.type}</div>
-                        <div className="text-xs" style={{ color: '#c39977' }}>
+                        <div className="text-sm" style={{ color: '#c39977' }}>
                           {new Date(tx.createdAt).toLocaleString()}
                         </div>
                       </div>
-                      <div className={`font-bold ${tx.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      <div className={`font-bold text-lg ${tx.amount > 0 ? 'text-green-500' : 'text-red-500'}`}>
                         {tx.amount.toFixed(2)} Birr
                       </div>
                     </div>

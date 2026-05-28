@@ -82,12 +82,12 @@ export default function WithdrawalsPage() {
   return (
     <div className="pb-16">
       <div className="p-4 max-w-lg mx-auto">
-        <h1 className="text-xl font-bold mb-6">Withdrawals</h1>
+        <h1 className="text-2xl font-bold mb-6">Withdrawals</h1>
 
         <div className="card mb-6">
-          <h3 className="font-bold mb-3">New Withdrawal</h3>
+          <h3 className="font-bold mb-3 text-lg">New Withdrawal</h3>
           {error && (
-            <div className="bg-red-100 text-red-700 text-sm p-2 rounded-lg mb-3">{error}</div>
+            <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-3">{error}</div>
           )}
           <div className="space-y-3">
             <input
@@ -131,7 +131,7 @@ export default function WithdrawalsPage() {
         </div>
 
         <div>
-          <h3 className="font-bold mb-3">Withdrawal History</h3>
+          <h3 className="font-bold mb-3 text-lg">Withdrawal History</h3>
           {loading ? (
             <div className="space-y-2">
               {[1, 2, 3].map((i) => (
@@ -147,11 +147,11 @@ export default function WithdrawalsPage() {
               {withdrawals.map((w) => (
                 <div key={w._id} className="card flex items-center justify-between">
                   <div>
-                    <div className="font-medium text-sm">{w.amount.toFixed(2)} Birr</div>
-                    <div className="text-xs" style={{ color: '#c39977' }}>
+                    <div className="font-medium">{w.amount.toFixed(2)} Birr</div>
+                    <div className="text-sm" style={{ color: '#c39977' }}>
                       {w.accountNumber}
                     </div>
-                    <div className="text-xs" style={{ color: '#c39977' }}>
+                    <div className="text-sm" style={{ color: '#c39977' }}>
                       {new Date(w.createdAt).toLocaleDateString()}
                     </div>
                   </div>

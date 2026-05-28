@@ -223,8 +223,8 @@ export default function HomePage() {
     return (
       <div className="flex items-center justify-center min-h-screen p-4">
         <div className="text-center">
-          <h1 className="text-xl font-bold mb-2">Bingo</h1>
-          <p className="text-sm" style={{ color: '#c39977' }}>
+          <h1 className="text-2xl font-bold mb-2">Bingo</h1>
+          <p style={{ color: '#c39977' }}>
             {error || 'Initializing...'}
           </p>
           {error && (
@@ -246,25 +246,25 @@ export default function HomePage() {
   const myCards = cards.filter(c => c.isOwnedByMe)
 
   return (
-    <div className="pb-16">
+    <div className="pb-20">
       <div className="p-4 max-w-lg mx-auto">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-xl font-bold">Bingo</h1>
-            <p className="text-sm" style={{ color: '#c39977' }}>
+            <h1 className="text-2xl font-bold">Bingo</h1>
+            <p style={{ color: '#c39977' }}>
               Welcome, {user.firstName}
             </p>
           </div>
           <div className="text-right">
-            <div className="text-sm" style={{ color: '#c39977' }}>Balance</div>
-            <div className="text-lg font-bold" style={{ color: '#0ca3db' }}>
+            <div style={{ color: '#c39977' }}>Balance</div>
+            <div className="text-xl font-bold" style={{ color: '#0ca3db' }}>
               {user.balance.toFixed(2)} Birr
             </div>
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-100 text-red-700 text-sm p-3 rounded-lg mb-4">{error}</div>
+          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>
         )}
 
         {loading ? (
@@ -275,14 +275,14 @@ export default function HomePage() {
         ) : !game ? (
           <div className="text-center py-12" style={{ color: '#c39977' }}>
             <p>No game available right now</p>
-            <p className="text-xs mt-1">Check back soon</p>
+            <p className="text-sm mt-1">Check back soon</p>
           </div>
         ) : isSelection ? (
           canAfford ? (
             <div>
-              <div className="card mb-3 text-xs flex justify-between items-center py-2 px-3">
-                <span>Game #{game.gameCode}</span>
-                <span>Prize {Math.floor(game.prizePool * 0.8)} Birr</span>
+              <div className="card mb-3 flex justify-between items-center py-2 px-3">
+                <span className="font-semibold">Game #{game.gameCode}</span>
+                <span style={{ color: '#0ca3db' }} className="font-bold">Prize {Math.floor(game.prizePool * 0.8)} Birr</span>
                 <span>{myCards.length} mine</span>
               </div>
               <CardSelector
@@ -297,7 +297,7 @@ export default function HomePage() {
             <div className="card text-center py-8">
               <div className="text-3xl mb-3">💰</div>
               <h3 className="font-bold mb-1">Insufficient Balance</h3>
-              <p className="text-sm mb-4" style={{ color: '#c39977' }}>
+              <p className="mb-4" style={{ color: '#c39977' }}>
                 You need at least {cardPrice} Birr to buy a card
               </p>
               <button
@@ -310,7 +310,7 @@ export default function HomePage() {
           )
         ) : (
           <div className="card text-center py-8">
-            <div className="text-sm mb-2" style={{ color: '#c39977' }}>
+            <div className="mb-2" style={{ color: '#c39977' }}>
               Game #{game.gameCode} is <strong>{game.status}</strong>
             </div>
             <button

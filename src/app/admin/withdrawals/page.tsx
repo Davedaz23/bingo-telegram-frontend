@@ -87,10 +87,10 @@ export default function AdminWithdrawalsPage() {
   return (
     <div className="pb-20">
       <div className="p-4 max-w-lg mx-auto">
-        <h1 className="text-xl font-bold mb-6">Withdrawals ({withdrawals.length})</h1>
+        <h1 className="text-2xl font-bold mb-6">Withdrawals ({withdrawals.length})</h1>
 
         {error && (
-          <div className="bg-red-100 text-red-700 text-sm p-3 rounded-lg mb-4">{error}</div>
+          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>
         )}
 
         {loading ? (
@@ -108,10 +108,10 @@ export default function AdminWithdrawalsPage() {
             {withdrawals.map((w) => (
               <div key={w._id} className="card">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="font-bold">{w.amount.toFixed(2)} Birr</div>
+                  <div className="font-bold text-lg">{w.amount.toFixed(2)} Birr</div>
                   <span className={statusBadge[w.status] || 'badge-gray'}>{w.status}</span>
                 </div>
-                <div className="text-xs space-y-0.5" style={{ color: '#c39977' }}>
+                <div className="space-y-0.5" style={{ color: '#c39977' }}>
                   <div>Account: {w.accountNumber}</div>
                   {w.bankName && <div>Bank: {w.bankName}</div>}
                   {w.accountName && <div>Name: {w.accountName}</div>}
@@ -121,14 +121,14 @@ export default function AdminWithdrawalsPage() {
                   <div className="flex gap-2 mt-3">
                     <button
                       onClick={() => handleApprove(w._id)}
-                      className="btn-success text-xs flex-1 py-2"
+                      className="btn-success flex-1"
                       disabled={actionLoading === `approve-${w._id}` || actionLoading === `reject-${w._id}`}
                     >
                       {actionLoading === `approve-${w._id}` ? '...' : 'Approve'}
                     </button>
                     <button
                       onClick={() => handleReject(w._id)}
-                      className="btn-danger text-xs flex-1 py-2"
+                      className="btn-danger flex-1"
                       disabled={actionLoading === `reject-${w._id}` || actionLoading === `approve-${w._id}`}
                     >
                       {actionLoading === `reject-${w._id}` ? '...' : 'Reject'}
@@ -136,7 +136,7 @@ export default function AdminWithdrawalsPage() {
                   </div>
                 )}
                 {w.remark && (
-                  <div className="text-xs mt-2 italic" style={{ color: '#c39977' }}>
+                  <div className="mt-2 italic" style={{ color: '#c39977' }}>
                     Remark: {w.remark}
                   </div>
                 )}

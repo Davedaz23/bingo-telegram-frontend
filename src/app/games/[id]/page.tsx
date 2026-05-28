@@ -241,9 +241,9 @@ export default function GameDetailPage() {
         <div className="flex items-center justify-end mb-1 gap-2">
           <div className="flex items-center gap-1">
             <div
-              className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-green-500' : 'bg-red-400'}`}
+              className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500' : 'bg-red-400'}`}
             />
-            <span className="text-[9px]" style={{ color: '#c39977' }}>
+            <span className="text-xs" style={{ color: '#c39977' }}>
               {connected ? 'Live' : 'Offline'}
             </span>
           </div>
@@ -251,27 +251,27 @@ export default function GameDetailPage() {
 
         <div className="flex items-center justify-between mb-2">
           <div>
-            <h1 className="text-lg font-bold">Game #{game.gameCode}</h1>
-            <p className="text-xs capitalize" style={{ color: '#c39977' }}>
+            <h1 className="text-xl font-bold">Game #{game.gameCode}</h1>
+            <p className="text-sm capitalize" style={{ color: '#c39977' }}>
               {game.status === 'starting' ? 'Starting...' : game.status === 'active' ? 'In Progress' : game.status}
             </p>
           </div>
           <div className="text-right">
-            <div className="text-xs" style={{ color: '#c39977' }}>Prize</div>
-            <div className="text-base font-bold" style={{ color: '#0ca3db' }}>
+            <div className="text-sm" style={{ color: '#c39977' }}>Prize</div>
+            <div className="text-lg font-bold" style={{ color: '#0ca3db' }}>
               {game.prizePool.toFixed(2)} Birr
             </div>
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-100 text-red-700 text-xs p-2 rounded-lg mb-2">{error}</div>
+          <div className="bg-red-100 text-red-700 text-sm p-3 rounded-lg mb-2">{error}</div>
         )}
 
         {countdown !== null && countdown > 0 && game.status === 'starting' && (
           <div className="card mb-3 text-center py-4">
-            <div className="text-xs" style={{ color: '#c39977' }}>Game starting in</div>
-            <div className="text-2xl font-bold mt-1" style={{ color: '#0ca3db' }}>
+            <div className="text-sm" style={{ color: '#c39977' }}>Game starting in</div>
+            <div className="text-3xl font-bold mt-1" style={{ color: '#0ca3db' }}>
               {Math.ceil(countdown)}s
             </div>
           </div>
@@ -281,12 +281,12 @@ export default function GameDetailPage() {
           <div>
             {/* Last 3 called numbers */}
             {lastThree.length > 0 && (
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-[10px]" style={{ color: '#c39977' }}>Last:</span>
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <span className="text-sm" style={{ color: '#c39977' }}>Last:</span>
                 {lastThree.map((n, i) => (
                   <span
                     key={i}
-                    className={`font-bold ${n === lastNumber ? 'text-base' : 'text-xs opacity-60'}`}
+                    className={`font-bold ${n === lastNumber ? 'text-xl' : 'text-sm opacity-60'}`}
                     style={{ color: n === lastNumber ? '#0ca3db' : '#c39977' }}
                   >
                     {n}
@@ -295,10 +295,10 @@ export default function GameDetailPage() {
               </div>
             )}
 
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               {/* Left: All 75 numbers */}
               <div className="flex-1 min-w-0">
-                <div className="grid grid-cols-5 gap-[1.5px]">
+                <div className="grid grid-cols-5 gap-[2px]">
                   {ALL_NUMBERS.map((n) => {
                     const isDrawn = drawnNumbers.includes(n)
                     const isCurrent = n === lastNumber
@@ -306,7 +306,7 @@ export default function GameDetailPage() {
                     return (
                       <div
                         key={n}
-                        className={`text-center text-[10px] leading-none py-[3px] rounded-sm ${
+                        className={`text-center leading-none py-[4px] rounded-sm ${
                           isCurrent
                             ? 'font-bold text-white'
                             : isDrawn
@@ -314,6 +314,7 @@ export default function GameDetailPage() {
                             : ''
                         }`}
                         style={{
+                          fontSize: isCurrent ? '14px' : '12px',
                           backgroundColor: isCurrent
                             ? '#0ca3db'
                             : isDrawn
@@ -335,15 +336,15 @@ export default function GameDetailPage() {
               </div>
 
               {/* Right: Player card */}
-              <div className="w-[120px] flex-shrink-0">
+              <div className="w-[140px] flex-shrink-0">
                 {myCards.length > 0 ? (
                   myCards.map((card) => (
                     <div key={card._id}>
-                      <div className="flex items-center justify-between mb-[2px]">
-                        <span className="text-[10px] font-bold">#{card.cardNumber}</span>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-bold">#{card.cardNumber}</span>
                         <button
                           onClick={handleBingo}
-                          className="text-[10px] px-2 py-[2px] rounded font-bold"
+                          className="text-xs px-3 py-1 rounded font-bold"
                           style={{
                             backgroundColor: '#0ca3db',
                             color: '#ffffff',
@@ -354,7 +355,7 @@ export default function GameDetailPage() {
                           {placedBingo ? '✓' : loading ? '...' : 'BINGO'}
                         </button>
                       </div>
-                      <div className="grid grid-cols-5 gap-[1px]">
+                      <div className="grid grid-cols-5 gap-[2px]">
                         {COLUMNS.map((col) =>
                           (card.card ? card.card[col] : [0, 0, 0, 0, 0]).map((num: number, idx: number) => {
                             const isFree = num === 0
@@ -364,8 +365,9 @@ export default function GameDetailPage() {
                               <button
                                 key={`${col}-${idx}`}
                                 onClick={() => canTap && toggleMark(num)}
-                                className="text-center text-[9px] leading-none py-[2px] rounded-sm"
+                                className="text-center font-bold leading-none py-[3px] rounded-sm"
                                 style={{
+                                  fontSize: isFree ? '10px' : '13px',
                                   backgroundColor: isMarked
                                     ? '#0ca3db'
                                     : '#ffffff',
@@ -385,7 +387,7 @@ export default function GameDetailPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-6 text-xs" style={{ color: '#c39977' }}>
+                  <div className="text-center py-6 text-sm" style={{ color: '#c39977' }}>
                     No cards
                   </div>
                 )}
@@ -407,29 +409,29 @@ export default function GameDetailPage() {
         {isFinished && (
           <div className="card text-center mb-4 py-4">
             {winnerCountdown !== null && (
-              <div className="text-2xl font-bold mb-2" style={{ color: '#0ca3db' }}>
+              <div className="text-3xl font-bold mb-2" style={{ color: '#0ca3db' }}>
                 {winnerCountdown}s
               </div>
             )}
             {game.winner && user && game.winner.userId === user._id ? (
               <div>
-                <div className="text-2xl mb-1">🎉</div>
-                <div className="font-bold text-green-500">You Won!</div>
-                <div className="text-xs mt-1" style={{ color: '#c39977' }}>
+                <div className="text-3xl mb-1">🎉</div>
+                <div className="font-bold text-lg text-green-500">You Won!</div>
+                <div className="text-sm mt-1" style={{ color: '#c39977' }}>
                   Prize: {game.winner.prizeAmount?.toFixed(2)} Birr
                 </div>
               </div>
             ) : game.winner ? (
               <div>
-                <div className="text-sm font-medium">Game Won</div>
-                <div className="text-xs mt-1" style={{ color: '#c39977' }}>
+                <div className="text-base font-medium">Game Won</div>
+                <div className="text-sm mt-1" style={{ color: '#c39977' }}>
                   Another player won this game
                 </div>
               </div>
             ) : (
               <div>
-                <div className="text-sm font-medium">Game {game.status === 'cancelled' ? 'Cancelled' : 'Finished'}</div>
-                <div className="text-xs mt-1" style={{ color: '#c39977' }}>
+                <div className="text-base font-medium">Game {game.status === 'cancelled' ? 'Cancelled' : 'Finished'}</div>
+                <div className="text-sm mt-1" style={{ color: '#c39977' }}>
                   {game.status === 'cancelled' ? 'Refunds processed' : 'No winner'}
                 </div>
               </div>

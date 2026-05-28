@@ -48,19 +48,19 @@ export default function ProfilePage() {
   return (
     <div className="pb-16">
       <div className="p-4 max-w-lg mx-auto">
-        <h1 className="text-xl font-bold mb-6">Profile</h1>
+        <h1 className="text-2xl font-bold mb-6">Profile</h1>
 
         <div className="card text-center mb-6">
-          <div className="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-3 text-white"
+          <div className="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-3 text-white"
             style={{ backgroundColor: '#0ca3db' }}
           >
             {p.firstName.charAt(0).toUpperCase()}
           </div>
-          <div className="font-bold text-lg">
+          <div className="font-bold text-xl">
             {p.firstName} {p.lastName || ''}
           </div>
           {p.username && (
-            <div className="text-sm" style={{ color: '#c39977' }}>
+            <div style={{ color: '#c39977' }}>
               @{p.username}
             </div>
           )}
@@ -70,8 +70,8 @@ export default function ProfilePage() {
         </div>
 
         <div className="card mb-6">
-          <h3 className="font-bold mb-3">Account Info</h3>
-          <div className="space-y-2 text-sm">
+          <h3 className="font-bold mb-3 text-lg">Account Info</h3>
+          <div className="space-y-3">
             <div className="flex justify-between">
               <span style={{ color: '#c39977' }}>Telegram ID</span>
               <span>{p.telegramId}</span>

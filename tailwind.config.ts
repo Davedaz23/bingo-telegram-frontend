@@ -7,14 +7,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        telegram: {
-          bg: 'var(--tg-theme-bg-color, #34a6f1)',
-          text: 'var(--tg-theme-text-color, #000000)',
-          hint: 'var(--tg-theme-hint-color, #80da64)',
-          link: 'var(--tg-theme-link-color, #44f84d)',
-          button: 'var(--tg-theme-button-color, #2481cc)',
-          buttonText: 'var(--tg-theme-button-text-color, #ffffff)',
-          secondaryBg: 'var(--tg-theme-secondary-bg-color, #f0f0f0)',
+        brand: {
+          primary: '#0ca3db',
+          secondary: '#528b98',
+          bg: '#ede7e0',
+          'bg-dark': '#e0d8cf',
+          hint: '#c39977',
+          gold: '#ddc477',
+          text: '#1a1a2e',
+          white: '#ffffff',
         },
       },
     },

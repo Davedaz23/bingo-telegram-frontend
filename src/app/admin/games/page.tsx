@@ -94,7 +94,7 @@ export default function AdminGamesPage() {
     <div className="pb-20">
       <div className="p-4 max-w-lg mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold">Games</h1>
+          <h1 className="text-2xl font-bold">Games</h1>
           <button
             onClick={handleCreate}
             className="btn-primary"
@@ -105,7 +105,7 @@ export default function AdminGamesPage() {
         </div>
 
         {error && (
-          <div className="bg-red-100 text-red-700 text-sm p-3 rounded-lg mb-4">{error}</div>
+          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>
         )}
 
         {loading ? (
@@ -117,7 +117,7 @@ export default function AdminGamesPage() {
         ) : games.length === 0 ? (
           <div className="text-center py-12" style={{ color: '#c39977' }}>
             <p>No games yet</p>
-            <p className="text-xs mt-1">Click &quot;+ New Game&quot; to create one</p>
+            <p className="text-sm mt-1">Click &quot;+ New Game&quot; to create one</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -125,7 +125,7 @@ export default function AdminGamesPage() {
               <div key={game._id} className="card">
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <span className="font-bold">#{game.gameCode}</span>
+                    <span className="font-bold text-lg">#{game.gameCode}</span>
                     <span className={`ml-2 ${
                       game.status === 'selection' ? 'badge-blue' :
                       game.status === 'starting' ? 'badge-yellow' :
@@ -140,7 +140,7 @@ export default function AdminGamesPage() {
                     {game.status === 'selection' && (
                       <button
                         onClick={() => handleStart(game._id)}
-                        className="btn-success text-xs px-2 py-1"
+                        className="btn-success"
                         disabled={actionLoading === `start-${game._id}`}
                       >
                         Start
@@ -149,7 +149,7 @@ export default function AdminGamesPage() {
                     {(game.status === 'selection' || game.status === 'starting') && (
                       <button
                         onClick={() => handleCancel(game._id)}
-                        className="btn-danger text-xs px-2 py-1"
+                        className="btn-danger"
                         disabled={actionLoading === `cancel-${game._id}`}
                       >
                         Cancel
@@ -157,7 +157,7 @@ export default function AdminGamesPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs" style={{ color: '#c39977' }}>
+                <div className="flex flex-wrap gap-x-3 gap-y-1" style={{ color: '#c39977' }}>
                   <span>🎯 {game.prizePool.toFixed(2)} Birr</span>
                   <span>🎴 {game.purchasedCards ?? '?'} sold</span>
                   <span>🔢 {game.drawnNumbers?.length ?? 0} drawn</span>

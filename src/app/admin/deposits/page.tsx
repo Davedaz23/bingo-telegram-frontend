@@ -84,14 +84,14 @@ export default function AdminDepositsPage() {
     <div className="pb-20">
       <div className="p-4 max-w-lg mx-auto">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-bold">Deposits</h1>
-          <button onClick={fetchDeposits} className="btn-secondary text-sm" disabled={loading}>
+          <h1 className="text-2xl font-bold">Deposits</h1>
+          <button onClick={fetchDeposits} className="btn-secondary" disabled={loading}>
             {loading ? '...' : 'Refresh'}
           </button>
         </div>
 
         {error && (
-          <div className="bg-red-100 text-red-700 text-sm p-3 rounded-lg mb-4">{error}</div>
+          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>
         )}
 
         {deposits.length === 0 && !loading ? (
@@ -110,53 +110,48 @@ export default function AdminDepositsPage() {
               const isPending = dep.status === 'pending'
               const isMatched = dep.status === 'sms_matched'
               return (
-                <div key={dep._id} className="card text-sm">
+                <div key={dep._id} className="card">
                   <div className="flex items-center justify-between mb-2">
                     <div>
-                      <span className="font-medium">{dep.userId?.firstName || 'Unknown'}</span>
+                      <span className="font-medium text-lg">{dep.userId?.firstName || 'Unknown'}</span>
                       {dep.userId?.username && (
                         <span className="ml-1" style={{ color: '#c39977' }}>
                           @{dep.userId.username}
                         </span>
                       )}
                     </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                      dep.status === 'completed' ? 'bg-green-100 text-green-700' :
-                      dep.status === 'sms_matched' ? 'bg-yellow-100 text-yellow-700' :
-                      dep.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                      'bg-gray-100 text-gray-700'
-                    }`}>
+                    <span className="px-2 py-0.5 rounded-full font-medium" style={{ fontSize: '12px' }}>
                       {dep.status}
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 mb-2 text-xs" style={{ color: '#c39977' }}>
-                    <div>Channel: <span className="font-medium text-gray-800">{dep.channel}</span></div>
-                    <div>Amount: <span className="font-medium text-gray-800">{dep.amount.toFixed(2)} Birr</span></div>
+                  <div className="grid grid-cols-2 gap-2 mb-2" style={{ color: '#c39977' }}>
+                    <div>Channel: <span className="font-medium" style={{ color: '#1a1a2e' }}>{dep.channel}</span></div>
+                    <div>Amount: <span className="font-medium" style={{ color: '#1a1a2e' }}>{dep.amount.toFixed(2)} Birr</span></div>
                     <div className="col-span-2">Date: {new Date(dep.createdAt).toLocaleString()}</div>
                   </div>
 
                   <div className="mb-2">
-                    <div className="text-xs font-medium mb-0.5">User SMS:</div>
-                    <div className="bg-gray-50 p-2 rounded text-xs break-all">{dep.userSmsText}</div>
+                    <div className="font-medium mb-0.5">User SMS:</div>
+                    <div className="bg-gray-50 p-2 rounded break-all">{dep.userSmsText}</div>
                   </div>
 
                   {dep.adminSmsText && (
                     <div className="mb-2">
-                      <div className="text-xs font-medium mb-0.5">Admin SMS (match):</div>
-                      <div className="bg-gray-50 p-2 rounded text-xs break-all">{dep.adminSmsText}</div>
+                      <div className="font-medium mb-0.5">Admin SMS (match):</div>
+                      <div className="bg-gray-50 p-2 rounded break-all">{dep.adminSmsText}</div>
                     </div>
                   )}
 
                   {dep.matchedRef && (
-                    <div className="text-xs mb-2">
+                    <div className="mb-2">
                       Matched Ref: <span className="font-medium">{dep.matchedRef}</span>
                     </div>
                   )}
 
                   {isPending && (
                     <div className="border-t pt-2 mt-2">
-                      <div className="text-xs font-medium mb-1">Paste your SMS to match:</div>
+                      <div className="font-medium mb-1">Paste your SMS to match:</div>
                       <div className="flex gap-2">
                         <input
                           type="text"
@@ -165,11 +160,11 @@ export default function AdminDepositsPage() {
                           onChange={(e) =>
                             setMatchText((prev) => ({ ...prev, [dep._id]: e.target.value }))
                           }
-                          className="input flex-1 text-xs"
+                          className="input flex-1"
                         />
                         <button
                           onClick={() => handleMatch(dep._id)}
-                          className="btn-secondary text-xs whitespace-nowrap"
+                          className="btn-secondary whitespace-nowrap"
                         >
                           Match
                         </button>
@@ -181,7 +176,7 @@ export default function AdminDepositsPage() {
                     <div className="border-t pt-2 mt-2">
                       <button
                         onClick={() => handleConfirm(dep._id)}
-                        className="btn-primary text-xs w-full"
+                        className="btn-primary w-full"
                       >
                         Confirm & Credit User
                       </button>

@@ -91,11 +91,11 @@ export default function AdminUsersPage() {
     <div className="pb-20">
       <div className="p-4 max-w-lg mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl font-bold">Users ({users.length})</h1>
+          <h1 className="text-2xl font-bold">Users ({users.length})</h1>
         </div>
 
         {error && (
-          <div className="bg-red-100 text-red-700 text-sm p-3 rounded-lg mb-4">{error}</div>
+          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>
         )}
 
         {loading ? (
@@ -110,18 +110,18 @@ export default function AdminUsersPage() {
               <div key={u._id} className="card">
                 <div className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-sm truncate">
+                    <div className="font-medium truncate">
                       {u.firstName} {u.lastName || ''}
                     </div>
-                    <div className="text-xs" style={{ color: '#c39977' }}>
+                    <div style={{ color: '#c39977' }}>
                       @{u.username || 'no username'} · ID: {u.telegramId}
                     </div>
                     <div className="flex items-center gap-2 mt-1">
-                      <span className={`text-xs ${u.isActive ? 'text-green-500' : 'text-red-500'}`}>
+                      <span className={`${u.isActive ? 'text-green-500' : 'text-red-500'}`}>
                         {u.isActive ? 'Active' : 'Banned'}
                       </span>
-                      <span className="badge-blue text-xs">{u.role}</span>
-                      <span className="text-xs font-bold" style={{ color: '#0ca3db' }}>
+                      <span className="badge-blue">{u.role}</span>
+                      <span className="font-bold" style={{ color: '#0ca3db' }}>
                         {u.balance.toFixed(2)} Birr
                       </span>
                     </div>
@@ -129,7 +129,7 @@ export default function AdminUsersPage() {
                   <div className="flex gap-1 ml-2">
                     <button
                       onClick={() => setCreditModal({ id: u._id, name: u.firstName })}
-                      className="btn-primary text-xs px-2 py-1"
+                      className="btn-primary"
                       disabled={actionLoading === `credit-${u._id}`}
                     >
                       Credit
@@ -137,7 +137,7 @@ export default function AdminUsersPage() {
                     {u.isActive && (
                       <button
                         onClick={() => handleBan(u._id)}
-                        className="btn-danger text-xs px-2 py-1"
+                        className="btn-danger"
                         disabled={actionLoading === `ban-${u._id}`}
                       >
                         Ban
