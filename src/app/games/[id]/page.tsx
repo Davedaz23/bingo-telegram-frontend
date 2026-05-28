@@ -357,14 +357,16 @@ export default function GameDetailPage() {
                         </button>
                       </div>
                       <div className="grid grid-cols-5 gap-[2px]">
-                        {COLUMNS.map((col) =>
-                          (card.card ? card.card[col] : [0, 0, 0, 0, 0]).map((num: number, idx: number) => {
+                        {[0, 1, 2, 3, 4].map((rowIdx) =>
+                          COLUMNS.map((col) => {
+                            const nums = card.card ? card.card[col] : [0, 0, 0, 0, 0]
+                            const num: number = nums[rowIdx]
                             const isFree = num === 0
                             const isMarked = markedNumbers.includes(num) || isFree
                             const canTap = drawnNumbers.includes(num) && !isFree
                             return (
                               <button
-                                key={`${col}-${idx}`}
+                                key={`${col}-${rowIdx}`}
                                 onClick={() => canTap && toggleMark(num)}
                                 className="text-center font-bold leading-none py-[3px] rounded-sm"
                                 style={{

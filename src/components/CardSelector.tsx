@@ -102,18 +102,23 @@ function BingoBoardSmall({ card }: { card: CardData }) {
   const columns = ['B', 'I', 'N', 'G', 'O'] as const
   return (
     <div className="grid grid-cols-5 gap-0.5 w-full max-w-[260px]">
-      {columns.map((col) =>
-        (card[col] || []).map((num: number, idx: number) => (
-          <div
-            key={`${col}-${idx}`}
-            className={`text-center font-bold py-1 rounded ${
-              col === 'N' && idx === 2 ? 'bg-gray-200 text-xs' : ''
-            }`}
-            style={{ fontSize: col === 'N' && idx === 2 ? '11px' : '13px' }}
-          >
-            {col === 'N' && idx === 2 ? 'FREE' : num}
-          </div>
-        ))
+      {[0, 1, 2, 3, 4].map((rowIdx) =>
+        columns.map((col) => {
+          const nums = card[col] || []
+          const num: number = nums[rowIdx]
+          const isFree = num === 0
+          return (
+            <div
+              key={`${col}-${rowIdx}`}
+              className={`text-center font-bold py-1 rounded ${
+                isFree ? 'bg-gray-200 text-xs' : ''
+              }`}
+              style={{ fontSize: isFree ? '11px' : '13px' }}
+            >
+              {isFree ? 'FREE' : num}
+            </div>
+          )
+        })
       )}
     </div>
   )
