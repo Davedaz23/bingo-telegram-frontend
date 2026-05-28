@@ -100,7 +100,7 @@ export default function AdminWithdrawalsPage() {
             ))}
           </div>
         ) : withdrawals.length === 0 ? (
-          <div className="text-center py-12" style={{ color: '#ffffff' }}>
+          <div className="text-center py-12" style={{ color: '#7fbcb4' }}>
             No withdrawals yet
           </div>
         ) : (
@@ -111,7 +111,7 @@ export default function AdminWithdrawalsPage() {
                   <div className="font-bold text-lg">{w.amount.toFixed(2)} Birr</div>
                   <span className={statusBadge[w.status] || 'badge-gray'}>{w.status}</span>
                 </div>
-                <div className="space-y-0.5" style={{ color: '#ffffff' }}>
+                <div className="space-y-0.5" style={{ color: '#7fbcb4' }}>
                   <div>Account: {w.accountNumber}</div>
                   {w.bankName && <div>Bank: {w.bankName}</div>}
                   {w.accountName && <div>Name: {w.accountName}</div>}
@@ -136,7 +136,7 @@ export default function AdminWithdrawalsPage() {
                   </div>
                 )}
                 {w.remark && (
-                  <div className="mt-2 italic" style={{ color: '#ffffff' }}>
+                  <div className="mt-2 italic" style={{ color: '#7fbcb4' }}>
                     Remark: {w.remark}
                   </div>
                 )}

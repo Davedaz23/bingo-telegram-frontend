@@ -115,7 +115,7 @@ export default function AdminGamesPage() {
             ))}
           </div>
         ) : games.length === 0 ? (
-          <div className="text-center py-12" style={{ color: '#ffffff' }}>
+          <div className="text-center py-12" style={{ color: '#7fbcb4' }}>
             <p>No games yet</p>
             <p className="text-sm mt-1">Click &quot;+ New Game&quot; to create one</p>
           </div>
@@ -157,7 +157,7 @@ export default function AdminGamesPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex flex-wrap gap-x-3 gap-y-1" style={{ color: '#ffffff' }}>
+                <div className="flex flex-wrap gap-x-3 gap-y-1" style={{ color: '#7fbcb4' }}>
                   <span>🎯 {game.prizePool.toFixed(2)} Birr</span>
                   <span>🎴 {game.purchasedCards ?? '?'} sold</span>
                   <span>🔢 {game.drawnNumbers?.length ?? 0} drawn</span>

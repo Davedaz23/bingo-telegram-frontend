@@ -4,20 +4,20 @@
 
 :root {
   --brand-primary: #00beac;
-  --brand-secondary: #ffffff;
-  --brand-bg: #00beac;
-  --brand-bg-dark: #007267;
-  --brand-hint: #ffffff;
-  --brand-gold: #ffffff;
-  --brand-text: #ffffff;
+  --brand-secondary: #009b8c;
+  --brand-bg: #e8f5f3;
+  --brand-bg-dark: #dceeea;
+  --brand-hint: #7fbcb4;
+  --brand-gold: #ddc477;
+  --brand-text: #1a1a2e;
   --brand-white: #ffffff;
 
   /* Override Telegram theme variables with brand colors */
-  --tg-theme-bg-color: #7ab5ec !important;
+  --tg-theme-bg-color: #e8f5f3 !important;
   --tg-theme-text-color: #1a1a2e !important;
-  --tg-theme-hint-color: #ffffff !important;
-  --tg-theme-link-color: #0ca3db !important;
-  --tg-theme-button-color: #0ca3db !important;
+  --tg-theme-hint-color: #7fbcb4 !important;
+  --tg-theme-link-color: #00beac !important;
+  --tg-theme-button-color: #00beac !important;
   --tg-theme-button-text-color: #ffffff !important;
   --tg-theme-secondary-bg-color: #ffffff !important;
 }
@@ -37,17 +37,17 @@ body {
     @apply btn text-white;
     background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
     color: var(--brand-white);
-    box-shadow: 0 4px 12px rgba(12, 163, 219, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 190, 172, 0.3);
   }
   .btn-primary:hover:not(:disabled) {
     @apply shadow-lg;
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(12, 163, 219, 0.35);
+    box-shadow: 0 6px 16px rgba(0, 190, 172, 0.35);
   }
   .btn-secondary {
     @apply btn;
     background-color: var(--brand-bg);
-    border: 1.5px solid #d4c9be;
+    border: 1.5px solid #c5ded9;
     color: var(--brand-hint);
   }
   .btn-secondary:hover:not(:disabled) {
@@ -72,7 +72,7 @@ body {
   }
   .input {
     @apply w-full px-4 py-2.5 rounded-xl border text-sm outline-none transition-all;
-    border-color: #d4c9be;
+    border-color: #c5ded9;
     background-color: var(--brand-bg);
     color: var(--brand-text);
   }
@@ -95,19 +95,19 @@ body {
   }
   .badge-blue {
     @apply badge;
-    background-color: rgba(12, 163, 219, 0.1);
+    background-color: rgba(0, 190, 172, 0.1);
     color: var(--brand-primary);
   }
   .badge-gray {
     @apply badge bg-gray-100 text-gray-600;
   }
   .bingo-cell {
-    @apply w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-xs sm:text-sm font-bold cursor-pointer transition-all duration-150;
+    @apply w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg font-bold cursor-pointer transition-all duration-150;
     background-color: var(--brand-bg);
   }
   .bingo-cell-default {
     @apply border;
-    border-color: #d4c9be;
+    border-color: #c5ded9;
     color: var(--brand-text);
   }
   .bingo-cell-default:hover {
@@ -118,7 +118,7 @@ body {
     background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
     color: var(--brand-white);
     border-color: transparent;
-    box-shadow: 0 2px 6px rgba(12, 163, 219, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 190, 172, 0.25);
   }
 }
 

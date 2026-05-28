@@ -222,7 +222,7 @@ export default function GameDetailPage() {
   if (!game) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-pulse text-center" style={{ color: '#ffffff' }}>
+        <div className="animate-pulse text-center" style={{ color: '#7fbcb4' }}>
           Loading game...
         </div>
       </div>
@@ -243,7 +243,7 @@ export default function GameDetailPage() {
             <div
               className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500' : 'bg-red-400'}`}
             />
-            <span className="text-xs" style={{ color: '#ffffff' }}>
+            <span className="text-xs" style={{ color: '#7fbcb4' }}>
               {connected ? 'Live' : 'Offline'}
             </span>
           </div>
@@ -252,13 +252,13 @@ export default function GameDetailPage() {
         <div className="flex items-center justify-between mb-2">
           <div>
             <h1 className="text-xl font-bold">Game #{game.gameCode}</h1>
-            <p className="text-sm capitalize" style={{ color: '#ffffff' }}>
+            <p className="text-sm capitalize" style={{ color: '#7fbcb4' }}>
               {game.status === 'starting' ? 'Starting...' : game.status === 'active' ? 'In Progress' : game.status}
             </p>
           </div>
           <div className="text-right">
-            <div className="text-sm" style={{ color: '#ffffff' }}>Prize</div>
-            <div className="text-lg font-bold" style={{ color: '#0ca3db' }}>
+            <div className="text-sm" style={{ color: '#7fbcb4' }}>Prize</div>
+            <div className="text-lg font-bold" style={{ color: '#00beac' }}>
               {game.prizePool.toFixed(2)} Birr
             </div>
           </div>
@@ -270,8 +270,8 @@ export default function GameDetailPage() {
 
         {countdown !== null && countdown > 0 && game.status === 'starting' && (
           <div className="card mb-3 text-center py-4">
-            <div className="text-sm" style={{ color: '#ffffff' }}>Game starting in</div>
-            <div className="text-3xl font-bold mt-1" style={{ color: '#0ca3db' }}>
+            <div className="text-sm" style={{ color: '#7fbcb4' }}>Game starting in</div>
+            <div className="text-3xl font-bold mt-1" style={{ color: '#00beac' }}>
               {Math.ceil(countdown)}s
             </div>
           </div>
@@ -282,12 +282,12 @@ export default function GameDetailPage() {
             {/* Last 3 called numbers */}
             {lastThree.length > 0 && (
               <div className="flex items-center justify-center gap-3 mb-2">
-                <span className="text-sm" style={{ color: '#ffffff' }}>Last:</span>
+                <span className="text-sm" style={{ color: '#7fbcb4' }}>Last:</span>
                 {lastThree.map((n, i) => (
                   <span
                     key={i}
                     className={`font-bold ${n === lastNumber ? 'text-xl' : 'text-sm opacity-60'}`}
-                    style={{ color: n === lastNumber ? '#0ca3db' : '#ffffff' }}
+                    style={{ color: n === lastNumber ? '#00beac' : '#7fbcb4' }}
                   >
                     {n}
                   </span>
@@ -316,16 +316,16 @@ export default function GameDetailPage() {
                         style={{
                           fontSize: isCurrent ? '14px' : '12px',
                           backgroundColor: isCurrent
-                            ? '#0ca3db'
+                            ? '#00beac'
                             : isDrawn
                             ? '#ffffff'
                             : 'transparent',
                           color: isCurrent
                             ? '#ffffff'
                             : isDrawn
-                            ? '#0ca3db'
-                            : '#ffffff',
-                          border: isRecent && !isCurrent ? '1.5px solid #0ca3db' : '1px solid transparent',
+                            ? '#00beac'
+                            : '#7fbcb4',
+                          border: isRecent && !isCurrent ? '1.5px solid #00beac' : '1px solid transparent',
                         }}
                       >
                         {n}
@@ -346,7 +346,7 @@ export default function GameDetailPage() {
                           onClick={handleBingo}
                           className="text-xs px-3 py-1 rounded font-bold"
                           style={{
-                            backgroundColor: '#0ca3db',
+                            backgroundColor: '#00beac',
                             color: '#ffffff',
                             border: 'none',
                           }}
@@ -369,7 +369,7 @@ export default function GameDetailPage() {
                                 style={{
                                   fontSize: isFree ? '10px' : '13px',
                                   backgroundColor: isMarked
-                                    ? '#0ca3db'
+                                    ? '#00beac'
                                     : '#ffffff',
                                   color: isMarked
                                     ? '#ffffff'
@@ -387,7 +387,7 @@ export default function GameDetailPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="text-center py-6 text-sm" style={{ color: '#ffffff' }}>
+                  <div className="text-center py-6 text-sm" style={{ color: '#7fbcb4' }}>
                     No cards
                   </div>
                 )}
@@ -409,7 +409,7 @@ export default function GameDetailPage() {
         {isFinished && (
           <div className="card text-center mb-4 py-4">
             {winnerCountdown !== null && (
-              <div className="text-3xl font-bold mb-2" style={{ color: '#0ca3db' }}>
+              <div className="text-3xl font-bold mb-2" style={{ color: '#00beac' }}>
                 {winnerCountdown}s
               </div>
             )}
@@ -417,21 +417,21 @@ export default function GameDetailPage() {
               <div>
                 <div className="text-3xl mb-1">🎉</div>
                 <div className="font-bold text-lg text-green-500">You Won!</div>
-                <div className="text-sm mt-1" style={{ color: '#ffffff' }}>
+                <div className="text-sm mt-1" style={{ color: '#7fbcb4' }}>
                   Prize: {game.winner.prizeAmount?.toFixed(2)} Birr
                 </div>
               </div>
             ) : game.winner ? (
               <div>
                 <div className="text-base font-medium">Game Won</div>
-                <div className="text-sm mt-1" style={{ color: '#ffffff' }}>
+                <div className="text-sm mt-1" style={{ color: '#7fbcb4' }}>
                   Another player won this game
                 </div>
               </div>
             ) : (
               <div>
                 <div className="text-base font-medium">Game {game.status === 'cancelled' ? 'Cancelled' : 'Finished'}</div>
-                <div className="text-sm mt-1" style={{ color: '#ffffff' }}>
+                <div className="text-sm mt-1" style={{ color: '#7fbcb4' }}>
                   {game.status === 'cancelled' ? 'Refunds processed' : 'No winner'}
                 </div>
               </div>

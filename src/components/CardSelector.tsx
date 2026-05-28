@@ -36,13 +36,13 @@ export default function CardSelector({
                     onClick={() => !taken && onSelect(card)}
                     className="card text-center py-2 px-1 transition-opacity"
                     style={{
-                      borderColor: taken ? '#dc2626' : '#0ca3db',
+                      borderColor: taken ? '#dc2626' : '#00beac',
                       borderWidth: '2px',
                       backgroundColor: taken ? '#fef2f2' : '#ffffff',
                     }}
                     disabled={loading || taken}
                   >
-                    <div className="font-bold" style={{ color: taken ? '#dc2626' : '#0ca3db' }}>
+                    <div className="font-bold" style={{ color: taken ? '#dc2626' : '#00beac' }}>
                       #{card.cardNumber}
                     </div>
                     {taken && (
@@ -55,7 +55,7 @@ export default function CardSelector({
               })}
             </div>
           </div>
-          <div className="text-xs mt-1" style={{ color: '#ffffff' }}>
+          <div className="text-xs mt-1" style={{ color: '#7fbcb4' }}>
             {availableCount} available &middot; {takenCount + myCards.length} taken
           </div>
         </div>
@@ -90,7 +90,7 @@ export default function CardSelector({
       )}
 
       {cards.length === 0 && (
-        <div className="text-center py-8" style={{ color: '#ffffff' }}>
+        <div className="text-center py-8" style={{ color: '#7fbcb4' }}>
           No cards available for this game
         </div>
       )}

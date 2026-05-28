@@ -21,7 +21,7 @@ export default function BingoBoard({ card, drawnNumbers }: BingoBoardProps) {
           <div
             key={col}
             className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-t font-bold text-white"
-            style={{ backgroundColor: '#0ca3db', fontSize: '14px' }}
+            style={{ backgroundColor: '#00beac', fontSize: '14px' }}
           >
             {col}
           </div>
@@ -39,9 +39,9 @@ export default function BingoBoard({ card, drawnNumbers }: BingoBoardProps) {
                 style={
                   drawn || isFree
                     ? {
-                        backgroundColor: '#0ca3db',
+                        backgroundColor: '#00beac',
                         color: '#ffffff',
-                        borderColor: '#0ca3db',
+                        borderColor: '#00beac',
                         opacity: isFree ? 0.5 : 1,
                       }
                     : undefined

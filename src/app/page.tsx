@@ -250,7 +250,7 @@ export default function HomePage() {
       <div className="flex items-center justify-center min-h-screen p-4">
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-2">Ato Bingo</h1>
-          <p style={{ color: '#ffffff' }}>
+          <p style={{ color: '#7fbcb4' }}>
             {error || 'Initializing...'}
           </p>
           {error && (
@@ -277,13 +277,13 @@ export default function HomePage() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-2xl font-bold">Ato Bingo</h1>
-            <p style={{ color: '#ffffff' }}>
+            <p style={{ color: '#7fbcb4' }}>
               Welcome, {user.firstName}
             </p>
           </div>
           <div className="text-right">
-            <div style={{ color: '#ffffff' }}>Balance</div>
-            <div className="text-xl font-bold" style={{ color: '#0ca3db' }}>
+            <div style={{ color: '#7fbcb4' }}>Balance</div>
+            <div className="text-xl font-bold" style={{ color: '#00beac' }}>
               {user.balance.toFixed(2)} Birr
             </div>
           </div>
@@ -299,7 +299,7 @@ export default function HomePage() {
             <div className="card animate-pulse h-64" />
           </div>
         ) : !game ? (
-          <div className="text-center py-12" style={{ color: '#ffffff' }}>
+          <div className="text-center py-12" style={{ color: '#7fbcb4' }}>
             <p>No game available right now</p>
             <p className="text-sm mt-1">Check back soon</p>
           </div>
@@ -311,7 +311,7 @@ export default function HomePage() {
                   <span className="font-semibold">Game #{game.gameCode}</span>
                   <span className="badge-blue text-xs">{game.status}</span>
                 </div>
-                <span style={{ color: '#0ca3db' }} className="font-bold">Prize {Math.floor(game.prizePool * 0.8)} Birr</span>
+                <span style={{ color: '#00beac' }} className="font-bold">Prize {Math.floor(game.prizePool * 0.8)} Birr</span>
                 <span>{myCards.length} mine</span>
               </div>
               <CardSelector
@@ -326,7 +326,7 @@ export default function HomePage() {
             <div className="card text-center py-8">
               <div className="text-3xl mb-3">💰</div>
               <h3 className="font-bold mb-1">Insufficient Balance</h3>
-              <p className="mb-4" style={{ color: '#ffffff' }}>
+              <p className="mb-4" style={{ color: '#7fbcb4' }}>
                 You need at least {cardPrice} Birr to buy a card
               </p>
               <button
@@ -339,7 +339,7 @@ export default function HomePage() {
           )
         ) : (
           <div className="card text-center py-8">
-            <div className="mb-2" style={{ color: '#ffffff' }}>
+            <div className="mb-2" style={{ color: '#7fbcb4' }}>
               Game #{game.gameCode} is <strong>{game.status}</strong>
             </div>
             <button

@@ -8,11 +8,11 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          primary: '#0ca3db',
-          secondary: '#528b98',
-          bg: '#7ab5ec',
-          'bg-dark': '#e0d8cf',
-          hint: '#ffffff',
+          primary: '#00beac',
+          secondary: '#009b8c',
+          bg: '#e8f5f3',
+          'bg-dark': '#dceeea',
+          hint: '#7fbcb4',
           gold: '#ddc477',
           text: '#1a1a2e',
           white: '#ffffff',

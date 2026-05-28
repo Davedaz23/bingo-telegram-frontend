@@ -88,10 +88,10 @@ export default function WalletPage() {
         <h1 className="text-2xl font-bold mb-6">Wallet</h1>
 
         <div className="card text-center mb-6">
-          <div style={{ color: '#ffffff' }}>
+          <div style={{ color: '#7fbcb4' }}>
             Available Balance
           </div>
-          <div className="text-4xl font-bold mt-1" style={{ color: '#0ca3db' }}>
+          <div className="text-4xl font-bold mt-1" style={{ color: '#00beac' }}>
             {balance.toFixed(2)} Birr
           </div>
         </div>
@@ -120,14 +120,14 @@ export default function WalletPage() {
               >
                 <span className="font-medium">{CHANNEL_LABELS[ch]}</span>
                 {accounts && (
-                  <span className="ml-2" style={{ color: '#ffffff' }}>
+                  <span className="ml-2" style={{ color: '#7fbcb4' }}>
                     {accounts[ch as keyof DepositAccounts]}
                   </span>
                 )}
               </button>
             ))}
             {accounts && (
-              <p className="text-sm mt-1" style={{ color: '#ffffff' }}>
+              <p className="text-sm mt-1" style={{ color: '#7fbcb4' }}>
                 Account Name: {accounts.accountName}
               </p>
             )}

@@ -113,7 +113,7 @@ export default function AdminUsersPage() {
                     <div className="font-medium truncate">
                       {u.firstName} {u.lastName || ''}
                     </div>
-                    <div style={{ color: '#ffffff' }}>
+                    <div style={{ color: '#7fbcb4' }}>
                       @{u.username || 'no username'} · ID: {u.telegramId}
                     </div>
                     <div className="flex items-center gap-2 mt-1">
@@ -121,7 +121,7 @@ export default function AdminUsersPage() {
                         {u.isActive ? 'Active' : 'Banned'}
                       </span>
                       <span className="badge-blue">{u.role}</span>
-                      <span className="font-bold" style={{ color: '#0ca3db' }}>
+                      <span className="font-bold" style={{ color: '#00beac' }}>
                         {u.balance.toFixed(2)} Birr
                       </span>
                     </div>
@@ -153,9 +153,9 @@ export default function AdminUsersPage() {
 
       {creditModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="rounded-xl p-6 w-full max-w-sm" style={{ backgroundColor: '#ede7e0' }}>
+          <div className="rounded-xl p-6 w-full max-w-sm" style={{ backgroundColor: '#e8f5f3' }}>
             <h3 className="font-bold mb-1">Credit {creditModal.name}</h3>
-            <p className="text-sm mb-4" style={{ color: '#ffffff' }}>
+            <p className="text-sm mb-4" style={{ color: '#7fbcb4' }}>
               Enter amount to add to wallet
             </p>
             <input
