@@ -70,7 +70,7 @@ export default function GameDetailPage() {
   const [winnerCardData, setWinnerCardData] = useState<CardData | null>(null)
   const [winningLine, setWinningLine] = useState<WinningLine | null>(null)
   const hasNavigated = useRef(false)
-  const { on } = useSocket()
+  const { on, fresh } = useSocket()
 
   useEffect(() => {
     validateTelegramSession()
@@ -224,34 +224,67 @@ export default function GameDetailPage() {
     return () => { unsubs.forEach((fn) => fn()) }
   }, [on, fetchGame, fetchCards, game?.drawnNumbers])
 
+  // ─── Re-fetch on visibility change (Telegram minimize/restore) ────────────
+  useEffect(() => {
+    if (fresh === 0) return
+    fetchGame()
+    fetchCards()
+  }, [fresh, fetchGame, fetchCards])
+
   useEffect(() => {
     if (!game || !user) return
     const purchased = cards.filter((c) => c.isOwnedByMe)
     setMyCards(purchased)
   }, [cards, game, user])
 
-  useEffect(() => {
-    if (countdown === null || countdown <= 0) return
-    const timer = setInterval(() => {
-      setCountdown((prev) => (prev !== null && prev > 0 ? prev - 1 : 0))
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [countdown])
+  // ─── Countdown: use Date.now()-based end time for accuracy ─────────────────
+  const [countdownEnd, setCountdownEnd] = useState<number | null>(null)
 
   useEffect(() => {
-    if (winnerCountdown === null || winnerCountdown <= 0) return
-    const timer = setInterval(() => {
-      setWinnerCountdown((prev) => (prev !== null && prev > 1 ? prev - 1 : 0))
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [winnerCountdown])
-
-  useEffect(() => {
-    if (winnerCountdown === 0 && !hasNavigated.current) {
-      hasNavigated.current = true
-      router.push('/')
+    if (countdownEnd === null) return
+    const tick = () => {
+      const remaining = Math.max(0, Math.ceil((countdownEnd - Date.now()) / 1000))
+      setCountdown(remaining)
+      if (remaining <= 0) setCountdownEnd(null)
     }
-  }, [winnerCountdown, router])
+    tick()
+    const timer = setInterval(tick, 1000)
+    return () => clearInterval(timer)
+  }, [countdownEnd])
+
+  // Recalculates end when a new countdown value arrives (from socket or server)
+  useEffect(() => {
+    if (countdown !== null && countdown > 0) {
+      setCountdownEnd(Date.now() + countdown * 1000)
+    }
+  }, [countdown]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ─── Winner countdown: same Date.now() approach ───────────────────────────
+  const [winnerCountdownEnd, setWinnerCountdownEnd] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (winnerCountdownEnd === null) return
+    const tick = () => {
+      const remaining = Math.max(0, Math.ceil((winnerCountdownEnd - Date.now()) / 1000))
+      setWinnerCountdown(remaining)
+      if (remaining <= 0) {
+        setWinnerCountdownEnd(null)
+        if (!hasNavigated.current) {
+          hasNavigated.current = true
+          router.push('/')
+        }
+      }
+    }
+    tick()
+    const timer = setInterval(tick, 1000)
+    return () => clearInterval(timer)
+  }, [winnerCountdownEnd, router])
+
+  useEffect(() => {
+    if (winnerCountdown !== null && winnerCountdown > 0) {
+      setWinnerCountdownEnd(Date.now() + winnerCountdown * 1000)
+    }
+  }, [winnerCountdown]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSelect = async (card: BingoCard) => {
     setLoading(true)

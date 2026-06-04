@@ -1,13 +1,14 @@
 'use client'
 
-import { useEffect, useRef, useCallback } from 'react'
-import { connectSocket, disconnectSocket, getSocket } from '@/lib/socket'
+import { useEffect, useRef, useCallback, useState } from 'react'
+import { connectSocket, disconnectSocket, getSocket, ensureSocketConnected } from '@/lib/socket'
 import { getStoredToken, getStoredInitData } from '@/lib/auth'
 
 type EventHandler = (...args: unknown[]) => void
 
 export function useSocket() {
   const initialized = useRef(false)
+  const [fresh, setFresh] = useState(0)
 
   useEffect(() => {
     if (initialized.current) return
@@ -25,6 +26,20 @@ export function useSocket() {
       disconnectSocket()
       initialized.current = false
     }
+  }, [])
+
+  // ─── Visibility change → ensure socket is alive ───────────────────────────
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        const sock = ensureSocketConnected()
+        if (sock?.connected) {
+          setFresh((n) => n + 1)
+        }
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
   }, [])
 
   const on = useCallback((event: string, handler: EventHandler) => {
@@ -45,5 +60,5 @@ export function useSocket() {
     }
   }, [])
 
-  return { on, emit }
+  return { on, emit, fresh }
 }

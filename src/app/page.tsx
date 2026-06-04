@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { getGames, getGameCards, selectCard, releaseCardApi, authTelegram, getProfile } from '@/lib/api'
 import { getStoredToken, getStoredUser, storeAuth, clearAuth } from '@/lib/auth'
-import { connectSocket, disconnectSocket, getSocket, joinGameRoom, leaveGameRoom } from '@/lib/socket'
+import { connectSocket, disconnectSocket, getSocket, joinGameRoom, leaveGameRoom, ensureSocketConnected } from '@/lib/socket'
 import NavBar from '@/components/NavBar'
 import CardSelector from '@/components/CardSelector'
 import type { User, Game, BingoCard } from '@/types'
@@ -147,13 +147,40 @@ export default function HomePage() {
     fetchGame()
   }, [user, fetchGame])
 
+  // ─── Selection countdown: Date.now()-based for accuracy across minimize ────
+  const [selCountdownEnd, setSelCountdownEnd] = useState<number | null>(null)
+
   useEffect(() => {
-    if (selectionCountdown === null || selectionCountdown <= 0) return
-    const timer = setInterval(() => {
-      setSelectionCountdown((prev) => (prev !== null && prev > 0 ? prev - 1 : 0))
-    }, 1000)
+    if (selCountdownEnd === null) return
+    const tick = () => {
+      const remaining = Math.max(0, Math.ceil((selCountdownEnd - Date.now()) / 1000))
+      setSelectionCountdown(remaining)
+      if (remaining <= 0) setSelCountdownEnd(null)
+    }
+    tick()
+    const timer = setInterval(tick, 1000)
     return () => clearInterval(timer)
+  }, [selCountdownEnd])
+
+  useEffect(() => {
+    if (selectionCountdown !== null && selectionCountdown > 0) {
+      setSelCountdownEnd(Date.now() + selectionCountdown * 1000)
+    }
   }, [selectionCountdown])
+
+  // ─── Re-fetch game when returning from minimize ───────────────────────────
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        const sock = ensureSocketConnected()
+        if (sock?.connected) {
+          fetchGame()
+        }
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [fetchGame])
 
   useEffect(() => {
     if (!game) return
