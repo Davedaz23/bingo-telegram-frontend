@@ -42,23 +42,6 @@ export default function GameDetailPage() {
     if (stored) setUser(stored)
   }, [])
 
-  useEffect(() => {
-    try {
-      const sock = getSocket()
-      setConnected(sock.connected)
-      const onConnect = () => setConnected(true)
-      const onDisconnect = () => setConnected(false)
-      sock.on('connect', onConnect)
-      sock.on('disconnect', onDisconnect)
-      return () => {
-        sock.off('connect', onConnect)
-        sock.off('disconnect', onDisconnect)
-      }
-    } catch {
-      return
-    }
-  }, [])
-
   const fetchGame = useCallback(async () => {
     try {
       const g = await getGame(id)
@@ -90,9 +73,42 @@ export default function GameDetailPage() {
   }, [id, fetchGame, fetchCards])
 
   useEffect(() => {
+    try {
+      const sock = getSocket()
+      setConnected(sock.connected)
+      const onConnect = () => {
+        setConnected(true)
+        joinGameRoom(id)
+        fetchGame()
+        fetchCards()
+      }
+      const onDisconnect = () => setConnected(false)
+      sock.on('connect', onConnect)
+      sock.on('disconnect', onDisconnect)
+      return () => {
+        sock.off('connect', onConnect)
+        sock.off('disconnect', onDisconnect)
+      }
+    } catch {
+      return
+    }
+  }, [id, fetchGame, fetchCards])
+
+  useEffect(() => {
     if (!on) return
 
     const unsubs: (() => void)[] = []
+
+    unsubs.push(on('game:joined', (data: unknown) => {
+      const d = data as { gameId: string; status: string; drawnNumbers: number[]; playerCount: number; prizePool: number }
+      setGame((prev) => prev ? {
+        ...prev,
+        status: d.status as Game['status'],
+        drawnNumbers: d.drawnNumbers || [],
+        prizePool: d.prizePool,
+      } : prev)
+      fetchCards()
+    }))
 
     unsubs.push(on('game:countdown', (data: unknown) => {
       const d = data as { seconds: number }

@@ -1,6 +1,7 @@
 import { io, Socket } from 'socket.io-client'
 
 let socket: Socket | null = null
+const joinedRooms: string[] = []
 
 export function getSocket(): Socket {
   if (!socket) {
@@ -10,7 +11,6 @@ export function getSocket(): Socket {
 }
 
 export function connectSocket(token?: string, initData?: string): Socket {
-  // If already connected but with potentially different creds, disconnect first
   if (socket?.connected) {
     socket.removeAllListeners()
     socket.disconnect()
@@ -25,13 +25,17 @@ export function connectSocket(token?: string, initData?: string): Socket {
     auth,
     transports: ['polling', 'websocket'],
     reconnection: true,
-    reconnectionAttempts: 10,
+    reconnectionAttempts: Infinity,
     reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
     timeout: 20000,
   })
 
   socket.on('connect', () => {
     console.log('[Socket] Connected:', socket?.id)
+    for (const roomId of joinedRooms) {
+      socket?.emit('game:join', { gameId: roomId })
+    }
   })
 
   socket.on('disconnect', (reason) => {
@@ -46,6 +50,7 @@ export function connectSocket(token?: string, initData?: string): Socket {
 }
 
 export function disconnectSocket(): void {
+  joinedRooms.length = 0
   if (socket) {
     socket.removeAllListeners()
     socket.disconnect()
@@ -54,9 +59,15 @@ export function disconnectSocket(): void {
 }
 
 export function joinGameRoom(gameId: string): void {
-  getSocket().emit('game:join', { gameId })
+  const sock = getSocket()
+  sock.emit('game:join', { gameId })
+  if (!joinedRooms.includes(gameId)) {
+    joinedRooms.push(gameId)
+  }
 }
 
 export function leaveGameRoom(gameId: string): void {
   getSocket().emit('game:leave', { gameId })
+  const idx = joinedRooms.indexOf(gameId)
+  if (idx !== -1) joinedRooms.splice(idx, 1)
 }
