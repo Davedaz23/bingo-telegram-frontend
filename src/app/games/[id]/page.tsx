@@ -126,6 +126,26 @@ export default function GameDetailPage() {
       setWinnerCountdown(10)
     }))
 
+    unsubs.push(on('game:sync', (data: unknown) => {
+      const d = data as { status: string; drawnNumbers?: number[]; countdownRemaining?: number; phase?: string }
+      if (d.countdownRemaining !== undefined) {
+        setCountdown(Math.ceil(d.countdownRemaining))
+      }
+      if (d.drawnNumbers) {
+        const prev = game?.drawnNumbers || []
+        const newNum = d.drawnNumbers.length > prev.length
+          ? d.drawnNumbers[d.drawnNumbers.length - 1]
+          : null
+        if (newNum) {
+          setAnimatingNumber(newNum)
+          setTimeout(() => setAnimatingNumber(null), 600)
+        }
+        setGame((prev) => prev ? { ...prev, drawnNumbers: d.drawnNumbers!, status: d.status as Game['status'] } : prev)
+      } else if (d.status) {
+        setGame((prev) => prev ? { ...prev, status: d.status as Game['status'] } : prev)
+      }
+    }))
+
     unsubs.push(on('game:cancelled', () => {
       fetchGame()
     }))

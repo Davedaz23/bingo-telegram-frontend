@@ -38,6 +38,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState(false)
   const [error, setError] = useState('')
+  const [selectionCountdown, setSelectionCountdown] = useState<number | null>(null)
 
   const tryRestoreSession = useCallback(async () => {
     const storedUser = getStoredUser()
@@ -147,6 +148,14 @@ export default function HomePage() {
   }, [user, fetchGame])
 
   useEffect(() => {
+    if (selectionCountdown === null || selectionCountdown <= 0) return
+    const timer = setInterval(() => {
+      setSelectionCountdown((prev) => (prev !== null && prev > 0 ? prev - 1 : 0))
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [selectionCountdown])
+
+  useEffect(() => {
     if (!game) return
     try { joinGameRoom(game._id) } catch {}
     return () => {
@@ -169,10 +178,27 @@ export default function HomePage() {
       router.push(`/games/${d.gameId}`)
     }
 
-    sock.on('game:countdown', goToGame)
+    sock.on('game:countdown', (data: unknown) => {
+      const d = data as { gameId: string; phase?: string }
+      if (d.phase === 'selection') {
+        setSelectionCountdown((data as { seconds: number }).seconds ?? 30)
+        fetchGame()
+      } else {
+        goToGame(data)
+      }
+    })
     sock.on('game:started', goToGame)
     sock.on('game:winner', refresh)
     sock.on('game:cancelled', refresh)
+
+    sock.on('game:sync', (data: unknown) => {
+      const d = data as { gameId: string; status: string; countdownRemaining?: number; phase?: string }
+      if (d.phase === 'selection' && d.countdownRemaining !== undefined) {
+        setSelectionCountdown(Math.ceil(d.countdownRemaining))
+      } else if (d.status !== 'selection') {
+        setSelectionCountdown(null)
+      }
+    })
 
     sock.on('card:purchased', (data: unknown) => {
       const d = data as { cardId: string; userId: string }
@@ -195,10 +221,11 @@ export default function HomePage() {
     })
 
     return () => {
-      sock.off('game:countdown', goToGame)
+      sock.off('game:countdown')
       sock.off('game:started', goToGame)
       sock.off('game:winner', refresh)
       sock.off('game:cancelled', refresh)
+      sock.off('game:sync')
       sock.off('card:purchased')
       sock.off('card:released')
     }
@@ -316,6 +343,24 @@ export default function HomePage() {
         ) : isSelection ? (
           canAfford ? (
             <div>
+              {/* Selection countdown banner */}
+              {selectionCountdown !== null && selectionCountdown > 0 && (
+                <div className="rounded-2xl p-4 bg-gradient-to-r from-amber-50 to-amber-100/60 border border-amber-200 mb-4 text-center">
+                  <div className="flex items-center justify-center gap-3">
+                    <div className="text-3xl font-extrabold text-amber-600">{selectionCountdown}s</div>
+                    <div className="text-left">
+                      <div className="font-bold text-amber-700 text-sm">Card Selection Ending Soon!</div>
+                      <div className="text-xs text-amber-500">Buy your cards before time runs out</div>
+                    </div>
+                  </div>
+                  <div className="w-full bg-amber-200/60 rounded-full h-1.5 mt-3 overflow-hidden">
+                    <div
+                      className="bg-gradient-to-r from-amber-500 to-amber-600 h-full rounded-full transition-all duration-1000 ease-linear"
+                      style={{ width: `${(selectionCountdown / 30) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
               {/* Game info bar */}
               <div className="rounded-2xl p-4 bg-white border border-gray-100 mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
