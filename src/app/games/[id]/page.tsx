@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
   getGame,
@@ -14,10 +14,43 @@ import { useSocket } from '@/hooks/useSocket'
 import { getSocket, joinGameRoom, leaveGameRoom } from '@/lib/socket'
 import NavBar from '@/components/NavBar'
 import CardSelector from '@/components/CardSelector'
-import type { User, Game, BingoCard } from '@/types'
+import BingoBoard from '@/components/BingoBoard'
+import type { User, Game, BingoCard, CardData, WinningLine } from '@/types'
 
 const ALL_NUMBERS = Array.from({ length: 75 }, (_, i) => i + 1)
 const COLUMNS = ['B', 'I', 'N', 'G', 'O'] as const
+
+function Confetti() {
+  const pieces = useRef<{ id: number; left: string; delay: string; duration: string; bg: string }[]>([])
+  if (pieces.current.length === 0) {
+    const colors = ['#F59E0B', '#6D28D9', '#FBBF24', '#8B5CF6', '#D97706', '#7C3AED']
+    for (let i = 0; i < 40; i++) {
+      pieces.current.push({
+        id: i,
+        left: `${Math.random() * 100}%`,
+        delay: `${Math.random() * 2}s`,
+        duration: `${2 + Math.random() * 3}s`,
+        bg: colors[Math.floor(Math.random() * colors.length)],
+      })
+    }
+  }
+  return (
+    <div className="confetti-container">
+      {pieces.current.map((p) => (
+        <div
+          key={p.id}
+          className="confetti-piece"
+          style={{
+            left: p.left,
+            animationDelay: p.delay,
+            animationDuration: p.duration,
+            background: p.bg,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
 
 export default function GameDetailPage() {
   const router = useRouter()
@@ -34,6 +67,9 @@ export default function GameDetailPage() {
   const [winnerCountdown, setWinnerCountdown] = useState<number | null>(null)
   const [connected, setConnected] = useState(false)
   const [animatingNumber, setAnimatingNumber] = useState<number | null>(null)
+  const [winnerCardData, setWinnerCardData] = useState<CardData | null>(null)
+  const [winningLine, setWinningLine] = useState<WinningLine | null>(null)
+  const hasNavigated = useRef(false)
   const { on } = useSocket()
 
   useEffect(() => {
@@ -45,7 +81,6 @@ export default function GameDetailPage() {
   const fetchGame = useCallback(async () => {
     try {
       const g = await getGame(id)
-      console.log('Fetched game:', g)
       setGame(g)
       if (g.countdownStartedAt) {
         const elapsed = (Date.now() - new Date(g.countdownStartedAt).getTime()) / 1000
@@ -133,13 +168,25 @@ export default function GameDetailPage() {
     }))
 
     unsubs.push(on('game:winner', (data: unknown) => {
-      const d = data as { winner?: { userId: string }; prizeAmount: number }
+      const d = data as {
+        winner?: { userId: string; firstName?: string; username?: string }
+        prizeAmount: number
+        winningLine?: { type: string; index?: number }
+        winnerCard?: CardData
+      }
+      setWinningLine(d.winningLine ? { type: d.winningLine.type as WinningLine['type'], index: d.winningLine.index } : null)
+      if (d.winnerCard) setWinnerCardData(d.winnerCard)
       setGame((prev) => prev ? {
         ...prev,
         status: 'finished',
-        winner: { userId: d.winner?.userId || '', prizeAmount: d.prizeAmount },
+        winner: {
+          userId: d.winner?.userId || '',
+          prizeAmount: d.prizeAmount,
+          winningLine: d.winningLine ? { type: d.winningLine.type as WinningLine['type'], index: d.winningLine.index } : undefined,
+        },
       } : prev)
       setWinnerCountdown(10)
+      hasNavigated.current = false
     }))
 
     unsubs.push(on('game:sync', (data: unknown) => {
@@ -194,16 +241,16 @@ export default function GameDetailPage() {
   useEffect(() => {
     if (winnerCountdown === null || winnerCountdown <= 0) return
     const timer = setInterval(() => {
-      setWinnerCountdown((prev) => {
-        if (prev !== null && prev > 1) return prev - 1
-        if (prev === 1) {
-          router.push('/')
-          return 0
-        }
-        return 0
-      })
+      setWinnerCountdown((prev) => (prev !== null && prev > 1 ? prev - 1 : 0))
     }, 1000)
     return () => clearInterval(timer)
+  }, [winnerCountdown])
+
+  useEffect(() => {
+    if (winnerCountdown === 0 && !hasNavigated.current) {
+      hasNavigated.current = true
+      router.push('/')
+    }
   }, [winnerCountdown, router])
 
   const handleSelect = async (card: BingoCard) => {
@@ -506,41 +553,66 @@ export default function GameDetailPage() {
 
         {/* Finished */}
         {isFinished && (
-          <div className="rounded-2xl p-6 bg-white border border-gray-100 text-center mb-4">
-            {winnerCountdown !== null && (
-              <div className="text-5xl font-extrabold text-amber-500 mb-3 animate-bounce-in">
-                {winnerCountdown}s
-              </div>
-            )}
-            {game.winner && user && game.winner.userId === user._id ? (
-              <div className="animate-slide-up">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-amber-200 animate-gold-pulse">
-                  <span className="text-4xl">👑</span>
+          <div className="mb-4">
+            {game.status === 'finished' && game.winner && <Confetti />}
+            <div className="rounded-2xl p-6 bg-white border border-gray-100 text-center relative overflow-hidden">
+              {winnerCountdown !== null && (
+                <div className="text-5xl font-extrabold text-amber-500 mb-3 animate-bounce-in">
+                  {winnerCountdown}s
                 </div>
-                <div className="font-extrabold text-2xl text-amber-600 mb-1">You Won!</div>
-                <div className="text-lg font-bold text-purple-600">
-                  {game.winner.prizeAmount?.toFixed(2)} Birr
+              )}
+              {game.winner && user && game.winner.userId === user._id ? (
+                <div className="animate-slide-up">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mx-auto mb-3 shadow-2xl shadow-amber-200" style={{ animation: 'crownBounce 1.5s ease-in-out infinite' }}>
+                    <span className="text-4xl">👑</span>
+                  </div>
+                  <div className="font-extrabold text-2xl text-amber-600 mb-1">You Won!</div>
+                  <div className="text-lg font-bold text-purple-600 mb-4">
+                    {game.winner.prizeAmount?.toFixed(2)} Birr
+                  </div>
+                  {/* Show winner's card with winning line */}
+                  {myCards.length > 0 && myCards[0].card && (
+                    <div className="flex justify-center">
+                      <BingoBoard
+                        card={myCards[0].card}
+                        drawnNumbers={game.drawnNumbers || []}
+                        won
+                        winningLine={winningLine || game.winner?.winningLine || null}
+                      />
+                    </div>
+                  )}
                 </div>
-              </div>
-            ) : game.winner ? (
-              <div>
-                <div className="text-4xl mb-3">🎉</div>
-                <div className="font-bold text-lg text-gray-900">Game Won</div>
-                <p className="text-sm text-gray-400 mt-1">
-                  Another player won this game
-                </p>
-              </div>
-            ) : (
-              <div>
-                <div className="text-4xl mb-3">{game.status === 'cancelled' ? '🚫' : '📭'}</div>
-                <div className="font-bold text-lg text-gray-900">
-                  Game {game.status === 'cancelled' ? 'Cancelled' : 'Finished'}
+              ) : game.winner ? (
+                <div className="animate-slide-up">
+                  <div className="text-4xl mb-2">🎉</div>
+                  <div className="font-bold text-lg text-gray-900 mb-1">Game Won!</div>
+                  <p className="text-sm text-amber-500 font-semibold mb-3">
+                    {game.winner.prizeAmount?.toFixed(2)} Birr prize
+                  </p>
+                  {/* Show winner's card if we have it */}
+                  {winnerCardData && (
+                    <div className="flex justify-center">
+                      <BingoBoard
+                        card={winnerCardData}
+                        drawnNumbers={game.drawnNumbers || []}
+                        won
+                        winningLine={winningLine || null}
+                      />
+                    </div>
+                  )}
                 </div>
-                <p className="text-sm text-gray-400 mt-1">
-                  {game.status === 'cancelled' ? 'Refunds processed' : 'No winner'}
-                </p>
-              </div>
-            )}
+              ) : (
+                <div>
+                  <div className="text-4xl mb-3">{game.status === 'cancelled' ? '🚫' : '📭'}</div>
+                  <div className="font-bold text-lg text-gray-900">
+                    Game {game.status === 'cancelled' ? 'Cancelled' : 'Finished'}
+                  </div>
+                  <p className="text-sm text-gray-400 mt-1">
+                    {game.status === 'cancelled' ? 'Refunds processed' : 'No winner'}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>

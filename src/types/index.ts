@@ -21,6 +21,11 @@ export interface CardData {
   O: number[]
 }
 
+export interface WinningLine {
+  type: 'row' | 'column' | 'diagonal' | 'full_card' | 'four_corners'
+  index?: number
+}
+
 export interface GameWinner {
   userId: string
   telegramId?: string
@@ -28,6 +33,7 @@ export interface GameWinner {
   prizeAmount?: number
   winningNumber?: number
   claimedAt?: string
+  winningLine?: WinningLine
 }
 
 export interface Game {
