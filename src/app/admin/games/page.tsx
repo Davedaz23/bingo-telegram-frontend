@@ -80,10 +80,10 @@ export default function AdminGamesPage() {
   const isAdmin = user.role === 'admin' || user.role === 'super_admin'
   if (!isAdmin) {
     return (
-      <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="flex items-center justify-center min-h-screen p-4" style={{ background: 'linear-gradient(180deg, #FAFAFA 0%, #F5F3FF 100%)' }}>
         <div className="text-center">
           <div className="text-4xl mb-4">🚫</div>
-          <h1 className="text-xl font-bold">Access Denied</h1>
+          <h1 className="text-xl font-extrabold text-gray-900">Access Denied</h1>
           <Link href="/" className="btn-primary mt-4 inline-block">Go Home</Link>
         </div>
       </div>
@@ -91,13 +91,13 @@ export default function AdminGamesPage() {
   }
 
   return (
-    <div className="pb-20">
+    <div className="pb-24">
       <div className="p-4 max-w-lg mx-auto">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Games</h1>
+          <h1 className="text-2xl font-extrabold text-gray-900">Games</h1>
           <button
             onClick={handleCreate}
-            className="btn-primary"
+            className="btn-primary text-sm"
             disabled={actionLoading === 'create'}
           >
             {actionLoading === 'create' ? 'Creating...' : '+ New Game'}
@@ -105,42 +105,50 @@ export default function AdminGamesPage() {
         </div>
 
         {error && (
-          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>
+          <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100">
+            {error}
+          </div>
         )}
 
         {loading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="card animate-pulse h-20" />
+              <div key={i} className="skeleton h-24" />
             ))}
           </div>
         ) : games.length === 0 ? (
-          <div className="text-center py-12" style={{ color: '#7fbcb4' }}>
-            <p>No games yet</p>
-            <p className="text-sm mt-1">Click &quot;+ New Game&quot; to create one</p>
+          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100">
+            <div className="text-4xl mb-3">🎲</div>
+            <p className="text-gray-400 font-medium">No games yet</p>
+            <p className="text-sm text-gray-300 mt-1">Click &quot;+ New Game&quot; to create one</p>
           </div>
         ) : (
           <div className="space-y-3">
             {games.map((game) => (
-              <div key={game._id} className="card">
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <span className="font-bold text-lg">#{game.gameCode}</span>
-                    <span className={`ml-2 ${
-                      game.status === 'selection' ? 'badge-blue' :
-                      game.status === 'starting' ? 'badge-yellow' :
-                      game.status === 'active' ? 'badge-green' :
-                      game.status === 'finished' ? 'badge-gray' :
-                      'badge-red'
-                    }`}>
-                      {game.status}
-                    </span>
+              <div key={game._id} className="rounded-2xl p-4 bg-white border border-gray-100">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-purple-200">
+                      #{game.gameCode}
+                    </div>
+                    <div>
+                      <span className="font-bold text-gray-900">#{game.gameCode}</span>
+                      <span className={`ml-2 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                        game.status === 'selection' ? 'bg-purple-50 text-purple-600' :
+                        game.status === 'starting' ? 'bg-amber-50 text-amber-600' :
+                        game.status === 'active' ? 'bg-emerald-50 text-emerald-600' :
+                        game.status === 'finished' ? 'bg-gray-50 text-gray-500' :
+                        'bg-rose-50 text-rose-600'
+                      }`}>
+                        {game.status}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1.5">
                     {game.status === 'selection' && (
                       <button
                         onClick={() => handleStart(game._id)}
-                        className="btn-success"
+                        className="btn-success text-xs px-3 py-1.5"
                         disabled={actionLoading === `start-${game._id}`}
                       >
                         Start
@@ -149,7 +157,7 @@ export default function AdminGamesPage() {
                     {(game.status === 'selection' || game.status === 'starting') && (
                       <button
                         onClick={() => handleCancel(game._id)}
-                        className="btn-danger"
+                        className="btn-danger text-xs px-3 py-1.5"
                         disabled={actionLoading === `cancel-${game._id}`}
                       >
                         Cancel
@@ -157,11 +165,11 @@ export default function AdminGamesPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex flex-wrap gap-x-3 gap-y-1" style={{ color: '#7fbcb4' }}>
-                  <span>🎯 {game.prizePool.toFixed(2)} Birr</span>
-                  <span>🎴 {game.purchasedCards ?? '?'} sold</span>
-                  <span>🔢 {game.drawnNumbers?.length ?? 0} drawn</span>
-                  <Link href={`/games/${game._id}`} className="underline">View →</Link>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
+                  <span>🎯 <strong className="text-gray-700">{game.prizePool.toFixed(2)} Birr</strong></span>
+                  <span>🎴 <strong className="text-gray-700">{game.purchasedCards ?? '?'}</strong> sold</span>
+                  <span>🔢 <strong className="text-gray-700">{game.drawnNumbers?.length ?? 0}</strong> drawn</span>
+                  <Link href={`/games/${game._id}`} className="text-purple-500 font-semibold hover:underline">View →</Link>
                 </div>
               </div>
             ))}

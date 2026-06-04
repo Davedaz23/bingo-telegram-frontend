@@ -7,47 +7,66 @@ import { cardDataToGrid, isNumberDrawn } from '@/lib/cardUtils'
 interface BingoBoardProps {
   card: CardData
   drawnNumbers: number[]
+  won?: boolean
 }
 
 const COLUMNS = ['B', 'I', 'N', 'G', 'O'] as const
 
-export default function BingoBoard({ card, drawnNumbers }: BingoBoardProps) {
+export default function BingoBoard({ card, drawnNumbers, won }: BingoBoardProps) {
   const grid = useMemo(() => cardDataToGrid(card), [card])
+  const lastDrawn = drawnNumbers.length > 0 ? drawnNumbers[drawnNumbers.length - 1] : null
 
   return (
-    <div className="inline-block select-none">
-      <div className="grid grid-cols-5 gap-0.5 mb-0.5">
+    <div className={`inline-block select-none ${won ? 'bingo-card-win rounded-2xl p-0.5' : ''}`}>
+      <div className="grid grid-cols-5 gap-1 mb-1">
         {COLUMNS.map((col) => (
-          <div
-            key={col}
-            className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-t font-bold text-white"
-            style={{ backgroundColor: '#00beac', fontSize: '14px' }}
-          >
+          <div key={col} className="bingo-cell-header">
             {col}
           </div>
         ))}
       </div>
       {grid.map((row, ri) => (
-        <div key={ri} className="grid grid-cols-5 gap-0.5 mb-0.5">
+        <div key={ri} className="grid grid-cols-5 gap-1 mb-1">
           {row.map((cell, ci) => {
             const drawn = isNumberDrawn(cell.number, drawnNumbers)
             const isFree = cell.number === 0
+            const isCurrent = cell.number === lastDrawn && !isFree
+            const cellClass = isCurrent
+              ? 'bingo-cell-current'
+              : drawn || isFree
+              ? 'bingo-cell-marked'
+              : drawnNumbers.length > 0 && drawn
+              ? 'bingo-cell-drawn'
+              : 'bingo-cell-default'
+
             return (
               <div
                 key={`${ri}-${ci}`}
-                className={`bingo-cell ${drawn || isFree ? 'bingo-cell-marked' : 'bingo-cell-default'}`}
+                className={`bingo-cell ${cellClass}`}
                 style={
-                  drawn || isFree
+                  isFree && !isCurrent
+                    ? { opacity: 0.5 }
+                    : isCurrent
                     ? {
-                        backgroundColor: '#00beac',
+                        background: 'linear-gradient(135deg, #F59E0B, #D97706)',
                         color: '#ffffff',
-                        borderColor: '#00beac',
-                        opacity: isFree ? 0.5 : 1,
+                        borderColor: 'transparent',
+                      }
+                    : drawn && !isFree
+                    ? {
+                        background: 'linear-gradient(135deg, #6D28D9, #5B21B6)',
+                        color: '#ffffff',
+                        borderColor: 'transparent',
+                        boxShadow: '0 2px 8px rgba(109, 40, 217, 0.3)',
                       }
                     : undefined
                 }
               >
-                {isFree ? '★' : cell.number}
+                {isFree ? (
+                  <span className={isCurrent ? 'text-lg' : 'text-base'}>⭐</span>
+                ) : (
+                  <span className="text-sm sm:text-base font-bold">{cell.number}</span>
+                )}
               </div>
             )
           })}

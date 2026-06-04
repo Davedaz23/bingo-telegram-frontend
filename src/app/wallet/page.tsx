@@ -83,58 +83,75 @@ export default function WalletPage() {
   if (!user) return null
 
   return (
-    <div className="pb-16">
+    <div className="pb-24">
       <div className="p-4 max-w-lg mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Wallet</h1>
+        <h1 className="text-2xl font-extrabold text-gray-900 mb-6">Wallet</h1>
 
-        <div className="card text-center mb-6">
-          <div style={{ color: '#7fbcb4' }}>
+        {/* Balance card */}
+        <div className="rounded-2xl p-6 bg-gradient-to-br from-purple-500 to-purple-700 text-white mb-6 shadow-2xl shadow-purple-200">
+          <div className="text-sm text-purple-200 font-medium mb-1">
             Available Balance
           </div>
-          <div className="text-4xl font-bold mt-1" style={{ color: '#00beac' }}>
-            {balance.toFixed(2)} Birr
+          <div className="text-4xl font-extrabold">
+            {balance.toFixed(2)} <span className="text-lg font-semibold text-purple-200">Birr</span>
+          </div>
+          <div className="mt-4 flex gap-2">
+            <div className="bg-white/15 rounded-xl px-3 py-1.5 text-xs font-medium text-purple-100">
+              Wallet
+            </div>
           </div>
         </div>
 
-        <div className="card mb-6">
-          <h3 className="font-bold mb-3 text-lg">Deposit via SMS</h3>
+        {/* Deposit section */}
+        <div className="rounded-2xl p-5 bg-white border border-gray-100 mb-6">
+          <h3 className="font-extrabold text-gray-900 mb-4 flex items-center gap-2">
+            <span className="text-lg">📥</span> Deposit via SMS
+          </h3>
 
           {error && (
-            <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-3">{error}</div>
+            <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100">
+              {error}
+            </div>
           )}
           {success && (
-            <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-3">{success}</div>
+            <div className="bg-emerald-50 text-emerald-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-emerald-100">
+              {success}
+            </div>
           )}
 
-          <div className="mb-3">
-            <label className="font-medium block mb-1">Transfer to</label>
-            {CHANNELS.map((ch) => (
-              <button
-                key={ch}
-                onClick={() => setChannel(ch)}
-                className={`block w-full text-left p-3 rounded-lg mb-1 border transition-colors ${
-                  channel === ch
-                    ? 'border-blue-500 bg-blue-50 font-medium'
-                    : 'border-transparent bg-gray-50'
-                }`}
-              >
-                <span className="font-medium">{CHANNEL_LABELS[ch]}</span>
-                {accounts && (
-                  <span className="ml-2" style={{ color: '#7fbcb4' }}>
-                    {accounts[ch as keyof DepositAccounts]}
-                  </span>
-                )}
-              </button>
-            ))}
+          <div className="mb-4">
+            <label className="font-bold text-sm text-gray-700 block mb-2">Transfer to</label>
+            <div className="space-y-1.5">
+              {CHANNELS.map((ch) => (
+                <button
+                  key={ch}
+                  onClick={() => setChannel(ch)}
+                  className={`w-full text-left px-4 py-3 rounded-2xl transition-all duration-200 ${
+                    channel === ch
+                      ? 'bg-purple-50 border-2 border-purple-300 shadow-sm'
+                      : 'bg-gray-50 border-2 border-gray-100 hover:border-gray-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className={`font-bold ${channel === ch ? 'text-purple-700' : 'text-gray-700'}`}>
+                      {CHANNEL_LABELS[ch]}
+                    </span>
+                    <span className={`text-sm ${channel === ch ? 'text-purple-500' : 'text-gray-400'}`}>
+                      {accounts?.[ch as keyof DepositAccounts] || '...'}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
             {accounts && (
-              <p className="text-sm mt-1" style={{ color: '#7fbcb4' }}>
-                Account Name: {accounts.accountName}
+              <p className="text-xs text-gray-400 mt-2">
+                Account Name: <span className="font-medium text-gray-600">{accounts.accountName}</span>
               </p>
             )}
           </div>
 
-          <div className="mb-3">
-            <label className="font-medium block mb-1">
+          <div className="mb-4">
+            <label className="font-bold text-sm text-gray-700 block mb-2">
               Paste SMS Confirmation
             </label>
             <textarea
@@ -155,12 +172,13 @@ export default function WalletPage() {
           </button>
         </div>
 
+        {/* Transactions */}
         <div>
-          <h3 className="font-bold mb-3 text-lg">Transaction History</h3>
+          <h3 className="font-extrabold text-gray-900 mb-4 text-lg">Transaction History</h3>
           {loading ? (
             <div className="space-y-2">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="card animate-pulse h-16" />
+                <div key={i} className="skeleton h-[72px]" />
               ))}
             </div>
           ) : (

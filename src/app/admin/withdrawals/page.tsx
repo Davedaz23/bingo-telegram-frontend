@@ -8,7 +8,7 @@ import NavBar from '@/components/NavBar'
 import type { User, Withdrawal } from '@/types'
 
 const statusBadge: Record<string, string> = {
-  pending: 'badge-yellow',
+  pending: 'badge-accent',
   processing: 'badge-blue',
   completed: 'badge-green',
   rejected: 'badge-red',
@@ -74,10 +74,10 @@ export default function AdminWithdrawalsPage() {
   const isAdmin = user.role === 'admin' || user.role === 'super_admin'
   if (!isAdmin) {
     return (
-      <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="flex items-center justify-center min-h-screen p-4" style={{ background: 'linear-gradient(180deg, #FAFAFA 0%, #F5F3FF 100%)' }}>
         <div className="text-center">
           <div className="text-4xl mb-4">🚫</div>
-          <h1 className="text-xl font-bold">Access Denied</h1>
+          <h1 className="text-xl font-extrabold text-gray-900">Access Denied</h1>
           <Link href="/" className="btn-primary mt-4 inline-block">Go Home</Link>
         </div>
       </div>
@@ -85,50 +85,53 @@ export default function AdminWithdrawalsPage() {
   }
 
   return (
-    <div className="pb-20">
+    <div className="pb-24">
       <div className="p-4 max-w-lg mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Withdrawals ({withdrawals.length})</h1>
+        <h1 className="text-2xl font-extrabold text-gray-900 mb-6">Withdrawals ({withdrawals.length})</h1>
 
         {error && (
-          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>
+          <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100">
+            {error}
+          </div>
         )}
 
         {loading ? (
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="card animate-pulse h-20" />
+              <div key={i} className="skeleton h-28" />
             ))}
           </div>
         ) : withdrawals.length === 0 ? (
-          <div className="text-center py-12" style={{ color: '#7fbcb4' }}>
-            No withdrawals yet
+          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100">
+            <div className="text-4xl mb-3">📭</div>
+            <p className="text-gray-400 font-medium">No withdrawals yet</p>
           </div>
         ) : (
           <div className="space-y-3">
             {withdrawals.map((w) => (
-              <div key={w._id} className="card">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="font-bold text-lg">{w.amount.toFixed(2)} Birr</div>
+              <div key={w._id} className="rounded-2xl p-4 bg-white border border-gray-100">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="font-extrabold text-lg text-gray-900">{w.amount.toFixed(2)} Birr</div>
                   <span className={statusBadge[w.status] || 'badge-gray'}>{w.status}</span>
                 </div>
-                <div className="space-y-0.5" style={{ color: '#7fbcb4' }}>
-                  <div>Account: {w.accountNumber}</div>
-                  {w.bankName && <div>Bank: {w.bankName}</div>}
-                  {w.accountName && <div>Name: {w.accountName}</div>}
-                  <div>Requested: {new Date(w.createdAt).toLocaleString()}</div>
+                <div className="space-y-0.5 text-xs text-gray-400 mb-3">
+                  <div>Account: <span className="font-medium text-gray-700">{w.accountNumber}</span></div>
+                  {w.bankName && <div>Bank: <span className="font-medium text-gray-700">{w.bankName}</span></div>}
+                  {w.accountName && <div>Name: <span className="font-medium text-gray-700">{w.accountName}</span></div>}
+                  <div>Date: {new Date(w.createdAt).toLocaleString()}</div>
                 </div>
                 {w.status === 'pending' && (
-                  <div className="flex gap-2 mt-3">
+                  <div className="flex gap-2">
                     <button
                       onClick={() => handleApprove(w._id)}
-                      className="btn-success flex-1"
+                      className="btn-success flex-1 text-sm"
                       disabled={actionLoading === `approve-${w._id}` || actionLoading === `reject-${w._id}`}
                     >
                       {actionLoading === `approve-${w._id}` ? '...' : 'Approve'}
                     </button>
                     <button
                       onClick={() => handleReject(w._id)}
-                      className="btn-danger flex-1"
+                      className="btn-danger flex-1 text-sm"
                       disabled={actionLoading === `reject-${w._id}` || actionLoading === `approve-${w._id}`}
                     >
                       {actionLoading === `reject-${w._id}` ? '...' : 'Reject'}
@@ -136,7 +139,7 @@ export default function AdminWithdrawalsPage() {
                   </div>
                 )}
                 {w.remark && (
-                  <div className="mt-2 italic" style={{ color: '#7fbcb4' }}>
+                  <div className="mt-2 text-xs text-gray-400 italic">
                     Remark: {w.remark}
                   </div>
                 )}

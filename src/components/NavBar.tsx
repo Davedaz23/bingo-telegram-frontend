@@ -20,34 +20,60 @@ export default function NavBar({ user }: NavBarProps) {
   const isAdmin = user.role === 'admin' || user.role === 'super_admin'
 
   return (
-    <nav style={{ backgroundColor: '#e8f5f3' }} className="border-t border-gray-200 dark:border-gray-700 fixed bottom-0 left-0 right-0 z-50">
-      <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-t border-gray-100/80">
+      <div className="flex justify-around items-center h-[72px] max-w-lg mx-auto px-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center px-3 py-1 transition-colors ${
-                isActive ? 'opacity-100' : 'opacity-50'
-              }`}
-              style={{ color: isActive ? '#00beac' : '#7fbcb4' }}
+              className="relative flex flex-col items-center justify-center w-14 py-1 group"
             >
-              <span className="text-xl">{item.icon}</span>
-              <span className="mt-0.5 text-xs">{item.label}</span>
+              {isActive && (
+                <span className="absolute -top-px w-8 h-[3px] rounded-full bg-gradient-to-r from-purple-500 to-purple-600" />
+              )}
+              <span
+                className={`text-xl transition-all duration-200 ${
+                  isActive ? 'scale-110 -translate-y-0.5' : 'group-hover:scale-105'
+                }`}
+              >
+                {item.icon}
+              </span>
+              <span
+                className={`mt-0.5 text-[10px] font-semibold tracking-wide transition-all duration-200 ${
+                  isActive ? 'text-purple-600' : 'text-gray-400 group-hover:text-gray-500'
+                }`}
+              >
+                {item.label}
+              </span>
             </Link>
           )
         })}
         {isAdmin && (
           <Link
             href="/admin"
-            className={`flex flex-col items-center justify-center px-3 py-1 transition-colors ${
-              pathname.startsWith('/admin') ? 'opacity-100' : 'opacity-50'
+            className={`relative flex flex-col items-center justify-center w-14 py-1 group ${
+              pathname.startsWith('/admin') ? '' : ''
             }`}
-            style={{ color: pathname.startsWith('/admin') ? '#00beac' : '#7fbcb4' }}
           >
-            <span className="text-xl">⚙️</span>
-            <span className="mt-0.5 text-xs">Admin</span>
+            {pathname.startsWith('/admin') && (
+              <span className="absolute -top-px w-8 h-[3px] rounded-full bg-gradient-to-r from-purple-500 to-purple-600" />
+            )}
+            <span
+              className={`text-xl transition-all duration-200 ${
+                pathname.startsWith('/admin') ? 'scale-110 -translate-y-0.5' : 'group-hover:scale-105'
+              }`}
+            >
+              ⚙️
+            </span>
+            <span
+              className={`mt-0.5 text-[10px] font-semibold tracking-wide transition-all duration-200 ${
+                pathname.startsWith('/admin') ? 'text-purple-600' : 'text-gray-400 group-hover:text-gray-500'
+              }`}
+            >
+              Admin
+            </span>
           </Link>
         )}
       </div>

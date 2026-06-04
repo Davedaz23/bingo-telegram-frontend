@@ -247,16 +247,19 @@ export default function HomePage() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen p-4">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-2">Ato Bingo</h1>
-          <p style={{ color: '#7fbcb4' }}>
+      <div className="flex items-center justify-center min-h-screen p-4" style={{ background: 'linear-gradient(180deg, #FAFAFA 0%, #F5F3FF 100%)' }}>
+        <div className="text-center animate-slide-up">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-purple-200">
+            <span className="text-3xl">🎯</span>
+          </div>
+          <h1 className="text-3xl font-extrabold mb-2 text-gray-900">Ato Bingo</h1>
+          <p className="text-purple-400 font-medium">
             {error || 'Initializing...'}
           </p>
           {error && (
             <button
               onClick={() => { setError(''); setLoading(true); window.location.reload() }}
-              className="btn-primary mt-4"
+              className="btn-primary mt-6"
             >
               Retry
             </button>
@@ -272,47 +275,62 @@ export default function HomePage() {
   const myCards = cards.filter(c => c.isOwnedByMe)
 
   return (
-    <div className="pb-20">
+    <div className="pb-24">
       <div className="p-4 max-w-lg mx-auto">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-2xl font-bold">Ato Bingo</h1>
-            <p style={{ color: '#7fbcb4' }}>
-              Welcome, {user.firstName}
-            </p>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-200">
+              <span className="text-xl">🎯</span>
+            </div>
+            <div>
+              <h1 className="text-xl font-extrabold text-gray-900">Ato Bingo</h1>
+              <p className="text-sm text-gray-400">Hi, {user.firstName}</p>
+            </div>
           </div>
           <div className="text-right">
-            <div style={{ color: '#7fbcb4' }}>Balance</div>
-            <div className="text-xl font-bold" style={{ color: '#00beac' }}>
-              {user.balance.toFixed(2)} Birr
+            <div className="text-xs text-gray-400 font-medium">Balance</div>
+            <div className="text-xl font-extrabold text-purple-600">
+              {user.balance.toFixed(2)} Br
             </div>
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">{error}</div>
+          <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100">
+            {error}
+          </div>
         )}
 
         {loading ? (
           <div className="space-y-3">
-            <div className="card animate-pulse h-20" />
-            <div className="card animate-pulse h-64" />
+            <div className="skeleton h-16" />
+            <div className="skeleton h-72" />
           </div>
         ) : !game ? (
-          <div className="text-center py-12" style={{ color: '#7fbcb4' }}>
-            <p>No game available right now</p>
-            <p className="text-sm mt-1">Check back soon</p>
+          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100">
+            <div className="text-5xl mb-4">🎲</div>
+            <p className="text-gray-400 font-semibold">No game available right now</p>
+            <p className="text-sm text-gray-300 mt-1">Check back soon</p>
           </div>
         ) : isSelection ? (
           canAfford ? (
             <div>
-              <div className="card mb-3 flex justify-between items-center py-2 px-3">
+              {/* Game info bar */}
+              <div className="rounded-2xl p-4 bg-white border border-gray-100 mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">Game #{game.gameCode}</span>
-                  <span className="badge-blue text-xs">{game.status}</span>
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-xs shadow-md shadow-purple-200">
+                    #{game.gameCode}
+                  </div>
+                  <div>
+                    <span className="font-bold text-gray-900">Game #{game.gameCode}</span>
+                    <span className="ml-2 badge-primary text-[10px]">{game.status}</span>
+                  </div>
                 </div>
-                <span style={{ color: '#00beac' }} className="font-bold">Prize {Math.floor(game.prizePool * 0.8)} Birr</span>
-                <span>{myCards.length} mine</span>
+                <div className="flex items-center gap-3 text-sm">
+                  <span className="font-bold text-amber-500">{Math.floor(game.prizePool * 0.8)} Br</span>
+                  <span className="text-gray-300">prize</span>
+                </div>
               </div>
               <CardSelector
                 cards={cards}
@@ -323,24 +341,26 @@ export default function HomePage() {
               />
             </div>
           ) : (
-            <div className="card text-center py-8">
-              <div className="text-3xl mb-3">💰</div>
-              <h3 className="font-bold mb-1">Insufficient Balance</h3>
-              <p className="mb-4" style={{ color: '#7fbcb4' }}>
+            <div className="rounded-2xl p-6 bg-white border border-gray-100 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">💰</span>
+              </div>
+              <h3 className="font-extrabold text-gray-900 mb-1">Insufficient Balance</h3>
+              <p className="text-sm text-gray-400 mb-5">
                 You need at least {cardPrice} Birr to buy a card
               </p>
               <button
                 onClick={() => router.push('/wallet')}
-                className="btn-primary"
+                className="btn-accent w-full"
               >
                 Deposit Now
               </button>
             </div>
           )
         ) : (
-          <div className="card text-center py-8">
-            <div className="mb-2" style={{ color: '#7fbcb4' }}>
-              Game #{game.gameCode} is <strong>{game.status}</strong>
+          <div className="rounded-2xl p-6 bg-white border border-gray-100 text-center">
+            <div className="text-sm text-gray-400 mb-3">
+              Game #{game.gameCode} is <span className="font-semibold text-purple-500">{game.status}</span>
             </div>
             <button
               onClick={() => router.push(`/games/${game._id}`)}
