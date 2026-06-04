@@ -290,12 +290,24 @@ export default function GameDetailPage() {
         )}
 
         {/* Countdown */}
-        {countdown !== null && countdown > 0 && game.status === 'starting' && (
+        {countdown !== null && countdown > 0 && (
           <div className="rounded-2xl p-5 bg-white border border-gray-100 mb-3 text-center">
-            <div className="text-sm text-gray-400 font-medium mb-1">Game starting in</div>
-            <div className="text-4xl font-extrabold text-purple-600 animate-bounce-in">
-              {Math.ceil(countdown)}s
-            </div>
+            {game.status === 'selection' ? (
+              <>
+                <div className="text-sm text-amber-500 font-bold mb-1">Card selection ends in</div>
+                <div className="text-4xl font-extrabold text-amber-500 animate-bounce-in">
+                  {Math.ceil(countdown)}s
+                </div>
+                <p className="text-xs text-gray-400 mt-1">Buy your cards before time runs out</p>
+              </>
+            ) : (
+              <>
+                <div className="text-sm text-gray-400 font-medium mb-1">Game starting in</div>
+                <div className="text-4xl font-extrabold text-purple-600 animate-bounce-in">
+                  {Math.ceil(countdown)}s
+                </div>
+              </>
+            )}
             <div className="flex justify-center gap-1 mt-2">
               {[0, 1, 2].map((i) => (
                 <div key={i} className="w-2 h-2 rounded-full bg-purple-300 animate-pulse-dot" style={{ animationDelay: `${i * 0.3}s` }} />
@@ -417,15 +429,11 @@ export default function GameDetailPage() {
                                     border: '1.5px solid',
                                     borderColor: isMarked
                                       ? 'transparent'
-                                      : canTap
-                                      ? '#C7D2FE'
                                       : '#F3F4F6',
-                                    boxShadow: isNewDrawn && isMarked
-                                      ? '0 0 0 3px rgba(245, 158, 11, 0.3)'
-                                      : isMarked
+                                    boxShadow: isMarked && !isFree
                                       ? '0 1px 4px rgba(109, 40, 217, 0.2)'
                                       : 'none',
-                                    opacity: canTap || isFree ? 1 : 0.4,
+                                    opacity: isFree ? 0.5 : 1,
                                     animation: isNewDrawn && isMarked ? 'bounceIn 0.5s ease-out' : 'none',
                                   }}
                                 >
