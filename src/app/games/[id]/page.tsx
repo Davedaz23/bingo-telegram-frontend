@@ -21,16 +21,19 @@ const ALL_NUMBERS = Array.from({ length: 75 }, (_, i) => i + 1)
 const COLUMNS = ['B', 'I', 'N', 'G', 'O'] as const
 
 function Confetti() {
-  const pieces = useRef<{ id: number; left: string; delay: string; duration: string; bg: string }[]>([])
+  const pieces = useRef<{ id: number; left: string; delay: string; duration: string; bg: string; size: number; shape: string }[]>([])
   if (pieces.current.length === 0) {
-    const colors = ['#F59E0B', '#6D28D9', '#FBBF24', '#8B5CF6', '#D97706', '#7C3AED']
-    for (let i = 0; i < 40; i++) {
+    const colors = ['#F59E0B', '#6D28D9', '#FBBF24', '#8B5CF6', '#D97706', '#7C3AED', '#10B981', '#EC4899']
+    const shapes = ['50%', '2px', '40% 0 60%']
+    for (let i = 0; i < 60; i++) {
       pieces.current.push({
         id: i,
         left: `${Math.random() * 100}%`,
-        delay: `${Math.random() * 2}s`,
-        duration: `${2 + Math.random() * 3}s`,
+        delay: `${Math.random() * 3}s`,
+        duration: `${2.5 + Math.random() * 3.5}s`,
         bg: colors[Math.floor(Math.random() * colors.length)],
+        size: 6 + Math.random() * 10,
+        shape: shapes[Math.floor(Math.random() * shapes.length)],
       })
     }
   }
@@ -45,6 +48,9 @@ function Confetti() {
             animationDelay: p.delay,
             animationDuration: p.duration,
             background: p.bg,
+            width: p.size,
+            height: p.size * 0.6,
+            borderRadius: p.shape,
           }}
         />
       ))}
@@ -337,7 +343,7 @@ export default function GameDetailPage() {
   if (error && !game) {
     return (
       <div className="flex items-center justify-center min-h-screen p-4" style={{ background: 'linear-gradient(180deg, #FAFAFA 0%, #F5F3FF 100%)' }}>
-        <div className="text-center">
+        <div className="text-center animate-scale-in">
           <div className="w-16 h-16 rounded-2xl bg-rose-50 flex items-center justify-center mx-auto mb-4">
             <span className="text-2xl">⚠️</span>
           </div>
@@ -352,8 +358,8 @@ export default function GameDetailPage() {
     return (
       <div className="flex items-center justify-center min-h-screen" style={{ background: 'linear-gradient(180deg, #FAFAFA 0%, #F5F3FF 100%)' }}>
         <div className="text-center animate-pulse-soft">
-          <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center mx-auto mb-3">
-            <span className="text-xl">🎯</span>
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mx-auto mb-3 shadow-lg shadow-purple-200">
+            <span className="text-2xl animate-spin-slow">🎯</span>
           </div>
           <p className="text-purple-300 font-medium">Loading game...</p>
         </div>
@@ -368,31 +374,28 @@ export default function GameDetailPage() {
   const gameWon = game.winner && user && game.winner.userId === user._id
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 animate-fade-in">
       <div className="p-3 max-w-lg mx-auto">
         {/* Connection + header */}
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between mb-3 animate-slide-up">
           <div className="flex items-center gap-2">
-            <button onClick={() => router.push('/')} className="w-8 h-8 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors">
-              ←
+            <button onClick={() => router.push('/')} className="w-9 h-9 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-all hover:border-purple-200 active:scale-90">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
             </button>
             <div>
               <h1 className="text-lg font-extrabold text-gray-900">Game #{game.gameCode}</h1>
-              <p className="text-xs text-gray-400 capitalize">
-                {game.status === 'starting' ? 'Starting...' : game.status === 'active' ? 'In Progress' : game.status}
-              </p>
+              <div className="flex items-center gap-1.5">
+                <div className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+                <p className="text-xs text-gray-400 capitalize">
+                  {game.status === 'starting' ? 'Starting...' : game.status === 'active' ? 'In Progress' : game.status}
+                </p>
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <div className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-400' : 'bg-rose-400'}`} />
-              <span className={`text-[10px] font-semibold ${connected ? 'text-emerald-500' : 'text-rose-400'}`}>
-                {connected ? 'Live' : 'Offline'}
-              </span>
-            </div>
             <div className="text-right">
-              <div className="text-[10px] text-gray-400 font-medium">Prize</div>
-              <div className="text-sm font-extrabold text-amber-500">
+              <div className="text-[10px] text-gray-400 font-medium">Prize Pool</div>
+              <div className="text-sm font-extrabold text-amber-500 number-transition">
                 {game.prizePool.toFixed(2)} Br
               </div>
             </div>
@@ -400,31 +403,32 @@ export default function GameDetailPage() {
         </div>
 
         {error && (
-          <div className="bg-rose-50 text-rose-600 text-sm font-medium p-3 rounded-2xl mb-3 border border-rose-100">
-            {error}
+          <div className="bg-rose-50 text-rose-600 text-sm font-medium p-3 rounded-2xl mb-3 border border-rose-100 animate-slide-down flex items-center gap-2">
+            <span>⚠️</span> {error}
           </div>
         )}
 
         {/* Countdown */}
         {countdown !== null && countdown > 0 && (
-          <div className="rounded-2xl p-5 bg-white border border-gray-100 mb-3 text-center">
+          <div className="rounded-2xl p-5 bg-white border border-gray-100 mb-3 text-center animate-scale-in relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-50/30 to-transparent" />
             {game.status === 'selection' ? (
               <>
-                <div className="text-sm text-amber-500 font-bold mb-1">Card selection ends in</div>
-                <div className="text-4xl font-extrabold text-amber-500 animate-bounce-in">
-                  {Math.ceil(countdown)}s
+                <div className="text-sm text-amber-500 font-bold mb-1 relative">Card selection ends in</div>
+                <div className="number-callout text-5xl text-amber-500 justify-center relative">
+                  {Math.ceil(countdown)}
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Buy your cards before time runs out</p>
+                <p className="text-xs text-gray-400 mt-1 relative">Buy your cards before time runs out</p>
               </>
             ) : (
               <>
-                <div className="text-sm text-gray-400 font-medium mb-1">Game starting in</div>
-                <div className="text-4xl font-extrabold text-purple-600 animate-bounce-in">
-                  {Math.ceil(countdown)}s
+                <div className="text-sm text-gray-400 font-medium mb-1 relative">Game starting in</div>
+                <div className="number-callout text-5xl text-purple-600 justify-center relative">
+                  {Math.ceil(countdown)}
                 </div>
               </>
             )}
-            <div className="flex justify-center gap-1 mt-2">
+            <div className="flex justify-center gap-1.5 mt-3 relative">
               {[0, 1, 2].map((i) => (
                 <div key={i} className="w-2 h-2 rounded-full bg-purple-300 animate-pulse-dot" style={{ animationDelay: `${i * 0.3}s` }} />
               ))}
@@ -434,7 +438,7 @@ export default function GameDetailPage() {
 
         {/* Active game */}
         {game.status === 'active' && (
-          <div>
+          <div className="animate-fade-in">
             {/* Last called numbers */}
             {lastThree.length > 0 && (
               <div className="flex items-center justify-center gap-2 mb-3">
@@ -442,9 +446,9 @@ export default function GameDetailPage() {
                 {lastThree.map((n, i) => (
                   <span
                     key={i}
-                    className={`font-extrabold rounded-xl px-2.5 py-1 ${
+                    className={`font-extrabold rounded-xl px-3 py-1.5 ${
                       n === lastNumber
-                        ? 'text-white bg-gradient-to-r from-amber-500 to-amber-600 shadow-lg shadow-amber-200 animate-bounce-in'
+                        ? 'number-callout text-white bg-gradient-to-r from-amber-500 to-amber-600 shadow-lg shadow-amber-200 min-w-[36px]'
                         : 'text-gray-400 bg-gray-100'
                     }`}
                   >
@@ -457,18 +461,17 @@ export default function GameDetailPage() {
             <div className="flex gap-3">
               {/* All 75 numbers */}
               <div className="flex-1 min-w-0">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-100">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2.5 border border-gray-100 shadow-sm">
                   <div className="grid grid-cols-5 gap-[3px]">
                     {ALL_NUMBERS.map((n) => {
                       const isDrawn = drawnNumbers.includes(n)
                       const isCurrent = n === lastNumber
-                      const isRecent = lastThree.includes(n)
                       return (
                         <div
                           key={n}
-                          className={`text-center rounded-lg py-[5px] transition-all duration-200 ${
+                          className={`text-center rounded-lg py-[5px] transition-all duration-300 ${
                             isCurrent ? 'font-extrabold' : isDrawn ? 'font-bold' : 'font-medium'
-                          }`}
+                          } ${isCurrent ? 'animate-number-pop' : ''}`}
                           style={{
                             fontSize: isCurrent ? '15px' : '11px',
                             background: isCurrent
@@ -493,25 +496,20 @@ export default function GameDetailPage() {
               </div>
 
               {/* Player card */}
-              <div className="w-[150px] flex-shrink-0">
+              <div className="w-[160px] flex-shrink-0">
                 {myCards.length > 0 ? (
                   <div className="space-y-2">
-                    {myCards.map((card) => (
-                      <div key={card._id} className="bg-white rounded-2xl p-2.5 border border-gray-100">
+                    {myCards.map((card, ci) => (
+                      <div key={card._id} className="bg-white rounded-2xl p-2.5 border border-gray-100 shadow-sm animate-slide-up" style={{ animationDelay: `${ci * 0.1}s` }}>
                         <div className="flex items-center justify-between mb-2">
                           <span className="font-extrabold text-xs text-gray-600">#{card.cardNumber}</span>
                           <button
                             onClick={handleBingo}
-                            className="text-[10px] px-3 py-1.5 rounded-xl font-extrabold tracking-wider transition-all"
-                            style={{
-                              background: placedBingo
-                                ? 'linear-gradient(135deg, #F59E0B, #D97706)'
-                                : 'linear-gradient(135deg, #6D28D9, #5B21B6)',
-                              color: '#ffffff',
-                              boxShadow: placedBingo
-                                ? '0 2px 8px rgba(245, 158, 11, 0.3)'
-                                : '0 2px 8px rgba(109, 40, 217, 0.25)',
-                            }}
+                            className={`text-[10px] px-3 py-1.5 rounded-xl font-extrabold tracking-wider transition-all active:scale-90 ${
+                              placedBingo
+                                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg shadow-amber-200'
+                                : 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-md shadow-purple-200'
+                            }`}
                             disabled={loading || placedBingo}
                           >
                             {placedBingo ? '★ WIN' : loading ? '...' : 'BINGO'}
@@ -530,7 +528,7 @@ export default function GameDetailPage() {
                                 <button
                                   key={`${col}-${rowIdx}`}
                                   onClick={() => canTap && toggleMark(num)}
-                                  className="text-center font-bold rounded-lg transition-all"
+                                  className="text-center font-bold rounded-lg transition-all active:scale-90"
                                   style={{
                                     fontSize: isFree ? '9px' : '12px',
                                     padding: '4px 0',
@@ -564,7 +562,7 @@ export default function GameDetailPage() {
                   </div>
                 ) : (
                   <div className="bg-white rounded-2xl p-4 border border-gray-100 text-center">
-                    <div className="text-2xl mb-2">🎴</div>
+                    <div className="text-2xl mb-2 animate-float">🎴</div>
                     <p className="text-xs text-gray-400">No cards</p>
                   </div>
                 )}
@@ -586,24 +584,23 @@ export default function GameDetailPage() {
 
         {/* Finished */}
         {isFinished && (
-          <div className="mb-4">
+          <div className="mb-4 animate-fade-in">
             {game.status === 'finished' && game.winner && <Confetti />}
             <div className="rounded-2xl p-6 bg-white border border-gray-100 text-center relative overflow-hidden">
               {winnerCountdown !== null && (
                 <div className="text-5xl font-extrabold text-amber-500 mb-3 animate-bounce-in">
-                  {winnerCountdown}s
+                  {winnerCountdown}
                 </div>
               )}
               {game.winner && user && game.winner.userId === user._id ? (
                 <div className="animate-slide-up">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mx-auto mb-3 shadow-2xl shadow-amber-200" style={{ animation: 'crownBounce 1.5s ease-in-out infinite' }}>
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mx-auto mb-3 shadow-2xl shadow-amber-200 pulse-ring" style={{ animation: 'crownBounce 1.5s ease-in-out infinite' }}>
                     <span className="text-4xl">👑</span>
                   </div>
                   <div className="font-extrabold text-2xl text-amber-600 mb-1">You Won!</div>
                   <div className="text-lg font-bold text-purple-600 mb-4">
                     {game.winner.prizeAmount?.toFixed(2)} Birr
                   </div>
-                  {/* Show winner's card with winning line */}
                   {myCards.length > 0 && myCards[0].card && (
                     <div className="flex justify-center">
                       <BingoBoard
@@ -617,12 +614,11 @@ export default function GameDetailPage() {
                 </div>
               ) : game.winner ? (
                 <div className="animate-slide-up">
-                  <div className="text-4xl mb-2">🎉</div>
+                  <div className="text-4xl mb-2 animate-bounce-in">🎉</div>
                   <div className="font-bold text-lg text-gray-900 mb-1">Game Won!</div>
                   <p className="text-sm text-amber-500 font-semibold mb-3">
                     {game.winner.prizeAmount?.toFixed(2)} Birr prize
                   </p>
-                  {/* Show winner's card if we have it */}
                   {winnerCardData && (
                     <div className="flex justify-center">
                       <BingoBoard
@@ -635,8 +631,8 @@ export default function GameDetailPage() {
                   )}
                 </div>
               ) : (
-                <div>
-                  <div className="text-4xl mb-3">{game.status === 'cancelled' ? '🚫' : '📭'}</div>
+                <div className="animate-slide-up">
+                  <div className="text-4xl mb-3 animate-wiggle">{game.status === 'cancelled' ? '🚫' : '📭'}</div>
                   <div className="font-bold text-lg text-gray-900">
                     Game {game.status === 'cancelled' ? 'Cancelled' : 'Finished'}
                   </div>

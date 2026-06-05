@@ -22,14 +22,14 @@ export default function CardSelector({
   const availableCount = cards.filter((c) => c.status === 'available').length
 
   return (
-    <div>
+    <div className="animate-fade-in">
       {cards.length > 0 && (
         <div className="mb-4">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-bold text-lg">Pick Your Cards</h3>
+            <h3 className="font-bold text-lg text-gray-900">Pick Your Cards</h3>
             <div className="flex items-center gap-3 text-xs font-medium">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse-soft" />
                 {availableCount} free
               </span>
               <span className="flex items-center gap-1.5">
@@ -38,7 +38,7 @@ export default function CardSelector({
               </span>
             </div>
           </div>
-          <div className="max-h-52 overflow-y-auto rounded-2xl bg-white/50 p-2 border border-gray-100">
+          <div className="max-h-52 overflow-y-auto hide-scrollbar rounded-2xl bg-white/50 p-2 border border-gray-100">
             <div className="grid grid-cols-5 gap-2">
               {cards.map((card) => {
                 const taken = card.status === 'selected' || card.status === 'purchased'
@@ -46,7 +46,7 @@ export default function CardSelector({
                   <button
                     key={card._id}
                     onClick={() => !taken && onSelect(card)}
-                    className="relative rounded-xl text-center py-3 px-1 font-bold transition-all duration-200"
+                    className="relative rounded-xl text-center py-3 px-1 font-bold transition-all duration-200 active:scale-90 hover:-translate-y-0.5"
                     style={{
                       background: taken
                         ? card.isOwnedByMe
@@ -59,6 +59,7 @@ export default function CardSelector({
                           ? '#F59E0B'
                           : '#D1D5DB'
                         : '#E5E7EB',
+                      boxShadow: !taken ? '0 2px 4px rgba(0,0,0,0.04)' : 'none',
                     }}
                     disabled={loading || taken}
                   >
@@ -97,32 +98,33 @@ export default function CardSelector({
 
       {myCards.length > 0 && (
         <div className="mb-4">
-          <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-            <span>🎯</span> My Cards
+          <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-gray-900">
+            <span className="animate-bounce-soft">🎯</span> My Cards
             <span className="text-sm font-normal text-gray-400">({myCards.length})</span>
           </h3>
           <div className="space-y-3">
             {myCards.map((card) => (
               <div
                 key={card._id}
-                className="relative rounded-2xl p-4 border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100/40 overflow-hidden"
+                className="relative rounded-2xl p-4 border-2 border-amber-200 bg-gradient-to-br from-amber-50 to-amber-100/40 overflow-hidden animate-slide-up"
               >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-200/5 to-transparent" />
                 <div className="absolute top-2 right-2">
-                  <span className="text-[10px] font-bold text-amber-600 bg-amber-200/60 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-bold text-amber-600 bg-amber-200/60 px-2 py-0.5 rounded-full backdrop-blur-sm">
                     #{card.cardNumber}
                   </span>
                 </div>
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-3 relative">
                   <span className="font-extrabold text-amber-800 text-lg">Card #{card.cardNumber}</span>
                   <button
                     onClick={() => onRelease(card)}
-                    className="px-4 py-1.5 rounded-xl text-xs font-bold bg-white/80 text-rose-500 border border-rose-200 hover:bg-rose-50 transition-all disabled:opacity-40"
+                    className="px-4 py-1.5 rounded-xl text-xs font-bold bg-white/80 text-rose-500 border border-rose-200 hover:bg-rose-50 hover:border-rose-300 transition-all disabled:opacity-40 active:scale-90"
                     disabled={loading}
                   >
                     Release
                   </button>
                 </div>
-                <div className="flex justify-center">
+                <div className="flex justify-center relative">
                   <BingoBoardSmall card={card.card!} />
                 </div>
               </div>
@@ -132,8 +134,8 @@ export default function CardSelector({
       )}
 
       {cards.length === 0 && (
-        <div className="text-center py-12 bg-white/60 rounded-2xl border border-gray-100">
-          <div className="text-4xl mb-3">🎴</div>
+        <div className="text-center py-12 bg-white/60 rounded-2xl border border-gray-100 animate-scale-in">
+          <div className="text-4xl mb-3 animate-float">🎴</div>
           <p className="text-gray-400 font-medium">No cards available for this game</p>
         </div>
       )}

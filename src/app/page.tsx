@@ -301,9 +301,15 @@ export default function HomePage() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen p-4" style={{ background: 'linear-gradient(180deg, #FAFAFA 0%, #F5F3FF 100%)' }}>
-        <div className="text-center animate-slide-up">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-purple-200">
+      <div className="flex items-center justify-center min-h-screen p-4 relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #FAFAFA 0%, #F5F3FF 100%)' }}>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="particle w-2 h-2 bg-purple-300/30 top-[20%] left-[10%] animate-float" style={{animationDelay:'0s'}} />
+          <div className="particle w-3 h-3 bg-amber-300/20 top-[40%] right-[15%] animate-float" style={{animationDelay:'1s'}} />
+          <div className="particle w-1.5 h-1.5 bg-purple-400/25 bottom-[30%] left-[25%] animate-float" style={{animationDelay:'2s'}} />
+          <div className="particle w-2.5 h-2.5 bg-amber-400/20 bottom-[20%] right-[30%] animate-float" style={{animationDelay:'0.5s'}} />
+        </div>
+        <div className="text-center animate-slide-up relative">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-purple-200 animate-float">
             <span className="text-3xl">🎯</span>
           </div>
           <h1 className="text-3xl font-extrabold mb-2 text-gray-900">Ato Bingo</h1>
@@ -329,12 +335,12 @@ export default function HomePage() {
   const myCards = cards.filter(c => c.isOwnedByMe)
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 animate-fade-in">
       <div className="p-4 max-w-lg mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 animate-slide-up">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-200">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-200 animate-float">
               <span className="text-xl">🎯</span>
             </div>
             <div>
@@ -344,15 +350,15 @@ export default function HomePage() {
           </div>
           <div className="text-right">
             <div className="text-xs text-gray-400 font-medium">Balance</div>
-            <div className="text-xl font-extrabold text-purple-600">
-              {user.balance.toFixed(2)} Br
+            <div className="text-xl font-extrabold text-purple-600 number-transition">
+              {user.balance.toFixed(2)} <span className="text-sm font-semibold text-purple-400">Br</span>
             </div>
           </div>
         </div>
 
         {error && (
-          <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100">
-            {error}
+          <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100 animate-slide-down flex items-center gap-2">
+            <span>⚠️</span> {error}
           </div>
         )}
 
@@ -362,8 +368,8 @@ export default function HomePage() {
             <div className="skeleton h-72" />
           </div>
         ) : !game ? (
-          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100">
-            <div className="text-5xl mb-4">🎲</div>
+          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100 animate-scale-in">
+            <div className="text-5xl mb-4 animate-float">🎲</div>
             <p className="text-gray-400 font-semibold">No game available right now</p>
             <p className="text-sm text-gray-300 mt-1">Check back soon</p>
           </div>
@@ -372,24 +378,24 @@ export default function HomePage() {
             <div>
               {/* Selection countdown banner */}
               {selectionCountdown !== null && selectionCountdown > 0 && (
-                <div className="rounded-2xl p-4 bg-gradient-to-r from-amber-50 to-amber-100/60 border border-amber-200 mb-4 text-center">
+                <div className="rounded-2xl p-4 bg-gradient-to-r from-amber-50 to-amber-100/60 border border-amber-200 mb-4 text-center animate-slide-down">
                   <div className="flex items-center justify-center gap-3">
-                    <div className="text-3xl font-extrabold text-amber-600">{selectionCountdown}s</div>
+                    <div className="number-callout text-amber-600 text-3xl min-w-[60px]">{selectionCountdown}</div>
                     <div className="text-left">
                       <div className="font-bold text-amber-700 text-sm">Card Selection Ending Soon!</div>
                       <div className="text-xs text-amber-500">Buy your cards before time runs out</div>
                     </div>
                   </div>
-                  <div className="w-full bg-amber-200/60 rounded-full h-1.5 mt-3 overflow-hidden">
+                  <div className="progress-bar mt-3">
                     <div
-                      className="bg-gradient-to-r from-amber-500 to-amber-600 h-full rounded-full transition-all duration-1000 ease-linear"
+                      className="progress-bar-accent"
                       style={{ width: `${(selectionCountdown / 30) * 100}%` }}
                     />
                   </div>
                 </div>
               )}
               {/* Game info bar */}
-              <div className="rounded-2xl p-4 bg-white border border-gray-100 mb-4 flex items-center justify-between">
+              <div className="card-hover mb-4 flex items-center justify-between animate-slide-up">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-xs shadow-md shadow-purple-200">
                     #{game.gameCode}
@@ -399,9 +405,9 @@ export default function HomePage() {
                     <span className="ml-2 badge-primary text-[10px]">{game.status}</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="font-bold text-amber-500">{Math.floor(game.prizePool * 0.8)} Br</span>
-                  <span className="text-gray-300">prize</span>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="font-extrabold text-amber-500">{Math.floor(game.prizePool * 0.8)}</span>
+                  <span className="text-gray-400 text-xs">Birr prize</span>
                 </div>
               </div>
               <CardSelector
@@ -413,8 +419,8 @@ export default function HomePage() {
               />
             </div>
           ) : (
-            <div className="rounded-2xl p-6 bg-white border border-gray-100 text-center">
-              <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-4">
+            <div className="rounded-2xl p-6 bg-white border border-gray-100 text-center animate-scale-in">
+              <div className="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-4 animate-wiggle">
                 <span className="text-3xl">💰</span>
               </div>
               <h3 className="font-extrabold text-gray-900 mb-1">Insufficient Balance</h3>
@@ -430,9 +436,9 @@ export default function HomePage() {
             </div>
           )
         ) : (
-          <div className="rounded-2xl p-6 bg-white border border-gray-100 text-center">
+          <div className="rounded-2xl p-6 bg-white border border-gray-100 text-center animate-scale-in">
             <div className="text-sm text-gray-400 mb-3">
-              Game #{game.gameCode} is <span className="font-semibold text-purple-500">{game.status}</span>
+              Game #{game.gameCode} is <span className="font-semibold text-purple-500 capitalize">{game.status}</span>
             </div>
             <button
               onClick={() => router.push(`/games/${game._id}`)}

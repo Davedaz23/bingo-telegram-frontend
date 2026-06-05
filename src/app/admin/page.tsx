@@ -53,9 +53,9 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 animate-fade-in">
       <div className="p-4 max-w-lg mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 animate-slide-up">
           <h1 className="text-2xl font-extrabold text-gray-900">Admin Panel</h1>
           <span className="badge-primary text-xs">{user.role}</span>
         </div>
@@ -74,17 +74,18 @@ export default function AdminDashboardPage() {
         ) : dashboard ? (
           <>
             {/* Stats grid */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-2 gap-3 mb-6 animate-slide-up" style={{animationDelay:'0.1s'}}>
               {[
                 { label: 'Users', value: dashboard.stats.users.total, color: 'text-purple-600' },
                 { label: 'Active Games', value: dashboard.stats.games.active, color: 'text-emerald-600' },
                 { label: 'Pending W/Drawals', value: dashboard.stats.pendingWithdrawals, color: 'text-amber-600' },
                 { label: 'Pending Deposits', value: dashboard.stats.pendingDeposits ?? 0, color: 'text-amber-600' },
                 { label: 'Revenue', value: `${dashboard.stats.platformRevenue.toFixed(2)} Br`, color: 'text-purple-600', span: true },
-              ].map((stat) => (
+              ].map((stat, i) => (
                 <div
                   key={stat.label}
-                  className={`rounded-2xl p-4 bg-white border border-gray-100 text-center ${stat.span ? 'col-span-2' : ''}`}
+                  className={`rounded-2xl p-4 bg-white border border-gray-100 text-center animate-scale-in ${stat.span ? 'col-span-2' : ''}`}
+                  style={{animationDelay: `${i * 0.05}s`}}
                 >
                   <div className={`text-2xl font-extrabold ${stat.color}`}>
                     {stat.value}
@@ -95,7 +96,7 @@ export default function AdminDashboardPage() {
             </div>
 
             {/* Navigation links */}
-            <div className="space-y-2 mb-6">
+            <div className="space-y-2 mb-6 animate-slide-up" style={{animationDelay:'0.15s'}}>
               {[
                 { href: '/admin/games', label: 'Games', icon: '🎮', desc: 'Create & manage' },
                 { href: '/admin/users', label: 'Users', icon: '👥', desc: 'Manage users' },
@@ -105,7 +106,7 @@ export default function AdminDashboardPage() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="flex items-center justify-between rounded-2xl p-4 bg-white border border-gray-100 transition-all hover:border-purple-200 hover:shadow-md hover:shadow-purple-100/30"
+                  className="flex items-center justify-between rounded-2xl p-4 bg-white border border-gray-100 transition-all hover:border-purple-200 hover:shadow-md hover:shadow-purple-100/30 hover:shadow-lg hover:-translate-y-0.5"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-lg">
@@ -123,11 +124,11 @@ export default function AdminDashboardPage() {
 
             {/* Recent transactions */}
             {dashboard.recentTransactions.length > 0 && (
-              <div>
+              <div className="animate-slide-up" style={{animationDelay:'0.2s'}}>
                 <h3 className="font-extrabold text-gray-900 mb-3 text-lg">Recent Transactions</h3>
                 <div className="space-y-2">
-                  {dashboard.recentTransactions.slice(0, 5).map((tx) => (
-                    <div key={tx._id} className="rounded-2xl p-4 bg-white border border-gray-100 flex items-center justify-between">
+                  {dashboard.recentTransactions.slice(0, 5).map((tx, i) => (
+                    <div key={tx._id} className="rounded-2xl p-4 bg-white border border-gray-100 flex items-center justify-between animate-slide-up" style={{animationDelay: `${i * 0.05}s`}}>
                       <div>
                         <div className="font-semibold text-gray-900">{tx.type}</div>
                         <div className="text-xs text-gray-400">{new Date(tx.createdAt).toLocaleString()}</div>

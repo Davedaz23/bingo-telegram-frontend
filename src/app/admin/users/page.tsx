@@ -88,14 +88,14 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 animate-fade-in">
       <div className="p-4 max-w-lg mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 animate-slide-up">
           <h1 className="text-2xl font-extrabold text-gray-900">Users ({users.length})</h1>
         </div>
 
         {error && (
-          <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100">
+          <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100 animate-slide-up">
             {error}
           </div>
         )}
@@ -108,8 +108,8 @@ export default function AdminUsersPage() {
           </div>
         ) : (
           <div className="space-y-2">
-            {users.map((u) => (
-              <div key={u._id} className="rounded-2xl p-4 bg-white border border-gray-100">
+            {users.map((u, i) => (
+              <div key={u._id} className="rounded-2xl p-4 bg-white border border-gray-100 animate-slide-up hover:shadow-md hover:-translate-y-0.5" style={{animationDelay: `${i * 0.05}s`}}>
                 <div className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
@@ -132,16 +132,16 @@ export default function AdminUsersPage() {
                   <div className="flex gap-1.5 ml-2 flex-shrink-0">
                     <button
                       onClick={() => setCreditModal({ id: u._id, name: u.firstName })}
-                      className="btn-primary text-xs px-3 py-1.5"
+                      className="btn-primary text-xs px-3 py-1.5 active:scale-[0.97]"
                       disabled={actionLoading === `credit-${u._id}`}
                     >
                       Credit
                     </button>
                     {u.isActive && (
                       <button
-                        onClick={() => handleBan(u._id)}
-                        className="btn-danger text-xs px-3 py-1.5"
-                        disabled={actionLoading === `ban-${u._id}`}
+                      onClick={() => handleBan(u._id)}
+                      className="btn-danger text-xs px-3 py-1.5 active:scale-[0.97]"
+                      disabled={actionLoading === `ban-${u._id}`}
                       >
                         Ban
                       </button>
@@ -157,7 +157,7 @@ export default function AdminUsersPage() {
       {/* Credit Modal */}
       {creditModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="rounded-2xl p-6 w-full max-w-sm bg-white shadow-2xl border border-gray-100 animate-slide-up">
+          <div className="rounded-2xl p-6 w-full max-w-sm bg-white shadow-2xl border border-gray-100 animate-slide-up hover:-translate-y-0.5">
             <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">💰</span>
             </div>

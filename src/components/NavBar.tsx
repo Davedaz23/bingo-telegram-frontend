@@ -20,7 +20,7 @@ export default function NavBar({ user }: NavBarProps) {
   const isAdmin = user.role === 'admin' || user.role === 'super_admin'
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-t border-gray-100/80">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-gray-100/80 safe-area-bottom">
       <div className="flex justify-around items-center h-[72px] max-w-lg mx-auto px-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href
@@ -28,10 +28,10 @@ export default function NavBar({ user }: NavBarProps) {
             <Link
               key={item.href}
               href={item.href}
-              className="relative flex flex-col items-center justify-center w-14 py-1 group"
+              className="relative flex flex-col items-center justify-center w-14 py-1 group active:scale-95 transition-transform duration-100"
             >
               {isActive && (
-                <span className="absolute -top-px w-8 h-[3px] rounded-full bg-gradient-to-r from-purple-500 to-purple-600" />
+                <span className="absolute -top-px w-8 h-[3px] rounded-full bg-gradient-to-r from-purple-500 to-purple-600 animate-fade-in" />
               )}
               <span
                 className={`text-xl transition-all duration-200 ${
@@ -53,12 +53,10 @@ export default function NavBar({ user }: NavBarProps) {
         {isAdmin && (
           <Link
             href="/admin"
-            className={`relative flex flex-col items-center justify-center w-14 py-1 group ${
-              pathname.startsWith('/admin') ? '' : ''
-            }`}
+            className="relative flex flex-col items-center justify-center w-14 py-1 group active:scale-95 transition-transform duration-100"
           >
             {pathname.startsWith('/admin') && (
-              <span className="absolute -top-px w-8 h-[3px] rounded-full bg-gradient-to-r from-purple-500 to-purple-600" />
+              <span className="absolute -top-px w-8 h-[3px] rounded-full bg-gradient-to-r from-purple-500 to-purple-600 animate-fade-in" />
             )}
             <span
               className={`text-xl transition-all duration-200 ${

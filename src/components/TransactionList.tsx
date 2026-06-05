@@ -36,8 +36,8 @@ const statusBadge: Record<string, string> = {
 export default function TransactionList({ transactions }: TransactionListProps) {
   if (!transactions.length) {
     return (
-      <div className="text-center py-12 bg-white/60 rounded-2xl border border-gray-100">
-        <div className="text-4xl mb-3">📭</div>
+      <div className="text-center py-12 bg-white/60 rounded-2xl border border-gray-100 animate-scale-in">
+        <div className="text-4xl mb-3 animate-float">📭</div>
         <p className="text-gray-400 font-medium">No transactions yet</p>
       </div>
     )
@@ -45,10 +45,11 @@ export default function TransactionList({ transactions }: TransactionListProps) 
 
   return (
     <div className="space-y-2">
-      {transactions.map((tx) => (
+      {transactions.map((tx, i) => (
         <div
           key={tx._id}
-          className="rounded-2xl p-4 bg-white border border-gray-100 flex items-center gap-3 transition-all hover:border-gray-200"
+          className="rounded-2xl p-4 bg-white border border-gray-100 flex items-center gap-3 transition-all hover:border-gray-200 hover:shadow-sm animate-slide-up"
+          style={{ animationDelay: `${i * 0.05}s` }}
         >
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
@@ -69,7 +70,7 @@ export default function TransactionList({ transactions }: TransactionListProps) 
           </div>
           <div className="text-right flex-shrink-0">
             <div
-              className={`font-extrabold ${tx.amount > 0 ? 'text-emerald-500' : 'text-rose-500'}`}
+              className={`font-extrabold number-transition ${tx.amount > 0 ? 'text-emerald-500' : 'text-rose-500'}`}
             >
               {tx.amount > 0 ? '+' : ''}{tx.amount.toFixed(2)} Br
             </div>

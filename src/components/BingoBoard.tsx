@@ -49,6 +49,7 @@ export default function BingoBoard({ card, drawnNumbers, won, winningLine }: Bin
             const isFree = cell.number === 0
             const isCurrent = cell.number === lastDrawn && !isFree
             const winCell = isWinningCell(ri, ci, winningLine)
+            const staggerDelay = `${(ri + ci) * 0.03}s`
 
             let cellClass = ''
             if (winCell) {
@@ -67,14 +68,15 @@ export default function BingoBoard({ card, drawnNumbers, won, winningLine }: Bin
               <div
                 key={`${ri}-${ci}`}
                 className={`bingo-cell ${cellClass}`}
-                style={
-                  winCell
+                style={{
+                  animationDelay: staggerDelay,
+                  ...(winCell
                     ? {
                         background: 'linear-gradient(135deg, #F59E0B, #D97706)',
                         color: '#ffffff',
                         borderColor: 'transparent',
                         boxShadow: '0 0 0 3px rgba(245, 158, 11, 0.4), 0 0 20px rgba(245, 158, 11, 0.3)',
-                        animation: 'goldPulse 0.8s ease-in-out infinite',
+                        animation: `goldPulse 0.8s ease-in-out infinite, bounceIn 0.5s ease-out`,
                       }
                     : isFree && !isCurrent
                     ? { opacity: 0.5 }
@@ -83,6 +85,7 @@ export default function BingoBoard({ card, drawnNumbers, won, winningLine }: Bin
                         background: 'linear-gradient(135deg, #F59E0B, #D97706)',
                         color: '#ffffff',
                         borderColor: 'transparent',
+                        animation: `bounceIn 0.5s ease-out ${staggerDelay}`,
                       }
                     : drawn && !isFree
                     ? {
@@ -91,11 +94,11 @@ export default function BingoBoard({ card, drawnNumbers, won, winningLine }: Bin
                         borderColor: 'transparent',
                         boxShadow: '0 2px 8px rgba(109, 40, 217, 0.3)',
                       }
-                    : undefined
-                }
+                    : undefined),
+                }}
               >
                 {isFree ? (
-                  <span className={isCurrent || winCell ? 'text-lg' : 'text-base'}>{winCell ? '👑' : '⭐'}</span>
+                  <span className={isCurrent || winCell ? 'text-lg animate-bounce-soft' : 'text-base'}>{winCell ? '👑' : '⭐'}</span>
                 ) : (
                   <span className="text-sm sm:text-base font-bold">{cell.number}</span>
                 )}

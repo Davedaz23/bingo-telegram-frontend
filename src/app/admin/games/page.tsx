@@ -91,13 +91,13 @@ export default function AdminGamesPage() {
   }
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 animate-fade-in">
       <div className="p-4 max-w-lg mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 animate-slide-up">
           <h1 className="text-2xl font-extrabold text-gray-900">Games</h1>
           <button
             onClick={handleCreate}
-            className="btn-primary text-sm"
+            className="btn-primary text-sm active:scale-[0.97]"
             disabled={actionLoading === 'create'}
           >
             {actionLoading === 'create' ? 'Creating...' : '+ New Game'}
@@ -105,7 +105,7 @@ export default function AdminGamesPage() {
         </div>
 
         {error && (
-          <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100">
+          <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100 animate-slide-up">
             {error}
           </div>
         )}
@@ -117,15 +117,15 @@ export default function AdminGamesPage() {
             ))}
           </div>
         ) : games.length === 0 ? (
-          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100">
+          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100 animate-scale-in">
             <div className="text-4xl mb-3">🎲</div>
             <p className="text-gray-400 font-medium">No games yet</p>
             <p className="text-sm text-gray-300 mt-1">Click &quot;+ New Game&quot; to create one</p>
           </div>
         ) : (
           <div className="space-y-3">
-            {games.map((game) => (
-              <div key={game._id} className="rounded-2xl p-4 bg-white border border-gray-100">
+            {games.map((game, i) => (
+              <div key={game._id} className="rounded-2xl p-4 bg-white border border-gray-100 animate-slide-up hover:shadow-md hover:-translate-y-0.5" style={{animationDelay: `${i * 0.05}s`}}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-purple-200">
@@ -148,7 +148,7 @@ export default function AdminGamesPage() {
                     {game.status === 'selection' && (
                       <button
                         onClick={() => handleStart(game._id)}
-                        className="btn-success text-xs px-3 py-1.5"
+                        className="btn-success text-xs px-3 py-1.5 active:scale-[0.97]"
                         disabled={actionLoading === `start-${game._id}`}
                       >
                         Start
@@ -157,7 +157,7 @@ export default function AdminGamesPage() {
                     {(game.status === 'selection' || game.status === 'starting') && (
                       <button
                         onClick={() => handleCancel(game._id)}
-                        className="btn-danger text-xs px-3 py-1.5"
+                        className="btn-danger text-xs px-3 py-1.5 active:scale-[0.97]"
                         disabled={actionLoading === `cancel-${game._id}`}
                       >
                         Cancel

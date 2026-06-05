@@ -83,50 +83,60 @@ export default function WalletPage() {
   if (!user) return null
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 animate-fade-in">
       <div className="p-4 max-w-lg mx-auto">
-        <h1 className="text-2xl font-extrabold text-gray-900 mb-6">Wallet</h1>
+        <h1 className="text-2xl font-extrabold text-gray-900 mb-6 animate-slide-up">Wallet</h1>
 
         {/* Balance card */}
-        <div className="rounded-2xl p-6 bg-gradient-to-br from-purple-500 to-purple-700 text-white mb-6 shadow-2xl shadow-purple-200">
-          <div className="text-sm text-purple-200 font-medium mb-1">
-            Available Balance
-          </div>
-          <div className="text-4xl font-extrabold">
-            {balance.toFixed(2)} <span className="text-lg font-semibold text-purple-200">Birr</span>
-          </div>
-          <div className="mt-4 flex gap-2">
-            <div className="bg-white/15 rounded-xl px-3 py-1.5 text-xs font-medium text-purple-100">
-              Wallet
+        <div className="rounded-2xl p-6 bg-gradient-to-br from-purple-500 via-purple-600 to-purple-700 text-white mb-6 shadow-2xl shadow-purple-200 animate-slide-up relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+          <div className="relative">
+            <div className="flex items-center gap-2 mb-1">
+              <div className="text-sm text-purple-200 font-medium">Available Balance</div>
+              <div className="bg-white/15 rounded-full px-2 py-0.5 text-[10px] font-semibold text-purple-100">
+                Birr
+              </div>
+            </div>
+            <div className="text-4xl font-extrabold number-transition">
+              {balance.toFixed(2)}
+            </div>
+            <div className="mt-4 flex gap-2">
+              <div className="bg-white/15 rounded-xl px-3 py-1.5 text-xs font-medium text-purple-100 backdrop-blur-sm">
+                Wallet
+              </div>
             </div>
           </div>
         </div>
 
         {/* Deposit section */}
-        <div className="rounded-2xl p-5 bg-white border border-gray-100 mb-6">
+        <div className="rounded-2xl p-5 bg-white border border-gray-100 mb-6 animate-slide-up" style={{animationDelay:'0.1s'}}>
           <h3 className="font-extrabold text-gray-900 mb-4 flex items-center gap-2">
             <span className="text-lg">📥</span> Deposit via SMS
           </h3>
 
           {error && (
-            <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100">
-              {error}
+            <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100 animate-slide-down flex items-center gap-2">
+              <span>⚠️</span> {error}
             </div>
           )}
           {success && (
-            <div className="bg-emerald-50 text-emerald-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-emerald-100">
-              {success}
+            <div className="bg-emerald-50 text-emerald-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-emerald-100 animate-slide-down flex items-center gap-2">
+              <span>✅</span> {success}
             </div>
           )}
 
-          <div className="mb-4">
-            <label className="font-bold text-sm text-gray-700 block mb-2">Transfer to</label>
+          <div className="space-y-1 mb-4">
+            <label className="font-bold text-sm text-gray-700 block mb-2 flex items-center gap-2">
+              <span className="step-number bg-purple-100 text-purple-600 w-6 h-6 rounded-lg text-xs">1</span>
+              Transfer to
+            </label>
             <div className="space-y-1.5">
               {CHANNELS.map((ch) => (
                 <button
                   key={ch}
                   onClick={() => setChannel(ch)}
-                  className={`w-full text-left px-4 py-3 rounded-2xl transition-all duration-200 ${
+                  className={`w-full text-left px-4 py-3 rounded-2xl transition-all duration-200 active:scale-[0.98] ${
                     channel === ch
                       ? 'bg-purple-50 border-2 border-purple-300 shadow-sm'
                       : 'bg-gray-50 border-2 border-gray-100 hover:border-gray-200'
@@ -136,7 +146,7 @@ export default function WalletPage() {
                     <span className={`font-bold ${channel === ch ? 'text-purple-700' : 'text-gray-700'}`}>
                       {CHANNEL_LABELS[ch]}
                     </span>
-                    <span className={`text-sm ${channel === ch ? 'text-purple-500' : 'text-gray-400'}`}>
+                    <span className={`text-sm font-mono ${channel === ch ? 'text-purple-500' : 'text-gray-400'}`}>
                       {accounts?.[ch as keyof DepositAccounts] || '...'}
                     </span>
                   </div>
@@ -144,14 +154,16 @@ export default function WalletPage() {
               ))}
             </div>
             {accounts && (
-              <p className="text-xs text-gray-400 mt-2">
+              <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                <span className="text-purple-400">🏦</span>
                 Account Name: <span className="font-medium text-gray-600">{accounts.accountName}</span>
               </p>
             )}
           </div>
 
           <div className="mb-4">
-            <label className="font-bold text-sm text-gray-700 block mb-2">
+            <label className="font-bold text-sm text-gray-700 block mb-2 flex items-center gap-2">
+              <span className="step-number bg-purple-100 text-purple-600 w-6 h-6 rounded-lg text-xs">2</span>
               Paste SMS Confirmation
             </label>
             <textarea
@@ -165,15 +177,20 @@ export default function WalletPage() {
 
           <button
             onClick={handleDeposit}
-            className="btn-primary w-full"
+            className="btn-primary w-full active:scale-[0.97]"
             disabled={depositing || !channel || !smsText.trim()}
           >
-            {depositing ? 'Submitting...' : 'Submit Deposit Request'}
+            {depositing ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                Submitting...
+              </span>
+            ) : 'Submit Deposit Request'}
           </button>
         </div>
 
         {/* Transactions */}
-        <div>
+        <div className="animate-slide-up" style={{animationDelay:'0.2s'}}>
           <h3 className="font-extrabold text-gray-900 mb-4 text-lg">Transaction History</h3>
           {loading ? (
             <div className="space-y-2">

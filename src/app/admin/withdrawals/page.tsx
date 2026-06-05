@@ -85,9 +85,9 @@ export default function AdminWithdrawalsPage() {
   }
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 animate-fade-in">
       <div className="p-4 max-w-lg mx-auto">
-        <h1 className="text-2xl font-extrabold text-gray-900 mb-6">Withdrawals ({withdrawals.length})</h1>
+        <h1 className="text-2xl font-extrabold text-gray-900 mb-6 animate-slide-up">Withdrawals ({withdrawals.length})</h1>
 
         {error && (
           <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100">
@@ -102,14 +102,14 @@ export default function AdminWithdrawalsPage() {
             ))}
           </div>
         ) : withdrawals.length === 0 ? (
-          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100">
+          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100 animate-scale-in">
             <div className="text-4xl mb-3">📭</div>
             <p className="text-gray-400 font-medium">No withdrawals yet</p>
           </div>
         ) : (
           <div className="space-y-3">
-            {withdrawals.map((w) => (
-              <div key={w._id} className="rounded-2xl p-4 bg-white border border-gray-100">
+            {withdrawals.map((w, i) => (
+              <div key={w._id} className="rounded-2xl p-4 bg-white border border-gray-100 animate-slide-up hover:shadow-md hover:-translate-y-0.5" style={{animationDelay: `${i * 0.05}s`}}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="font-extrabold text-lg text-gray-900">{w.amount.toFixed(2)} Birr</div>
                   <span className={statusBadge[w.status] || 'badge-gray'}>{w.status}</span>
@@ -124,14 +124,14 @@ export default function AdminWithdrawalsPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleApprove(w._id)}
-                      className="btn-success flex-1 text-sm"
+                      className="btn-success flex-1 text-sm active:scale-[0.97]"
                       disabled={actionLoading === `approve-${w._id}` || actionLoading === `reject-${w._id}`}
                     >
                       {actionLoading === `approve-${w._id}` ? '...' : 'Approve'}
                     </button>
                     <button
                       onClick={() => handleReject(w._id)}
-                      className="btn-danger flex-1 text-sm"
+                      className="btn-danger flex-1 text-sm active:scale-[0.97]"
                       disabled={actionLoading === `reject-${w._id}` || actionLoading === `approve-${w._id}`}
                     >
                       {actionLoading === `reject-${w._id}` ? '...' : 'Reject'}

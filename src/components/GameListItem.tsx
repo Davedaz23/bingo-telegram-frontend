@@ -22,7 +22,7 @@ export default function GameListItem({ game }: GameListItemProps) {
   return (
     <Link
       href={`/games/${game._id}`}
-      className="block rounded-2xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:border-purple-200 hover:shadow-lg hover:shadow-purple-100/30 hover:-translate-y-0.5 mb-3"
+      className="block rounded-2xl p-4 bg-white border border-gray-100 transition-all duration-200 hover:border-purple-200 hover:shadow-lg hover:shadow-purple-100/30 hover:-translate-y-0.5 mb-3 active:scale-[0.98]"
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">

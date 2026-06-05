@@ -81,11 +81,11 @@ export default function AdminDepositsPage() {
   const pending = deposits.filter((d) => d.status === 'pending')
 
   return (
-    <div className="pb-24">
+    <div className="pb-24 animate-fade-in">
       <div className="p-4 max-w-lg mx-auto">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 animate-slide-up">
           <h1 className="text-2xl font-extrabold text-gray-900">Deposits</h1>
-          <button onClick={fetchDeposits} className="btn-ghost text-sm" disabled={loading}>
+          <button onClick={fetchDeposits} className="btn-ghost text-sm active:scale-[0.97]" disabled={loading}>
             {loading ? '...' : '↻ Refresh'}
           </button>
         </div>
@@ -97,7 +97,7 @@ export default function AdminDepositsPage() {
         )}
 
         {deposits.length === 0 && !loading ? (
-          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100">
+          <div className="text-center py-16 bg-white/60 rounded-2xl border border-gray-100 animate-scale-in">
             <div className="text-4xl mb-3">📭</div>
             <p className="text-gray-400 font-medium">No deposit requests found</p>
           </div>
@@ -109,11 +109,11 @@ export default function AdminDepositsPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {deposits.map((dep) => {
+            {deposits.map((dep, i) => {
               const isPending = dep.status === 'pending'
               const isMatched = dep.status === 'sms_matched'
               return (
-                <div key={dep._id} className="rounded-2xl p-5 bg-white border border-gray-100">
+                <div key={dep._id} className="rounded-2xl p-5 bg-white border border-gray-100 animate-slide-up hover:shadow-md" style={{animationDelay: `${i * 0.05}s`}}>
                   {/* Header */}
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
@@ -185,7 +185,7 @@ export default function AdminDepositsPage() {
                         />
                         <button
                           onClick={() => handleMatch(dep._id)}
-                          className="btn-secondary whitespace-nowrap text-sm"
+                          className="btn-secondary whitespace-nowrap text-sm active:scale-[0.97]"
                         >
                           Match
                         </button>
@@ -197,7 +197,7 @@ export default function AdminDepositsPage() {
                     <div className="border-t border-gray-100 pt-3 mt-3">
                       <button
                         onClick={() => handleConfirm(dep._id)}
-                        className="btn-primary w-full"
+                        className="btn-primary w-full active:scale-[0.97]"
                       >
                         Confirm & Credit User
                       </button>
