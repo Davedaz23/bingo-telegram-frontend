@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { User } from '@/types'
+import { hasAdminAccess } from '@/lib/roles'
 
 interface NavBarProps {
   user: User
@@ -17,7 +18,7 @@ const navItems = [
 
 export default function NavBar({ user }: NavBarProps) {
   const pathname = usePathname()
-  const isAdmin = user.role === 'admin' || user.role === 'super_admin'
+  const isAdmin = hasAdminAccess(user.role)
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-t border-gray-100/80 safe-area-bottom">

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { getAdminDashboardData } from '@/lib/api'
 import { getStoredUser, validateTelegramSession } from '@/lib/auth'
+import { hasAdminAccess } from '@/lib/roles'
 import NavBar from '@/components/NavBar'
 import type { User, AdminDashboard } from '@/types'
 
@@ -36,7 +37,7 @@ export default function AdminDashboardPage() {
 
   if (!user) return null
 
-  const isAdmin = user.role === 'admin' || user.role === 'super_admin'
+  const isAdmin = hasAdminAccess(user.role)
   if (!isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen p-4" style={{ background: 'linear-gradient(180deg, #FAFAFA 0%, #F5F3FF 100%)' }}>

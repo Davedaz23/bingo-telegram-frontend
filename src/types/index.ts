@@ -5,7 +5,7 @@ export interface User {
   username?: string
   firstName: string
   lastName?: string
-  role: 'user' | 'admin' | 'super_admin'
+  role: string
   balance: number
   isActive: boolean
   languageCode: string

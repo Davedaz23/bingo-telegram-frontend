@@ -47,7 +47,7 @@ function normalizeUser(u: Record<string, unknown>): User {
     username: u.username as string | undefined,
     firstName: u.firstName as string,
     lastName: u.lastName as string | undefined,
-    role: u.role as User['role'],
+    role: (u.role as string) || 'user',
     balance: (u.balance as number) || 0,
     isActive: (u.isActive as boolean) ?? true,
     languageCode: (u.languageCode as string) || 'en',
