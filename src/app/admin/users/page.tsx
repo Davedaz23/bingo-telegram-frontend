@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { adminGetUsers, adminBanUser, adminCreditUser } from '@/lib/api'
+import { adminGetUsers, adminBanUser, adminCreditUser, adminDeleteUser } from '@/lib/api'
 import { getStoredUser, validateTelegramSession } from '@/lib/auth'
 import { hasAdminAccess } from '@/lib/roles'
 import NavBar from '@/components/NavBar'
@@ -16,6 +16,7 @@ export default function AdminUsersPage() {
   const [error, setError] = useState('')
   const [creditModal, setCreditModal] = useState<{ id: string; name: string } | null>(null)
   const [creditAmount, setCreditAmount] = useState('')
+  const [deleteModal, setDeleteModal] = useState<{ id: string; name: string } | null>(null)
 
   useEffect(() => {
     validateTelegramSession()
@@ -68,6 +69,21 @@ export default function AdminUsersPage() {
       await fetchUsers()
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to credit user')
+    } finally {
+      setActionLoading('')
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!deleteModal) return
+    setActionLoading(`delete-${deleteModal.id}`)
+    setError('')
+    try {
+      await adminDeleteUser(deleteModal.id)
+      setDeleteModal(null)
+      await fetchUsers()
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to delete user')
     } finally {
       setActionLoading('')
     }
@@ -130,24 +146,31 @@ export default function AdminUsersPage() {
                       <span className="text-xs font-bold text-purple-600">{u.balance.toFixed(2)} Birr</span>
                     </div>
                   </div>
-                  <div className="flex gap-1.5 ml-2 flex-shrink-0">
-                    <button
-                      onClick={() => setCreditModal({ id: u._id, name: u.firstName })}
-                      className="btn-primary text-xs px-3 py-1.5 active:scale-[0.97]"
-                      disabled={actionLoading === `credit-${u._id}`}
-                    >
-                      Credit
-                    </button>
-                    {u.isActive && (
+                    <div className="flex gap-1.5 ml-2 flex-shrink-0">
                       <button
-                      onClick={() => handleBan(u._id)}
-                      className="btn-danger text-xs px-3 py-1.5 active:scale-[0.97]"
-                      disabled={actionLoading === `ban-${u._id}`}
+                        onClick={() => setCreditModal({ id: u._id, name: u.firstName })}
+                        className="btn-primary text-xs px-3 py-1.5 active:scale-[0.97]"
+                        disabled={actionLoading === `credit-${u._id}`}
                       >
-                        Ban
+                        Credit
                       </button>
-                    )}
-                  </div>
+                      {u.isActive && (
+                        <button
+                        onClick={() => handleBan(u._id)}
+                        className="btn-danger text-xs px-3 py-1.5 active:scale-[0.97]"
+                        disabled={actionLoading === `ban-${u._id}`}
+                        >
+                          Ban
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setDeleteModal({ id: u._id, name: u.firstName })}
+                        className="btn-danger text-xs px-3 py-1.5 active:scale-[0.97]"
+                        disabled={actionLoading === `delete-${u._id}`}
+                      >
+                        Delete
+                      </button>
+                    </div>
                 </div>
               </div>
             ))}
@@ -181,6 +204,29 @@ export default function AdminUsersPage() {
               </button>
               <button onClick={handleCredit} className="btn-primary flex-1" disabled={!creditAmount}>
                 Add
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Modal */}
+      {deleteModal && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="rounded-2xl p-6 w-full max-w-sm bg-white shadow-2xl border border-gray-100 animate-slide-up hover:-translate-y-0.5">
+            <div className="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">⚠️</span>
+            </div>
+            <h3 className="font-extrabold text-gray-900 text-center mb-1">Delete {deleteModal.name}?</h3>
+            <p className="text-sm text-gray-400 text-center mb-5">
+              This will permanently delete the user and all their data (cards, transactions, games). This action cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button onClick={() => setDeleteModal(null)} className="btn-ghost flex-1 border-2 border-gray-100">
+                Cancel
+              </button>
+              <button onClick={handleDelete} className="btn-danger flex-1" disabled={actionLoading.startsWith('delete-')}>
+                {actionLoading.startsWith('delete-') ? 'Deleting...' : 'Delete Permanently'}
               </button>
             </div>
           </div>

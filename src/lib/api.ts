@@ -202,6 +202,11 @@ export async function adminCreditUser(id: string, amount: number): Promise<void>
   if (!data.success) throw new Error(data.message || 'Failed to credit user')
 }
 
+export async function adminDeleteUser(id: string): Promise<void> {
+  const { data } = await api.delete(`/api/admin/users/${id}`)
+  if (!data.success) throw new Error(data.message || 'Failed to delete user')
+}
+
 // Admin: SMS Deposits
 export async function adminGetDepositRequests(): Promise<DepositRequest[]> {
   const { data } = await api.get('/api/admin/deposits')
