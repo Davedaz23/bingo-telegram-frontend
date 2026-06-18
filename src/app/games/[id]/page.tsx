@@ -434,7 +434,7 @@ export default function GameDetailPage() {
               ))}
             </div>
           </div>
-        )}
+        )} 
 
         {/* Active game */}
         {game.status === 'active' && (

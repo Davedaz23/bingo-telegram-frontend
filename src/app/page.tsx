@@ -374,7 +374,7 @@ export default function HomePage() {
             <p className="text-sm text-gray-300 mt-1">Check back soon</p>
           </div>
         ) : isSelection ? (
-          canAfford ? (
+          (canAfford || myCards.length > 0) ? (
             <div>
               {/* Selection countdown banner */}
               {selectionCountdown !== null && selectionCountdown > 0 && (
