@@ -103,6 +103,7 @@ export default function AdminDashboardPage() {
                 { href: '/admin/users', label: 'Users', icon: '👥', desc: 'Manage users' },
                 { href: '/admin/deposits', label: 'Deposits', icon: '💰', desc: 'Match & confirm' },
                 { href: '/admin/withdrawals', label: 'Withdrawals', icon: '💳', desc: 'Approve/reject' },
+                { href: '/admin/settings', label: 'Settings', icon: '⚙️', desc: 'Welcome bonus & config' },
               ].map((link) => (
                 <Link
                   key={link.href}

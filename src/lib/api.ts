@@ -238,3 +238,16 @@ export async function adminRejectWithdrawal(id: string): Promise<void> {
   const { data } = await api.post(`/api/admin/withdrawals/${id}/reject`, { reason: 'Rejected by admin' })
   if (!data.success) throw new Error(data.message || 'Failed to reject withdrawal')
 }
+
+// Admin: Settings
+export async function getWelcomeBonusSetting(): Promise<number> {
+  const { data } = await api.get('/api/admin/settings/welcome-bonus')
+  if (!data.success) throw new Error(data.message || 'Failed to get welcome bonus setting')
+  return data.welcomeBonus as number
+}
+
+export async function setWelcomeBonusSetting(amount: number): Promise<number> {
+  const { data } = await api.put('/api/admin/settings/welcome-bonus', { amount })
+  if (!data.success) throw new Error(data.message || 'Failed to set welcome bonus')
+  return data.welcomeBonus as number
+}
