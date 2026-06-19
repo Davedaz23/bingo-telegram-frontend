@@ -92,9 +92,8 @@ export default function CardSelector({
             <div className="grid grid-cols-5 gap-2">
               {cards.map((card, i) => {
                 const isAvailable = card.status === 'available'
-                const isLocked = card.isLockedByMe && !card.isOwnedByMe
+                const isSelected = card.status === 'selected'
                 const isOwned = card.isOwnedByMe
-                const isTaken = !isAvailable && !isLocked && !isOwned
 
                 let bg = 'linear-gradient(135deg, #EEF2FF, #E0E7FF)'
                 let border = '#C7D2FE'
@@ -108,17 +107,11 @@ export default function CardSelector({
                   textColor = '#92400E'
                   label = '★ MINE'
                   disabled = true
-                } else if (isLocked) {
+                } else if (isSelected) {
                   bg = 'linear-gradient(135deg, #FEE2E2, #FECACA)'
                   border = '#EF4444'
                   textColor = '#991B1B'
-                  label = '🔒 Selected'
-                  disabled = true
-                } else if (isTaken) {
-                  bg = '#F3F4F6'
-                  border = '#D1D5DB'
-                  textColor = '#9CA3AF'
-                  label = 'Taken'
+                  label = card.isLockedByMe ? '🔒 Selected' : 'Taken'
                   disabled = true
                 }
 
@@ -137,7 +130,7 @@ export default function CardSelector({
                         ? '0 2px 8px rgba(67, 56, 202, 0.08), inset 0 1px 0 rgba(255,255,255,0.8)'
                         : isOwned
                         ? '0 4px 12px rgba(245, 158, 11, 0.2)'
-                        : isLocked
+                        : isSelected
                         ? '0 4px 12px rgba(239, 68, 68, 0.2)'
                         : 'none',
                       animationDelay: `${i * 0.02}s`,
@@ -171,9 +164,9 @@ export default function CardSelector({
         <div className="mb-4">
           <h3 className="font-extrabold text-lg mb-3 flex items-center gap-2 text-rose-700">
             <span className="animate-wiggle">🔒</span> Your Selection
-            <span className="text-sm font-normal text-rose-400">(confirming...)</span>
+            <span className="text-sm font-normal text-rose-400">(confirming purchase...)</span>
           </h3>
-          <div className="rounded-2xl p-4 border-2 border-rose-200 bg-gradient-to-br from-rose-50 to-rose-100/30 overflow-hidden animate-slide-up shadow-lg shadow-rose-100/30">
+          <div className="rounded-2xl p-4 border-2 border-rose-300 bg-gradient-to-br from-rose-50 to-rose-100/50 overflow-hidden animate-slide-up shadow-lg shadow-rose-200/30">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-rose-400 to-rose-600 flex items-center justify-center text-white font-bold text-xs">
                 🔒
@@ -181,7 +174,7 @@ export default function CardSelector({
               <span className="font-extrabold text-rose-800">Card #{lockedByMe[0].cardNumber}</span>
             </div>
             <div className="flex justify-center">
-              <div className="bg-white/60 backdrop-blur-sm rounded-xl p-1.5 shadow-inner">
+              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-1.5 shadow-inner">
                 <BingoBoardSmall card={lockedByMe[0].card} />
               </div>
             </div>
