@@ -21,11 +21,6 @@ export function useSocket() {
       const initData = getStoredInitData()
       connectSocket(token || undefined, initData || undefined)
     }
-
-    return () => {
-      disconnectSocket()
-      initialized.current = false
-    }
   }, [])
 
   // ─── Visibility change → ensure socket is alive ───────────────────────────

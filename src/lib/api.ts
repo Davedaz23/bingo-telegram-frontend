@@ -104,6 +104,11 @@ export async function purchaseCardApi(gameId: string, cardId: string): Promise<v
   if (!data.success) throw new Error(data.message || 'Failed to purchase card')
 }
 
+export async function markNumberApi(gameId: string, cardId: string, numbers: number[]): Promise<void> {
+  const { data } = await api.post(`/api/games/${gameId}/cards/${cardId}/mark`, { numbers })
+  if (!data.success) throw new Error(data.message || 'Failed to mark number')
+}
+
 export async function claimBingoApi(gameId: string): Promise<void> {
   const { data } = await api.post(`/api/games/${gameId}/bingo`)
   if (!data.success) throw new Error(data.message || 'Failed to claim bingo')

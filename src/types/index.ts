@@ -76,6 +76,7 @@ export interface BingoCard {
   lockExpiresAt?: string
   lockedBy?: string
   ownerId?: string
+  markedNumbers?: number[]
 }
 
 export interface CardCell {

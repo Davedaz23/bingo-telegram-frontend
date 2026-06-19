@@ -8,6 +8,7 @@ import {
   selectCard,
   purchaseCardApi,
   releaseCardApi,
+  markNumberApi,
   claimBingoApi,
 } from '@/lib/api'
 import { getStoredUser, validateTelegramSession } from '@/lib/auth'
@@ -388,6 +389,13 @@ export default function GameDetailPage() {
     if (!game || !user) return
     const purchased = cards.filter((c) => c.isOwnedByMe)
     setMyCards(purchased)
+    // Restore marked numbers from backend for owned cards
+    for (const c of purchased) {
+      if (c.markedNumbers && c.markedNumbers.length > 0) {
+        setMarkedNumbers(c.markedNumbers)
+        break
+      }
+    }
   }, [cards, game, user])
 
   // ─── Countdown: use Date.now()-based end time for accuracy ─────────────────
@@ -487,11 +495,17 @@ export default function GameDetailPage() {
     }
   }
 
-  const toggleMark = (num: number) => {
+  const toggleMark = async (num: number) => {
     if (!drawnNumbers.includes(num)) return
-    setMarkedNumbers((prev) =>
-      prev.includes(num) ? prev.filter((n) => n !== num) : [...prev, num]
-    )
+    const next = markedNumbers.includes(num)
+      ? markedNumbers.filter((n) => n !== num)
+      : [...markedNumbers, num]
+    setMarkedNumbers(next)
+    // Sync to backend
+    const owned = myCards[0]
+    if (owned) {
+      try { await markNumberApi(id, owned._id, next) } catch { /* ignore */ }
+    }
   }
 
   if (!user) return null
