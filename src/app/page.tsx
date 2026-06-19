@@ -227,6 +227,13 @@ export default function HomePage() {
       }
     })
 
+    sock.on('card:selected', (data: unknown) => {
+      const d = data as { cardId: string }
+      setCards((prev) => prev.map((c) =>
+        c._id === d.cardId ? { ...c, status: 'selected' } : c
+      ))
+    })
+
     sock.on('card:purchased', (data: unknown) => {
       const d = data as { cardId: string; userId: string }
       setCards((prev) => prev.map((c) =>
@@ -301,25 +308,61 @@ export default function HomePage() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen p-4 relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #FAFAFA 0%, #F5F3FF 100%)' }}>
+      <div className="flex items-center justify-center min-h-screen p-4 relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #1E1B4B 0%, #312E81 50%, #4C1D95 100%)' }}>
+        {/* Animated background orbs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="particle w-2 h-2 bg-purple-300/30 top-[20%] left-[10%] animate-float" style={{animationDelay:'0s'}} />
-          <div className="particle w-3 h-3 bg-amber-300/20 top-[40%] right-[15%] animate-float" style={{animationDelay:'1s'}} />
-          <div className="particle w-1.5 h-1.5 bg-purple-400/25 bottom-[30%] left-[25%] animate-float" style={{animationDelay:'2s'}} />
-          <div className="particle w-2.5 h-2.5 bg-amber-400/20 bottom-[20%] right-[30%] animate-float" style={{animationDelay:'0.5s'}} />
+          <div className="absolute w-72 h-72 rounded-full bg-purple-500/10 blur-3xl top-[-10%] left-[-10%] animate-float" style={{animationDelay:'0s'}} />
+          <div className="absolute w-96 h-96 rounded-full bg-amber-500/10 blur-3xl bottom-[-20%] right-[-10%] animate-float" style={{animationDelay:'1.5s'}} />
+          <div className="absolute w-48 h-48 rounded-full bg-pink-500/10 blur-3xl top-[40%] right-[20%] animate-float" style={{animationDelay:'3s'}} />
+          {/* Floating particles */}
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1.5 h-1.5 rounded-full bg-white/20 animate-float"
+              style={{
+                top: `${5 + Math.random() * 90}%`,
+                left: `${5 + Math.random() * 90}%`,
+                animationDelay: `${i * 0.4}s`,
+                animationDuration: `${2 + Math.random() * 3}s`,
+                opacity: 0.3 + Math.random() * 0.4,
+              }}
+            />
+          ))}
         </div>
-        <div className="text-center animate-slide-up relative">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-purple-200 animate-float">
-            <span className="text-3xl">🎯</span>
+
+        {/* Bouncing bingo ball */}
+        <div className="text-center animate-slide-up relative z-10">
+          <div className="relative mx-auto mb-6 w-24 h-24">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 animate-ball-bounce shadow-2xl shadow-purple-500/30 flex items-center justify-center">
+              <div className="absolute inset-1 rounded-full bg-white/10" />
+              <span className="text-3xl relative z-10 animate-ball-spin" style={{transformOrigin:'center center'}}>🎯</span>
+            </div>
+            {/* Rings */}
+            <div className="absolute inset-[-8px] rounded-full border-2 border-purple-400/20 animate-ping" style={{animationDuration:'3s'}} />
+            <div className="absolute inset-[-16px] rounded-full border border-purple-400/10 animate-ping" style={{animationDuration:'4s', animationDelay:'1s'}} />
           </div>
-          <h1 className="text-3xl font-extrabold mb-2 text-gray-900">Ato Bingo</h1>
-          <p className="text-purple-400 font-medium">
-            {error || 'Initializing...'}
-          </p>
+
+          <h1 className="text-4xl font-extrabold mb-1 text-white tracking-tight">
+            Ato Bingo
+          </h1>
+          <div className="flex items-center justify-center gap-1.5 mb-6">
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-soft" />
+            <p className="text-purple-200/80 font-medium text-sm">
+              {error || 'Connecting...'}
+            </p>
+          </div>
+
+          {/* Loading bar */}
+          <div className="w-48 mx-auto">
+            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+              <div className="h-full rounded-full bg-gradient-to-r from-purple-400 to-amber-400 animate-shimmer" style={{width:'60%'}} />
+            </div>
+          </div>
+
           {error && (
             <button
               onClick={() => { setError(''); setLoading(true); window.location.reload() }}
-              className="btn-primary mt-6"
+              className="mt-8 px-8 py-3 rounded-2xl font-bold text-sm bg-white/10 text-white border border-white/20 hover:bg-white/20 transition-all backdrop-blur-sm active:scale-95"
             >
               Retry
             </button>
@@ -335,26 +378,27 @@ export default function HomePage() {
   const myCards = cards.filter(c => c.isOwnedByMe)
 
   return (
-    <div className="pb-24 animate-fade-in">
-      <div className="p-4 max-w-lg mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6 animate-slide-up">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-200 animate-float">
-              <span className="text-xl">🎯</span>
+      <div className="pb-24 animate-fade-in">
+        <div className="p-4 max-w-lg mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6 animate-slide-up">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-200 shadow-2xl shadow-purple-300/20 animate-float">
+                <span className="text-xl">🎯</span>
+              </div>
+              <div>
+                <h1 className="text-xl font-extrabold text-gray-900">Ato Bingo</h1>
+                <p className="text-xs text-gray-400 font-medium">Welcome back, <span className="text-purple-500">{user.firstName}</span></p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-extrabold text-gray-900">Ato Bingo</h1>
-              <p className="text-sm text-gray-400">Hi, {user.firstName}</p>
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-4 py-2.5 border border-gray-100/80 shadow-sm text-right">
+              <div className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Balance</div>
+              <div className="text-xl font-extrabold text-purple-600 number-transition flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                {user.balance.toFixed(2)} <span className="text-sm font-semibold text-purple-400">Br</span>
+              </div>
             </div>
           </div>
-          <div className="text-right">
-            <div className="text-xs text-gray-400 font-medium">Balance</div>
-            <div className="text-xl font-extrabold text-purple-600 number-transition">
-              {user.balance.toFixed(2)} <span className="text-sm font-semibold text-purple-400">Br</span>
-            </div>
-          </div>
-        </div>
 
         {error && (
           <div className="bg-rose-50 text-rose-600 p-3 rounded-2xl text-sm font-medium mb-4 border border-rose-100 animate-slide-down flex items-center gap-2">

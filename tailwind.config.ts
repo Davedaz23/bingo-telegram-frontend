@@ -42,6 +42,14 @@ const config: Config = {
         'ripple': 'ripple 0.6s ease-out',
         'spin-slow': 'spin 3s linear infinite',
         'bounce-soft': 'bounceSoft 2s ease-in-out infinite',
+        'ball-spin': 'bingoBallSpin 1.5s ease-in-out infinite',
+        'ball-bounce': 'bingoBallBounce 2s ease-in-out infinite',
+        'card-glow': 'cardGlow 2s ease-in-out infinite',
+        'shimmer-card': 'shimmerCard 2s linear infinite',
+        'winner-modal': 'winnerModalIn 0.6s ease-out',
+        'slide-up-winner': 'slideUpWinner 0.5s ease-out',
+        'pulse-gold': 'pulseGold 1.5s ease-in-out infinite',
+        'progress-glow': 'progressGlow 1.5s ease-in-out infinite',
       },
       keyframes: {
         pop: {
