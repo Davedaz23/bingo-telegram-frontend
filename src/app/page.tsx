@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { getGames, getGameCards, selectCard, releaseCardApi, authTelegram, getProfile } from '@/lib/api'
+import { getGames, getGameCards, selectCard, purchaseCardApi, releaseCardApi, authTelegram, getProfile } from '@/lib/api'
 import { getStoredToken, getStoredUser, storeAuth, clearAuth } from '@/lib/auth'
 import { connectSocket, disconnectSocket, getSocket, joinGameRoom, leaveGameRoom, ensureSocketConnected } from '@/lib/socket'
 import NavBar from '@/components/NavBar'
@@ -270,11 +270,12 @@ export default function HomePage() {
     setActionLoading(true)
     setError('')
     try {
-      const result = await selectCard(game._id, card._id)
-      if (result.card) {
-        setCards((prev) => prev.map((c) =>
-          c._id === card._id ? { ...c, ...result.card, status: 'purchased' } : c
-        ))
+      await selectCard(game._id, card._id)
+      try {
+        await purchaseCardApi(game._id, card._id)
+      } catch {
+        await releaseCardApi(game._id, card._id).catch(() => {})
+        throw new Error('Insufficient balance to purchase this card')
       }
       const [allCards, fresh] = await Promise.all([getGameCards(game._id), getProfile()])
       setCards(allCards)
