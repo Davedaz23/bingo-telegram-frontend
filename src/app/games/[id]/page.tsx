@@ -667,7 +667,7 @@ export default function GameDetailPage() {
                       return (
                         <div
                           key={n}
-                          className="text-center rounded-lg py-[5px] transition-all duration-300"
+                          className="text-center rounded-lg py-[5px] transition-colors duration-200"
                           style={{
                             fontSize: isCurrent ? '16px' : '11px',
                             background: isCurrent
@@ -726,7 +726,7 @@ export default function GameDetailPage() {
                                 <button
                                   key={`${col}-${rowIdx}`}
                                   onClick={() => canTap && toggleMark(num)}
-                                  className="text-center font-bold rounded-lg transition-all active:scale-90"
+                                  className="text-center font-bold rounded-lg transition-colors duration-150 active:scale-90"
                                   style={{
                                     fontSize: isFree ? '9px' : '12px',
                                     padding: '4px 0',

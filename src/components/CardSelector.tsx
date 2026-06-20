@@ -121,7 +121,7 @@ export default function CardSelector({
                     onClick={() => {
                       if (isAvailable && !loading) onSelect(card)
                     }}
-                    className="relative rounded-xl text-center py-3 px-1 font-bold transition-all duration-200 active:scale-90 hover:-translate-y-0.5"
+                    className="relative rounded-xl text-center py-3 px-1 font-bold transition-transform duration-150 active:scale-90 hover:-translate-y-0.5 will-change-transform"
                     style={{
                       background: bg,
                       border: '2px solid',
