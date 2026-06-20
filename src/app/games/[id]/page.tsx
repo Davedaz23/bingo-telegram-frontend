@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
   getGame,
@@ -21,6 +21,26 @@ import type { User, Game, BingoCard, CardData, WinningLine } from '@/types'
 
 const ALL_NUMBERS = Array.from({ length: 75 }, (_, i) => i + 1)
 const COLUMNS = ['B', 'I', 'N', 'G', 'O'] as const
+
+const NumberCell = React.memo(function NumberCell({ n, isDrawn, isCurrent }: { n: number; isDrawn: boolean; isCurrent: boolean }) {
+  return (
+    <div
+      className={`text-center rounded-lg py-[5px] ${isCurrent ? 'num-cell-current' : isDrawn ? 'num-cell-drawn' : 'num-cell-default'}`}
+    >
+      {n}
+    </div>
+  )
+})
+
+const CardCell = React.memo(function CardCell({ num, isFree, isMarked }: { num: number; isFree: boolean; isMarked: boolean }) {
+  return (
+    <div
+      className={`text-center font-bold rounded-lg py-[4px] text-[12px] ${isFree ? 'cell-free' : isMarked ? 'cell-marked' : 'cell-default'}`}
+    >
+      {isFree ? '⭐' : num}
+    </div>
+  )
+})
 
 function WinnerModal({
   won, prizeAmount, winnerCardData, winningLine, drawnNumbers, gameCode, countdown, onClose,
@@ -658,35 +678,13 @@ export default function GameDetailPage() {
             <div className="flex gap-3">
               {/* All 75 numbers */}
               <div className="flex-1 min-w-0">
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2.5 border border-gray-100 shadow-sm">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2.5 border border-gray-100 shadow-sm num-grid">
                   <div className="grid grid-cols-5 gap-[3px]">
                     {ALL_NUMBERS.map((n) => {
                       const isDrawn = drawnNumbers.includes(n)
                       const isCurrent = n === lastNumber
-                      const col = COLUMNS[Math.floor((n - 1) / 15)]
                       return (
-                        <div
-                          key={n}
-                          className="text-center rounded-lg py-[5px] transition-colors duration-200"
-                          style={{
-                            fontSize: isCurrent ? '16px' : '11px',
-                            background: isCurrent
-                              ? 'linear-gradient(135deg, #F59E0B, #D97706)'
-                              : isDrawn
-                              ? 'rgba(109, 40, 217, 0.08)'
-                              : 'transparent',
-                            color: isCurrent
-                              ? '#ffffff'
-                              : isDrawn
-                              ? '#6D28D9'
-                              : '#9CA3AF',
-                            boxShadow: isCurrent ? '0 4px 16px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)' : 'none',
-                            fontWeight: isCurrent ? 800 : isDrawn ? 700 : 500,
-                            transform: isCurrent ? 'scale(1.1)' : 'none',
-                          }}
-                        >
-                          {n}
-                        </div>
+                        <NumberCell key={n} n={n} isDrawn={isDrawn} isCurrent={isCurrent} />
                       )
                     })}
                   </div>
@@ -721,33 +719,11 @@ export default function GameDetailPage() {
                               const isFree = num === 0
                               const isMarked = markedNumbers.includes(num) || isFree
                               const canTap = drawnNumbers.includes(num) && !isFree
-                              const isNewDrawn = num === animatingNumber
                               return (
                                 <button
                                   key={`${col}-${rowIdx}`}
                                   onClick={() => canTap && toggleMark(num)}
-                                  className="text-center font-bold rounded-lg transition-colors duration-150 active:scale-90"
-                                  style={{
-                                    fontSize: isFree ? '9px' : '12px',
-                                    padding: '4px 0',
-                                    background: isMarked
-                                      ? isFree
-                                        ? 'rgba(245, 158, 11, 0.12)'
-                                        : 'linear-gradient(135deg, #6D28D9, #5B21B6)'
-                                      : '#FFFFFF',
-                                    color: isMarked
-                                      ? isFree ? '#D97706' : '#ffffff'
-                                      : '#374151',
-                                    border: '1.5px solid',
-                                    borderColor: isMarked
-                                      ? 'transparent'
-                                      : '#F3F4F6',
-                                    boxShadow: isMarked && !isFree
-                                      ? '0 1px 4px rgba(109, 40, 217, 0.2)'
-                                      : 'none',
-                                    opacity: isFree ? 0.5 : 1,
-                                    animation: isNewDrawn && isMarked ? 'bounceIn 0.5s ease-out' : 'none',
-                                  }}
+                                  className={`text-center font-bold rounded-lg active:scale-90 ${isFree ? 'cell-free' : isMarked ? 'cell-marked' : 'cell-default'}`}
                                 >
                                   {isFree ? '⭐' : num}
                                 </button>

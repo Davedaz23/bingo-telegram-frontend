@@ -89,61 +89,26 @@ export default function CardSelector({
           </div>
 
           <div className="max-h-52 overflow-y-auto hide-scrollbar rounded-2xl bg-white/60 backdrop-blur-sm p-2.5 border border-gray-100/80 shadow-sm">
-            <div className="grid grid-cols-5 gap-2">
-              {cards.map((card, i) => {
+            <div className="grid grid-cols-5 gap-2 card-grid">
+              {cards.map((card) => {
                 const isAvailable = card.status === 'available'
                 const isSelected = card.status === 'selected'
                 const isOwned = card.isOwnedByMe
-
-                let bg = 'linear-gradient(135deg, #EEF2FF, #E0E7FF)'
-                let border = '#C7D2FE'
-                let textColor = '#4338CA'
-                let label = `${cardPrice} Br`
-                let disabled = loading
-
-                if (isOwned) {
-                  bg = 'linear-gradient(135deg, #FEF3C7, #FDE68A)'
-                  border = '#F59E0B'
-                  textColor = '#92400E'
-                  label = '★ MINE'
-                  disabled = true
-                } else if (isSelected) {
-                  bg = 'linear-gradient(135deg, #FEE2E2, #FECACA)'
-                  border = '#EF4444'
-                  textColor = '#991B1B'
-                  label = card.isLockedByMe ? '🔒 Selected' : 'Taken'
-                  disabled = true
-                }
+                const stateClass = isOwned ? 'card-btn-owned' : isSelected ? 'card-btn-selected' : 'card-btn-available'
+                const disabled = !isAvailable || loading
+                const label = isOwned ? '★ MINE' : isSelected ? (card.isLockedByMe ? '🔒 Selected' : 'Taken') : `${cardPrice} Br`
 
                 return (
                   <button
                     key={card._id}
-                    onClick={() => {
-                      if (isAvailable && !loading) onSelect(card)
-                    }}
-                    className="relative rounded-xl text-center py-3 px-1 font-bold transition-transform duration-150 active:scale-90 hover:-translate-y-0.5 will-change-transform"
-                    style={{
-                      background: bg,
-                      border: '2px solid',
-                      borderColor: border,
-                      boxShadow: isAvailable
-                        ? '0 2px 8px rgba(67, 56, 202, 0.08), inset 0 1px 0 rgba(255,255,255,0.8)'
-                        : isOwned
-                        ? '0 4px 12px rgba(245, 158, 11, 0.2)'
-                        : isSelected
-                        ? '0 4px 12px rgba(239, 68, 68, 0.2)'
-                        : 'none',
-                      animationDelay: `${i * 0.02}s`,
-                    }}
+                    onClick={() => isAvailable && !loading && onSelect(card)}
+                    className={`relative rounded-xl text-center py-3 px-1 font-bold transition-transform duration-150 active:scale-90 hover:-translate-y-0.5 will-change-transform ${stateClass}`}
                     disabled={disabled}
                   >
-                    <div
-                      className={`text-sm ${isAvailable ? 'text-indigo-700' : ''}`}
-                      style={{ color: textColor }}
-                    >
+                    <div className="text-sm font-extrabold card-btn-label">
                       #{card.cardNumber}
                     </div>
-                    <div className="text-[9px] font-medium mt-0.5" style={{ color: textColor, opacity: isAvailable ? 0.6 : 1 }}>
+                    <div className="text-[9px] font-medium mt-0.5 card-btn-sublabel">
                       {label}
                     </div>
                     {isAvailable && (
